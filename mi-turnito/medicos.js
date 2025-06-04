@@ -8,7 +8,7 @@ export const medicos = [
     imagen: require('./src/assets/images/medicaSilvia.jpg'),
     disponibilidad: {
     "Lunes": ["10:00AM", "11:00AM"],
-    "Miércoles": ["12:00PM"],
+    "Martes": ["12:00PM"],
     "Jueves": ["14:00PM", "15:30PM", "16:00PM", "17:0PM", "18:30PM", "19:00PM", ],
     }
 },
@@ -43,7 +43,7 @@ export const medicos = [
     direccion: "Av. Scalabrini Ortiz 2100, Capital Federal",
     imagen: require('./src/assets/images/medicaSilvia.jpg'),
     disponibilidad: {
-    "Lunes": ["10:00", "11:00"],
+    "Martes": ["10:00", "11:00"],
     "Miércoles": ["12:00", "13:00"],
     "Viernes": ["14:00", "15:30"]
     }
@@ -80,8 +80,8 @@ export const medicos = [
     imagen: require('./src/assets/images/medicaSilvia.jpg'),
         disponibilidad: {
     "Lunes": ["10:00", "11:00"],
-    "Miércoles": ["12:00", "13:00"],
-    "Viernes": ["14:00", "15:30"]
+    "Martes": ["12:00", "13:00"],
+    "Jueves": ["14:00", "15:30"]
     }
 },
 {
@@ -93,7 +93,7 @@ export const medicos = [
         disponibilidad: {
     "Lunes": ["10:00", "11:00"],
     "Miércoles": ["12:00", "13:00"],
-    "Viernes": ["14:00", "15:30"]
+    "Jueves": ["14:00", "15:30"]
     }
 },
 {
@@ -115,9 +115,9 @@ export const medicos = [
     direccion: "Av. Independencia 1600, Capital Federal",
     imagen: require('./src/assets/images/medicaSilvia.jpg'),
         disponibilidad: {
-    "Lunes": ["10:00", "11:00"],
+    "Martes": ["10:00", "11:00"],
     "Miércoles": ["12:00", "13:00"],
-    "Viernes": ["14:00", "15:30"]
+    "Jueves": ["14:00", "15:30"]
     }
 },
 ];

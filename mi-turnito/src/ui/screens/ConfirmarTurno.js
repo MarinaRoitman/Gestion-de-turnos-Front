@@ -16,7 +16,7 @@ export default function ConfirmarTurno({ route, navigation }) {
         style={styles.boton}
         onPress={() => {
           // Acá iría lógica para guardar la reserva
-          navigation.popToTop(); // o navegar a otra pantalla final
+          navigation.popToTop();
         }}
       >
         <Text style={styles.botonTexto}>Confirmar</Text>

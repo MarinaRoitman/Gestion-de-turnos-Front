@@ -2,7 +2,7 @@
 export const medicos = [
 {
     id: 1,
-    nombre: "Martín Ferreyra",
+    nombre: "Martín Dosio",
     especialidad: "Cardiología",
     direccion: "Bulnes 2057, Capital Federal",
     imagen: require('./src/assets/images/medicaSilvia.jpg'),

@@ -1,0 +1,1 @@
+export const hostname = '' //tu ip local

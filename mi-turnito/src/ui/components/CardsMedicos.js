@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext.js';
+import medicaSilvia from '../../assets/images/medicaSilvia.jpg';
 
-export const CardsMedicos = ({ nombre, especialidad, direccion, imagen, onPress }) => {
+export const CardsMedicos = ({ nombre, especialidad, matricula, onPress }) => {
 
         const { isDark, toggleTheme, theme } = useTheme();
 
 return (
     <TouchableOpacity style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]} onPress={onPress}>
-        <Image source={imagen} style={styles.avatar} />
+        <Image source={medicaSilvia} style={styles.avatar} />
         <View style={styles.info}>
             <Text style={[styles.nombre, {color: theme.textColor}]}>{nombre}</Text>
             <Text style={[styles.especialidad, {color: theme.textColor}]}>{especialidad}</Text>
-            <Text style={[styles.direccion, {color: theme.textColor}]}>{direccion}</Text>
+            <Text style={[styles.matricula, {color: theme.textColor}]}>{matricula}</Text>
         </View>
     </TouchableOpacity>
 );
@@ -50,7 +51,7 @@ especialidad: {
     fontSize: 14,
     color: '#4F3680',
 },
-direccion: {
+matricula: {
     fontSize: 13,
     color: '#6D6D6D',
 },

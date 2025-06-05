@@ -1,49 +1,89 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos.js';
-import { medicos } from '../../../medicos.js'; 
 import { useTheme } from '../../theme/ThemeContext.js';
+import { getProfesionales } from '../../api/profesional.js';
 
-export default function Cartilla( {navigation} ) {
-    const { isDark, toggleTheme, theme } = useTheme();
-return (
-<SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
-    <View style={styles.containerGlobal}>
-        <View style={[styles.contenedorHeader, {backgroundColor:theme.backgroundTertiary}, { borderBottomColor: theme.borderBottomColor }]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                <MaterialIcons 
-                    name="arrow-back-ios-new" 
-                    size={28} 
-                    style={[ {color: theme.textColor}, 
-                    {textShadowRadius: 1} ]} />
-            </TouchableOpacity>
-            <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "60%", paddingLeft:70}]}>Cartilla</Text>
-        </View>
-    </View>
+export default function Cartilla({ navigation }) {
+  const { isDark, toggleTheme, theme } = useTheme();
+  const [profesionales, setProfesionales] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    <ScrollView contentContainerStyle={styles.body}>
-        {medicos.map((medico) => (
-            <CardsMedicos
-                key={medico.id}
-                nombre={medico.nombre}
-                especialidad={medico.especialidad}
-                direccion={medico.direccion}
-                imagen={medico.imagen}
+  useEffect(() => {
+    async function fetchProfesionales() {
+      try {
+        const data = await getProfesionales();
+        setProfesionales(data);
+      } catch (error) {
+        console.error("Error cargando profesionales:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfesionales();
+  }, []);
+
+  return (
+    <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
+      <View style={styles.containerGlobal}>
+        <View
+          style={[
+            styles.contenedorHeader,
+            { backgroundColor: theme.backgroundTertiary },
+            { borderBottomColor: theme.borderBottomColor },
+          ]}
+        >
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+            <MaterialIcons
+              name="arrow-back-ios-new"
+              size={28}
+              style={[{ color: theme.textColor }, { textShadowRadius: 1 }]}
             />
-        ))}
-    </ScrollView>
-</SafeAreaView>
-);
+          </TouchableOpacity>
+          <Text style={[styles.tituloInicial, { color: theme.textColor }, { width: '60%', paddingLeft: 70 }]}>
+            Cartilla
+          </Text>
+        </View>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.body}>
+        {loading && <Text style={{ color: theme.textColor }}>Cargando profesionales...</Text>}
+
+        {!loading && profesionales.length === 0 && (
+          <Text style={{ color: theme.textColor }}>No se encontraron profesionales.</Text>
+        )}
+
+        {profesionales.map((profesional) => {
+          // Convertir especialidades a string separados por comas
+          const especialidadesStr = profesional.especialidades
+            .map((esp) => esp.nombre)
+            .join(', ');
+
+          // Componer nombre completo
+          const nombreCompleto = `${profesional.nombre} ${profesional.apellido}`;
+
+          return (
+            <CardsMedicos
+              key={profesional.id}
+              nombre={nombreCompleto}
+              especialidad={especialidadesStr}
+              matricula={profesional.matricula || 'Sin matrÃ­cula'}
+            />
+          );
+        })}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-containerGlobal: {
+  containerGlobal: {
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
-},
-//TurnitoHeader
-contenedorHeader: {
+  },
+  contenedorHeader: {
     paddingTop: 80,
     paddingBottom: 16,
     borderBottomColor: '#4F3680',
@@ -52,55 +92,22 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
-},
-tituloInicial: {
+  },
+  tituloInicial: {
     fontSize: 30,
     color: '#4F3680',
     fontWeight: 'bold',
-},
-subTexto: {
-    fontSize: 16,
-    color: '#655873',
-    fontWeight: 500,
-},
-iconWrapper: {
+  },
+  iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
-    borderColor: '#4F3680', 
-},
-arrow: {
-    position: 'absolute',
-    right: 15,
-    top: 20,
-},
-imagen: {
-    width: 240,
-    height: 240,
-},
-filtroBtn: {
-    flexDirection: 'row',
-    backgroundColor: '#4F3680',
-    padding: 8,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
-    marginTop: 15,
-    marginLeft: 15,
-    alignItems: 'center',
-    gap: 6,
-    width: 100,
-    justifyContent: 'center',
-},
-filtroText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-},
-body: {
+    borderColor: '#4F3680',
+  },
+  body: {
     margin: 16,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-},
+  },
 });

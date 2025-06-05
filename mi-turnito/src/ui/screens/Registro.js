@@ -22,7 +22,7 @@ const goToLogin = () => {
 };
 
 return (
-<View style={[styles.containerGlobal]}>
+<View style={[styles.containerGlobal, { backgroundColor: theme.background }]}>
     <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
     <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
     <TouchableOpacity style={styles.iconWrapper} onPress={goToLogin}>
@@ -35,9 +35,12 @@ return (
     </TouchableOpacity>
 
     <Image
-        source={require('../../../src/assets/images/TurnitoLogin.png')}
-        style={styles.imagenHeader}
-    />
+    source={
+        isDark
+            ? require('../../assets/images/turnitoDarkmode.png')
+            : require('../../assets/images/TurnitoLogin.png')
+    }
+/>
     </View>
 
     <View style={styles.containerContenido}>
@@ -170,7 +173,15 @@ rectangleRegistro: {
     position: 'relative', 
     },
 iconWrapper: {
-  padding: 8,
-
+    padding: 8,
+},
+imagenHeader: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    position: 'absolute',
+    top: -10,
+    left: '55%',
+    transform: [{ translateX: -100 }],
 },
 });

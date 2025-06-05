@@ -23,11 +23,11 @@ return (
     </View>
 
     <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 200 }}>
-        <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+        <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
             <Text style={[styles.optionSub, {color: theme.textColor}]}>Nombre</Text>
             <Text style={[styles.optionTitle, {color: theme.textColor}]}>Macarena</Text>
         </View>
-        <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+        <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
             <Text style={[styles.optionSub, {color: theme.textColor}]}>Apellido</Text>
             <Text style={[styles.optionTitle, {color: theme.textColor}]}>López</Text>
         </View>
@@ -35,13 +35,13 @@ return (
         <View style={{ height: 20, backgroundColor: theme.backgroundSecondary }} />
 
         <TouchableOpacity>
-                <View style={styles.option}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Mis Datos</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
 
-        <View style={[styles.option, { backgroundColor: theme.backgroundTertiary, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
+        <View style={[styles.option, { backgroundColor: theme.backgroundPerfil, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
         <Text style={[styles.optionTitle, { color: theme.textColor }]}>Modo Oscuro</Text>
         
         <Switch

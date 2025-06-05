@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text,Button, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { Switch } from 'react-native';
 
 export default function Perfil({ navigation }) {
 
@@ -11,7 +12,7 @@ const { isDark, toggleTheme, theme } = useTheme();
 };
 
 return (
-<SafeAreaView style={[styles.safeArea, { backgroundColor: theme.backgroundSecondary }]}>
+<SafeAreaView style={[{ backgroundColor: theme.backgroundSecondary }]}>
     <View style={[styles.containerGlobal, { backgroundColor: theme.backgroundSecondary }]}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
             <TouchableOpacity style={[styles.iconWrapper]} onPress={() => navigation.navigate('Home')}>
@@ -21,46 +22,64 @@ return (
         </View>
     </View>
 
-    <ScrollView contentContainerStyle={[styles.body, {backgroundColor: theme.backgroundTertiary}]}>
-        <Text style={styles.text}>Modo actual: {isDark ? 'Dark' : 'Light'}</Text>
-            <Button title="Cambiar tema" onPress={toggleTheme} />
-        <TouchableOpacity>
-        <View style={styles.option}>
-            <Text style={styles.optionTitle}>Agendar nuevo turno</Text>
-            <Text style={styles.optionSub}>Programá turnos de medicina general o pediatría</Text>
-            <MaterialIcons name="chevron-right" size={24} color="#4F3680" style={styles.arrow} />
+    <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 200 }}>
+        <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+            <Text style={[styles.optionSub, {color: theme.textColor}]}>Nombre</Text>
+            <Text style={[styles.optionTitle, {color: theme.textColor}]}>Macarena</Text>
         </View>
-        </TouchableOpacity>
+        <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+            <Text style={[styles.optionSub, {color: theme.textColor}]}>Apellido</Text>
+            <Text style={[styles.optionTitle, {color: theme.textColor}]}>López</Text>
+        </View>
+
+        <View style={{ height: 20, backgroundColor: theme.backgroundSecondary }} />
+
         <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+                <View style={styles.option}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Mis Datos</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
+
+        <View style={[styles.option, { backgroundColor: theme.backgroundTertiary, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
+        <Text style={[styles.optionTitle, { color: theme.textColor }]}>Modo Oscuro</Text>
+        
+        <Switch
+            value={isDark}
+            onValueChange={toggleTheme}
+            thumbColor={isDark ? '#4F3680' : '#f4f3f4'}
+            trackColor={{ false: '#ccc', true: '#b19cd9' }}
+        />
+        </View>
+
         <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Ayuda</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
+
         <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Idiomas</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
+
         <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Eliminar Cuenta</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={goToLogin}>
-                <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>Cerrar Sesión</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
+
         </ScrollView>
 
 </SafeAreaView>
@@ -99,7 +118,6 @@ iconWrapper: {
 },
 //BodyTurnos
 option: {
-    backgroundColor: '#F0F0F0',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
@@ -114,7 +132,6 @@ optionTitle: {
 },
 optionSub: {
     fontSize: 15,
-    color: '#6D6D6D',
 },
 arrow: {
     position: 'absolute',

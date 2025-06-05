@@ -4,6 +4,8 @@ import  CustomButton from '../../ui/components/Button.js';
 import  RectangleLogin1 from '../../ui/components/rectangleLogin.js';
 import  InputField  from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
+import ErrorModal from '../../ui/components/ErrorModal';
+
 
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
@@ -14,13 +16,37 @@ const goToRegistro = () => {
 };
 
 const handleLogin = () => {
-  navigation.replace('Tabs', { screen: 'Home' }); // reemplaza la pantalla Login con las Tabs
+if (!username || !password) {
+    setErrorText("Por favor, completá todos los campos.");
+    setModalVisible(true);
+    return;
+}
+
+if (username !== MOCK_EMAIL || password !== MOCK_PASSWORD) {
+    setErrorText("Correo o contraseña incorrectos.");
+    setModalVisible(true);
+    return;
+}
+
+
+navigation.replace('Tabs', { screen: 'Home' });
 };
 
 const { isDark, toggleTheme, theme } = useTheme();
 
+const MOCK_EMAIL = "macarena@uade.com";
+const MOCK_PASSWORD = "password";
+
+const [modalVisible, setModalVisible] = useState(false);
+const [errorText, setErrorText] = useState('');
+
 return (
 <ScrollView contentContainerStyle={[styles.containerGlobal, { backgroundColor: theme.background }]} keyboardShouldPersistTaps="handled">
+    <ErrorModal
+    visible={modalVisible}
+    message={errorText}
+    onClose={() => setModalVisible(false)}
+    />
     <View style={styles.containerFoto}>
     <Image
         source={

@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext.js';
 
-export const ButtonSecondary = ({ title, onPress }) => {
+export const ButtonSecondary = ({ title, onPress, style }) => {
     const { theme } = useTheme();
 
     return (

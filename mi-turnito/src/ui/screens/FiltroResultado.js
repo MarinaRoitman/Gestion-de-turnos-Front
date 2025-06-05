@@ -1,10 +1,11 @@
-// Resultados.js
 import { View, ScrollView, StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import { medicos } from '../../../medicos.js';
 import { CardsMedicos } from '../components/CardsMedicos.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../../theme/ThemeContext.js';
 
 export default function Resultados({ route, navigation }) {
+    const { isDark, toggleTheme, theme } = useTheme();
     const { especialidad, profesional } = route.params;
 
     const medicosFiltrados = medicos.filter(m =>
@@ -13,13 +14,18 @@ export default function Resultados({ route, navigation }) {
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
-            <View style={styles.header}>
+        <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>
+            
+            <View style={[styles.header, { borderBottomColor: theme.borderBottomColor }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons name="arrow-back-ios-new" size={28} color="#4F3680" />
+                    <MaterialIcons 
+                        name="arrow-back-ios-new" size={28} 
+                        style={[ {color: theme.textColor}, 
+                        {textShadowRadius: 1} ]} />
                 </TouchableOpacity>
-                <Text style={[styles.titulo, { width: "80%", paddingLeft: 55 }]}>Agendar Turno</Text>
+                <Text style={[styles.titulo, { width: "80%", paddingLeft: 55 }, {color: theme.textColor} ]}>Agendar Turno</Text>
             </View>
+
             <ScrollView contentContainerStyle={styles.body}>
                 {medicosFiltrados.length > 0 ? (
                     medicosFiltrados.map(medico => (
@@ -47,12 +53,10 @@ const styles = StyleSheet.create({
         paddingTop: 80,
         paddingBottom: 20,
         paddingHorizontal: 16,
-        borderBottomColor: '#4F3680',
         borderBottomWidth: 5,
     },
     titulo: {
         fontSize: 30,
-        color: '#4F3680',
         fontWeight: 'bold',
     },
     body: {

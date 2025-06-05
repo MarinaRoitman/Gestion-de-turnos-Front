@@ -32,6 +32,14 @@ const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
                     imagen={medico.imagen}
                 />
 
+            <View style={[styles.infoContainer]}>
+                <MaterialIcons name="calendar-today" size={22} style={{color: theme.colorIconBackground}}/>
+                <View style={styles.infoText}>
+                <Text style={[styles.infoLabel,{color: theme.textColor}]}>Día y horario</Text>
+                <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>Elegí día y horario según la disponibilidad</Text>
+                </View>
+            </View>
+
 {Object.entries(medico.disponibilidad || {}).map(([dia, horarios]) => (
     <View key={dia} style={styles.diaContainer}>
         <Text style={[styles.subtitulo, { color: theme.textColor }]}>{dia}</Text>
@@ -62,7 +70,7 @@ const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
         </View>
     </View>
 ))}
-
+            <View style={{ paddingTop: 5, position: 'relative', alignContent: 'center' }}>
             <ButtonSecondary
             style={[
                 styles.botonConfirmar,
@@ -79,6 +87,7 @@ const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
             }}
             title="Confirmar Turno"
             />
+            </View>
 
             </ScrollView>
         </SafeAreaView>
@@ -141,7 +150,6 @@ const styles = StyleSheet.create({
     botonConfirmar: {
         padding: 12,
         borderRadius: 10,
-        marginTop: 20,
         alignItems: 'center',
     },
     textoBoton: {
@@ -168,5 +176,25 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 10,
         justifyContent: 'flex-start',
+    },
+    infoContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
+    gap: 12,
+    alignItems: 'flex-start',
+    paddingLeft: 20,
+    },
+
+    infoText: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '100%',
+    },
+    infoLabel: {
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
+    infoLabelSecundario: {
+        fontSize: 15,
     },
 });

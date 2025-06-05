@@ -9,15 +9,17 @@ const EmailInput = ({ label, value, onChangeText, placeholder, keyboardType, sec
     <View style={styles.inputContainer}>
       <Text style={[styles.label, { color: theme.textColor }]}>{label}</Text>
       <TextInput
-        style={[styles.input, { backgroundColor: theme.backgroundSecondary, color: theme.textColor }]}
-        placeholder={placeholder}
-        Color={theme.placeholderText}
-        backgroundColor = {theme.placeholderColor}
-        keyboardType={keyboardType}
-        secureTextEntry={secureTextEntry}
-        autoCapitalize="none"
-        value={value}
-        onChangeText={onChangeText}
+        style={[
+    styles.input,
+    { backgroundColor: theme.backgroundImput, color: theme.textColorLogin }
+    ]}
+    placeholder={placeholder}
+    placeholderTextColor={theme.placeholderText}
+    keyboardType={keyboardType}
+    secureTextEntry={secureTextEntry}
+    autoCapitalize="none"
+    value={value}
+    onChangeText={onChangeText}
       />
     </View>
   );

@@ -3,47 +3,46 @@ import {
     View,
     StyleSheet,
     Text,
-    Image,
     ScrollView,
     TouchableOpacity,
     SafeAreaView,
+    Image,
 } from 'react-native';
 import Button from '../components/Button.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { medicos } from '../../../medicos.js';
+import { useTheme } from '../../theme/ThemeContext.js';
 
 export default function Seleccionar({ navigation }) {
     const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState(null);
     const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
-
     const especialidades = [...new Set(medicos.map(m => m.especialidad))];
-
     const profesionalesDeEspecialidad = especialidadSeleccionada
     ? [...new Set(medicos
         .filter(m => m.especialidad === especialidadSeleccionada)
         .map(m => m.nombre))]
     : [];
+    const { isDark, toggleTheme, theme } = useTheme();
 
     return (
-        <SafeAreaView style={{ backgroundColor: '#F0F0F0', flex: 1 }}>
+        <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
             <View style={styles.containerGlobal}>
-                <View style={styles.contenedorHeader}>
+                <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
                     <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
                         <MaterialIcons
                             name="arrow-back-ios-new"
                             size={28}
-                            color="#4F3680"
-                            style={{ textShadowColor: '#4F3680', textShadowRadius: 1 }}
+                            style={[ {color: theme.textColor}, {textShadowRadius: 1} ]}
                         />
                     </TouchableOpacity>
-                    <Text style={[styles.tituloInicial, { width: "70%", paddingLeft: 100 }]}>Filtros</Text>
+                    <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "70%", paddingLeft: 100 }]}>Filtros</Text>
                 </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.body}>
-                <View style={{ width: '100%', marginBottom: 20 }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 4 }}>Especialidad</Text>
+                <View style={{ width: '100%', marginBottom: 20}}>
+                    <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>Especialidad</Text>
                     <View style={styles.pickerContainer}>
                     <Picker
                         selectedValue={especialidadSeleccionada}
@@ -51,22 +50,26 @@ export default function Seleccionar({ navigation }) {
                             setEspecialidadSeleccionada(value);
                             setProfesionalSeleccionado(null); // Reset profesional when especialidad changes
                         }}
+                        style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
+                        dropdownIconColor={theme.modalButtonText}
                     >
                         <Picker.Item label="Todas" value={null} />
                         {especialidades.map((esp, index) => (
                             <Picker.Item key={index} label={esp} value={esp} />
                         ))}
                     </Picker>
-                    </View>
+                    </View> 
                 </View>
 
                 {especialidadSeleccionada && (
                     <View style={{ width: '100%', marginBottom: 20 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 4 }}>Profesional</Text>
+                        <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>Profesional</Text>
                         <View style={styles.pickerContainer}>
                         <Picker
                             selectedValue={profesionalSeleccionado}
                             onValueChange={(value) => setProfesionalSeleccionado(value)}
+                            style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
+                            dropdownIconColor={theme.modalButtonText}
                         >
                             <Picker.Item label="Todos" value={null} />
                             {profesionalesDeEspecialidad.map((prof, index) => (
@@ -76,22 +79,35 @@ export default function Seleccionar({ navigation }) {
                         </View>
                     </View>
                 )}
-                <Button
-                title="Aplicar Filtros"
-                onPress={() => navigation.navigate('Resultados', {
-                    especialidad: especialidadSeleccionada,
-                    profesional: profesionalSeleccionado,
-                })}
-                />
+            </ScrollView>    
 
-            </ScrollView>
+            <View style={styles.containerFoto}>
+                <Image
+                    source={
+                        isDark
+                            ? require('../../assets/images/FiltroDMode.png')
+                            : require('../../assets/images/FiltroLMode.png')
+                    }
+                    style={styles.imagen}
+                />
+                </View>
+
+
+                <View style={styles.botonFijo}>
+                    <Button
+                    title="Aplicar Filtros"
+                    onPress={() => navigation.navigate('Resultados', {
+                        especialidad: especialidadSeleccionada,
+                        profesional: profesionalSeleccionado,
+                    })}
+                    />
+                </View>
         </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({
     containerGlobal: {
         alignItems: 'center',
-        backgroundColor: '#F0F0F0',
     },
     contenedorHeader: {
         paddingTop: 80,
@@ -105,14 +121,12 @@ const styles = StyleSheet.create({
     },
     tituloInicial: {
         fontSize: 30,
-        color: '#4F3680',
         fontWeight: 'bold',
     },
     iconWrapper: {
         position: 'absolute',
         left: 30,
         top: 87,
-        borderColor: '#4F3680',
     },
     body: {
         paddingHorizontal: 16,
@@ -134,20 +148,19 @@ const styles = StyleSheet.create({
     },
     filtroLabel: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 20,
         marginBottom: 4,
-        color: '#4F3680',
     },
-
-    filtroBtn: {
-    backgroundColor: '#4F3680',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 10,
-    marginTop: 20,
+    botonFijo: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 20,
+    left: 16,
+    right: 16,
+    paddingVertical: 10,
 },
 filtroText: {
-    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -158,5 +171,12 @@ pickerContainer: {
     borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 10,
+},
+containerFoto: {
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 170, 
+    left: 0,
+    right: 0,
 },
 });

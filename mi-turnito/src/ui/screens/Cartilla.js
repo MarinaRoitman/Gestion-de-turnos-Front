@@ -8,13 +8,17 @@ import { useTheme } from '../../theme/ThemeContext.js';
 export default function Cartilla( {navigation} ) {
     const { isDark, toggleTheme, theme } = useTheme();
 return (
-<SafeAreaView style={{ backgroundColor: '#F0F0F0', flex: 1 }}>
+<SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
     <View style={styles.containerGlobal}>
-        <View style={styles.contenedorHeader}>
+        <View style={[styles.contenedorHeader, {backgroundColor:theme.backgroundTertiary}, { borderBottomColor: theme.borderBottomColor }]}>
             <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                <MaterialIcons name="arrow-back-ios-new" size={28} color="#4F3680" style={{textShadowColor: '#4F3680', textShadowRadius: 1}} />
+                <MaterialIcons 
+                    name="arrow-back-ios-new" 
+                    size={28} 
+                    style={[ {color: theme.textColor}, 
+                    {textShadowRadius: 1} ]} />
             </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { width: "60%", paddingLeft:70}]}>Cartilla</Text>
+            <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "60%", paddingLeft:70}]}>Cartilla</Text>
         </View>
     </View>
 

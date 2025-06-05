@@ -12,7 +12,8 @@ import Filtro from '../ui/screens/Filtro';
 import { useTheme } from '../../src/theme/ThemeContext';
 import Cartilla from '../ui/screens/Cartilla';
 import ConfirmarTurno from '../ui/screens/ConfirmarTurno';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { View } from 'react-native';
 // Creación de los stacks individuales
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,7 +22,7 @@ const Stack = createNativeStackNavigator();
 function HomeStack() {
 return (
 <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="HomeMain" component={Home} />
+    <Stack.Screen name="HomeMain" component={Home}/>
     <Stack.Screen name="Cartilla" component={Cartilla} />
 </Stack.Navigator>
 );
@@ -76,18 +77,51 @@ return (
 <Tab.Navigator initialRouteName="Home" screenOptions={{
         headerShown: false,
         tabBarStyle: {
-        backgroundColor: theme.tabBarBackground,
-        height: 100,
+            backgroundColor: theme.tabBarBackground,
+            height: 100,
+            paddingTop: 13,
+            paddingBottom:20,
         },
         tabBarActiveTintColor: theme.tabBarIconColor,
         tabBarInactiveTintColor: theme.tabBarIconColor,
     }}>
 
-    <Tab.Screen name="Turnos" component={TurnosStack} />
-    <Tab.Screen name="Historial" component={HistorialStack} />
-    <Tab.Screen name="Home" component={HomeStack} />
-    <Tab.Screen name="Notificaciones" component={NotificacionesStack} />
-    <Tab.Screen name="Perfil" component={PerfilStack} />
+    <Tab.Screen name="Turnos" component={TurnosStack} options={{
+        tabBarIcon: ({ color, size }) => (
+            <View style={{ position: 'absolute'}}>
+            <MaterialIcons name="event" color={color} size={32} />
+            </View>),
+        tabBarLabel: "Turnos",
+    }}/>
+    <Tab.Screen name="Historial" component={HistorialStack} 
+    options={{
+        tabBarIcon: ({ color, size }) => (
+        <MaterialIcons name="history" color={color}size={32}/>),
+        tabBarLabel: "Historial",
+    }}/>
+    <Tab.Screen name="Home" component={HomeStack} 
+    options={{
+        tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="home" color={color} size={32} />
+        ),
+        tabBarLabel: "Inicio",
+        }}
+    />
+    <Tab.Screen name="Notificaciones" component={NotificacionesStack} 
+    options={{
+        tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="notifications" color={color} size={32} />
+        ),
+        tabBarLabel: "Notificaciones",
+    }}
+    />
+    <Tab.Screen name="Perfil" component={PerfilStack} 
+    options={{
+        tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="person" color={color} size={32} />
+        ),
+        tabBarLabel: "Perfil",
+    }}/>
 
 </Tab.Navigator>
 );

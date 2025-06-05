@@ -36,7 +36,7 @@ return (
             <View style={styles.containerContenido}>
                 <RectangleLogin style={[{ borderTopLeftRadius: 0, borderTopRightRadius: 0, top: -45, borderBottomLeftRadius: 35, borderBottomRightRadius: 35}]} />
                 <View style={{ alignItems: 'flex-start', width: '100%' }}>
-                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' },{color: theme.textColor}]}>¡Hola Usuario!</Text>
+                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' },{color: theme.textColor}]}>¡Hola Macarena!</Text>
                     <Text style={[styles.subTexto, { textAlign: 'left', width: '100%' }, {color: theme.textColor}]}>
                         ¿Cómo podemos ayudarte hoy? 💜
                     </Text>

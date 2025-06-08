@@ -13,7 +13,7 @@ export default function ConfirmarTurno({ route, navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
         <View style={[styles.containerGlobal, { backgroundColor: theme.backgroundSecondary }]}>
             <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-                <TouchableOpacity style={[styles.iconWrapper]} onPress={() => navigation.navigate('Home')}>
+                <TouchableOpacity style={[styles.iconWrapper]} onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
                 </TouchableOpacity>
                 <Text style={[styles.tituloInicial, { width: "60%"}, {color: theme.textColor}]}>Confirmar Turno</Text>

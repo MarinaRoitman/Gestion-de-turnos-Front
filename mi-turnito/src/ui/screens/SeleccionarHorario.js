@@ -4,15 +4,13 @@ import { CardsMedicos } from '../components/CardsMedicos';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import ButtonSecondary from '../components/ButtonSecondary.js';
+import ErrorModal from '../components/ErrorModal';
 
 export default function Horario({ route, navigation }) {
     const { medico } = route.params;
-
-const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
-
-
+    const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
     const { isDark, toggleTheme, theme } = useTheme();
-
+    const [modalErrorVisible, setModalErrorVisible] = useState(false);
 
     return (
         <SafeAreaView style={[{backgroundColor:theme.backgroundTertiary}, {flex: 1}]}>
@@ -78,18 +76,26 @@ const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
             ]}
             disabled={!horarioSeleccionado}
             onPress={() => {
-                if (horarioSeleccionado) {
+                if (!horarioSeleccionado) {
+                    setModalErrorVisible(true);
+                    return;
+                }
+
                 navigation.navigate('ConfirmarTurno', {
                     medico,
                     horario: `${horarioSeleccionado.dia} a las ${horarioSeleccionado.hora}`,
                 });
-                }
             }}
             title="Confirmar Turno"
             />
             </View>
 
             </ScrollView>
+            <ErrorModal
+                visible={modalErrorVisible}
+                message="Por favor, primero seleccioná un horario."
+                onClose={() => setModalErrorVisible(false)}
+            />
         </SafeAreaView>
     );
 }
@@ -197,4 +203,5 @@ const styles = StyleSheet.create({
     infoLabelSecundario: {
         fontSize: 15,
     },
+
 });

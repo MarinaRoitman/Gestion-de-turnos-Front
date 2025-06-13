@@ -1,11 +1,16 @@
+import React, { useState } from 'react';
 import { View, StyleSheet, Text,Button, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { Switch } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import LanguageSelectorModal from '../components/ModalLanguage.js';
 
 export default function Perfil({ navigation }) {
 
 const { isDark, toggleTheme, theme } = useTheme();
+const { t } = useTranslation();
+const [modalVisible, setModalVisible] = useState(false);
 
     const goToLogin = () => {
     navigation.navigate("Login")
@@ -18,17 +23,19 @@ return (
             <TouchableOpacity style={[styles.iconWrapper]} onPress={() => navigation.navigate('Home')}>
                 <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
             </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { width: "20%"}, {color: theme.textColor}]}>Perfil</Text>
+            <Text style={[styles.tituloInicial, { width: "22%" }, { color: theme.textColor }]}>
+                {t('profile')}
+            </Text>
         </View>
     </View>
 
     <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 200 }}>
         <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-            <Text style={[styles.optionSub, {color: theme.textColor}]}>Nombre</Text>
+            <Text style={[styles.optionSub, {color: theme.textColor}]}>{t('name')}</Text>
             <Text style={[styles.optionTitle, {color: theme.textColor}]}>Macarena</Text>
         </View>
         <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-            <Text style={[styles.optionSub, {color: theme.textColor}]}>Apellido</Text>
+            <Text style={[styles.optionSub, {color: theme.textColor}]}>{t('lastName')}</Text>
             <Text style={[styles.optionTitle, {color: theme.textColor}]}>López</Text>
         </View>
 
@@ -36,13 +43,13 @@ return (
 
         <TouchableOpacity>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>Mis Datos</Text>
+                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('myData')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
 
         <View style={[styles.option, { backgroundColor: theme.backgroundPerfil, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
-        <Text style={[styles.optionTitle, { color: theme.textColor }]}>Modo Oscuro</Text>
+        <Text style={[styles.optionTitle, { color: theme.textColor }]}>{t('darkMode')}</Text>
         
         <Switch
             value={isDark}
@@ -54,33 +61,37 @@ return (
 
         <TouchableOpacity>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>Ayuda</Text>
+                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('help')}</Text>
+                    <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
+                </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
+                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('language')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
 
         <TouchableOpacity>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>Idiomas</Text>
-                    <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
-                </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>Eliminar Cuenta</Text>
+                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('deleteAccount')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={goToLogin}>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>Cerrar Sesión</Text>
+                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('logout')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
                 </View>
         </TouchableOpacity>
 
         </ScrollView>
+        <LanguageSelectorModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        />
 
 </SafeAreaView>
 );

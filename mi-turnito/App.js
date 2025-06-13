@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import NavigationStack from './src/navigator/NavigationStack.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './src/theme/ThemeContext.js';
-
+import './src/languages/i18n';
 
 export default function App() {
   return (

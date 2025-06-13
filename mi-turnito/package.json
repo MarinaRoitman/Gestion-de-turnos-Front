@@ -19,16 +19,22 @@
     "axios": "^1.9.0",
     "expo": "~53.0.9",
     "expo-status-bar": "~2.2.3",
+    "i18next": "^25.2.1",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-http-backend": "^3.0.2",
     "mi-turnito": "file:",
     "react": "19.0.0",
+    "react-i18next": "^15.5.3",
     "react-native": "0.79.2",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "~4.10.0"
+    "react-native-screens": "~4.10.0",
+    "expo-localization": "~16.1.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@types/react-i18next": "^7.8.3"
   },
   "private": true
 }

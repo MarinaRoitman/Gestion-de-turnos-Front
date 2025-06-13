@@ -8,15 +8,15 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-    "image": "./src/assets/images/LogoTurnito.png",
-    "resizeMode": "contain",
-    "backgroundColor": "#4F3680",
-    "dark": {
       "image": "./src/assets/images/LogoTurnito.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
-    }
-  },
+      "backgroundColor": "#4F3680",
+      "dark": {
+        "image": "./src/assets/images/LogoTurnito.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      }
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -29,6 +29,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }

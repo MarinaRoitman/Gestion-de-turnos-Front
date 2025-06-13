@@ -23,6 +23,8 @@ export const LightTheme = {
     modalBackground: '#FFFFFF',
     modalButton: '#4F3680',
     modalButtonText: '#4F3680',
+    modalButtonClose: '#ccc',
+    modalButtonCloseText: '#4F3680',
 };
 
 export const DarkTheme = {
@@ -43,10 +45,12 @@ export const DarkTheme = {
     textColorTertiary: '#4F3680',
     textColorLogin: '#4F3680',
     placeholderColor: '#C5BDD8',
-    placeholderText: "4F3680",
+    placeholderText: "#4F3680",
     borderBottomColor: '#C5BDD8',
     buttonColor: '#C5BDD8',
     modalBackground: '#4F3680',
     modalButton: '#1C0E37',
     modalButtonText: '#4F3680',
+    modalButtonClose: '#C5BDD8',
+    modalButtonCloseText: '#4F3680',
 };

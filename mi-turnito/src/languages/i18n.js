@@ -14,6 +14,7 @@ const initialLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLang
 const resources = {
 en: {
 translation: {
+    //perfil
     profile: "Profile",
     name: "First Name",
     lastName: "Last Name",
@@ -24,12 +25,14 @@ translation: {
     deleteAccount: "Delete Account",
     logout: "Log Out",
     selectLanguage: "Select Language",
+    cancel: "Cancel",
     spanish: "Spanish",
     english: "English",
 }
 },
 es: {
 translation: {
+    //profile
     profile: "Perfil",
     name: "Nombre",
     lastName: "Apellido",
@@ -40,6 +43,7 @@ translation: {
     deleteAccount: "Eliminar Cuenta",
     logout: "Cerrar Sesión",
     selectLanguage: "Seleccionar Idioma",
+    cancel: "Cancelar",
     spanish: "Español",
     english: "Inglés",
 }

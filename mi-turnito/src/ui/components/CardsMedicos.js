@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext.js';
 import medicaSilvia from '../../assets/images/medicaSilvia.jpg';
+import { useTranslation } from 'react-i18next';
 
-export const CardsMedicos = ({ nombre, especialidad, matricula, onPress }) => {
+export const CardsMedicos = ({ nombre, especialidad, matricula, onPress}) => {
 
         const { isDark, toggleTheme, theme } = useTheme();
 

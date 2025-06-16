@@ -13,6 +13,9 @@ import { useTheme } from '../../src/theme/ThemeContext';
 import Cartilla from '../ui/screens/Cartilla';
 import ConfirmarTurno from '../ui/screens/ConfirmarTurno';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ayuda from '../ui/screens/Ayuda';
+import DetalleScreen from '../ui/screens/DetalleHistorial';
+
 import { View } from 'react-native';
 // Creación de los stacks individuales
 const Tab = createBottomTabNavigator();
@@ -38,6 +41,7 @@ return (
     <Stack.Screen name="Resultados" component={Resultados} />       
     <Stack.Screen name="SeleccionarHorario" component={SeleccionarHorario} />
     <Stack.Screen name="ConfirmarTurno" component={ConfirmarTurno} />
+    <Stack.Screen name="Historial" component={Historial} />
 </Stack.Navigator>
 );
 }
@@ -47,6 +51,7 @@ function HistorialStack() {
 return (
 <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HistorialMain" component={Historial} />
+    <Stack.Screen name="Detalle" component={DetalleScreen} />
 </Stack.Navigator>
 );
 }
@@ -65,6 +70,7 @@ function PerfilStack() {
 return (
 <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="PerfilMain" component={Perfil} />
+    <Stack.Screen name="Ayuda" component={Ayuda} />
 </Stack.Navigator>
 );
 }

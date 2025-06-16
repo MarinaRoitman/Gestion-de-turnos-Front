@@ -25,22 +25,25 @@ return (
 <View style={[styles.containerGlobal, { backgroundColor: theme.background }]}>
     <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
     <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-    <TouchableOpacity style={styles.iconWrapper} onPress={goToLogin}>
-        <MaterialIcons
-        name="arrow-back-ios-new"
-        size={28}
-        color={theme.textColor}
-        style={{ textShadowColor: theme.textColor, textShadowRadius: 1 }}
-        />
-    </TouchableOpacity>
+        <TouchableOpacity style={styles.iconWrapper} onPress={goToLogin}>
+            <MaterialIcons
+                name="arrow-back-ios-new"
+                size={28}
+                color={theme.textColor}
+                style={{ textShadowColor: theme.textColor, textShadowRadius: 1 }}
+            />
+        </TouchableOpacity>
 
-    <Image
-    source={
-        isDark
-            ? require('../../assets/images/turnitoDarkmode.png')
-            : require('../../assets/images/TurnitoLogin.png')
-    }
-/>
+    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+        <Image
+            source={
+                isDark
+                    ? require('../../assets/images/turnitoDarkmode.png')
+                    : require('../../assets/images/TurnitoLogin.png')
+            }
+            style={{ width: 160, height: 160, resizeMode: 'contain' }}
+        />
+    </View>
     </View>
 
     <View style={styles.containerContenido}>
@@ -50,69 +53,69 @@ return (
 
     <View style={styles.containerForm}>
         <InputField
-        label="Nombre"
-        isPassword={false}
-        onChangeText={setNombre}
-        value={nombre}
-        placeholder={"Ingresá tu nombre"}
+            label="Nombre"
+            isPassword={false}
+            onChangeText={setNombre}
+            value={nombre}
+            placeholder={"Ingresá tu nombre"}
         />
 
         <InputField
-        label="Apellido"
-        isPassword={false}
-        onChangeText={setApellido}
-        placeholder={"Ingresá tu apellido"}
-        value={apellido}
+            label="Apellido"
+            isPassword={false}
+            onChangeText={setApellido}
+            placeholder={"Ingresá tu apellido"}
+            value={apellido}
         />
 
         <InputField
-        label="Dni"
-        isPassword={false}
-        onChangeText={setDni}
-        placeholder={"Ingresá tu DNI"}
-        keyboardType="numeric"
-        value={dni}
+            label="Dni"
+            isPassword={false}
+            onChangeText={setDni}
+            placeholder={"Ingresá tu DNI"}
+            keyboardType="numeric"
+            value={dni}
         />
 
         <InputField
-        label="Teléfono"
-        isPassword={false}
-        onChangeText={setTelefono}
-        value={telefono}
-        placeholder={"Ingresá tu teléfono"}
-        keyboardType="numeric"
+            label="Teléfono"
+            isPassword={false}
+            onChangeText={setTelefono}
+            value={telefono}
+            placeholder={"Ingresá tu teléfono"}
+            keyboardType="numeric"
         />
 
         <InputField
-        label="Fecha de Nacimiento"
-        isPassword={false}
-        onChangeText={setFechaNacimiento}
-        value={fechaNacimiento}
-        placeholder={"Ingresá tu fecha de nacimiento"}
-        keyboardType="date"
+            label="Fecha de Nacimiento"
+            isPassword={false}
+            onChangeText={setFechaNacimiento}
+            value={fechaNacimiento}
+            placeholder={"Ingresá tu fecha de nacimiento"}
+            keyboardType="date"
         />
 
         <InputField
-        label="Correo"
-        isPassword={false}
-        onChangeText={setUsername}
-        value={username}
-        placeholder={"Ingresá tu correo"}
-        keyboardType="mail-address"
+            label="Correo"
+            isPassword={false}
+            onChangeText={setUsername}
+            value={username}
+            placeholder={"Ingresá tu correo"}
+            keyboardType="mail-address"
         />
 
         <InputField
-        label="Contraseña"
-        isPassword={true}
-        onChangeText={setPassword}
-        value={password}
-        placeholder={"Ingresá tu contraseña"}
-        secureTextEntry={true}
+            label="Contraseña"
+            isPassword={true}
+            onChangeText={setPassword}
+            value={password}
+            placeholder={"Ingresá tu contraseña"}
+            secureTextEntry={true}
         />
-        </View>
-        <View style={{ margin: 25, marginBottom:16 }}>
+    </View>
+    <View style={{ margin: 25, marginBottom:16 }}>
         <CustomButton title="Registrarme" />
-        </View>
+    </View>
     </ScrollView>
 </View>
 );
@@ -162,13 +165,12 @@ rectangleRegistro: {
     borderTopLeftRadius: 58,
     borderTopRightRadius: 58,
 },
-    contenedorHeader: {
+contenedorHeader: {
     width: '100%',
     flexDirection: 'row',      
     alignItems: 'center',      
     justifyContent: 'space-between', 
-    paddingTop: 80,
-    paddingBottom: 16,
+    paddingTop: 25,
     paddingHorizontal: 30,     
     position: 'relative', 
     },
@@ -179,9 +181,7 @@ imagenHeader: {
     width: 200,
     height: 200,
     resizeMode: 'contain',
-    position: 'absolute',
-    top: -10,
-    left: '55%',
-    transform: [{ translateX: -100 }],
+    alignSelf: 'center',
+    marginTop: 20,
 },
 });

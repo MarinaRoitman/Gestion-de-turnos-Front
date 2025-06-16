@@ -10,7 +10,10 @@ import NavigationTab from './NavigationTab';
 import Filtro from '../ui/screens/Filtro';
 import FiltroResultado from '../ui/screens/FiltroResultado'
 import SeleccionarHorario from '../ui/screens/SeleccionarHorario';
-
+import Ayuda from '../ui/screens/Ayuda';
+import Recupero from '../ui/screens/RecuperarCuenta'
+import Detalle from '../ui/screens/DetalleHistorial';
+import MisDatosScreen from '../ui/screens/MisDatosScreen';
 
 
 
@@ -20,6 +23,7 @@ export default function MyStack() {
 return (
     <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Recupero" component={Recupero}/>
         <Stack.Screen name="Registro" component={Registro}/>
         <Stack.Screen name="Cartilla" component={Cartilla}/>
         <Stack.Screen name="Turnos" component={Turnos} />
@@ -29,6 +33,9 @@ return (
         <Stack.Screen name="Filtro" component={Filtro}/>
         <Stack.Screen name="Resultados" component={FiltroResultado} />       
         <Stack.Screen name="SeleccionarHorario" component={SeleccionarHorario} />
+        <Stack.Screen name="Ayuda" component={Ayuda} />
+        <Stack.Screen name="Detalle" component={Detalle} />
+        <Stack.Screen name="MisDatos" component={MisDatosScreen} />
     </Stack.Navigator>
 );
 }

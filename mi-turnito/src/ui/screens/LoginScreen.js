@@ -6,13 +6,16 @@ import  InputField  from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import ErrorModal from '../../ui/components/ErrorModal';
 
-
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 
 const goToRegistro = () => {
     navigation.navigate("Registro"); 
+};
+
+const goToRecupero = () => {
+    navigation.navigate("Recupero"); 
 };
 
 const handleLogin = () => {
@@ -27,7 +30,6 @@ if (username !== MOCK_EMAIL || password !== MOCK_PASSWORD) {
     setModalVisible(true);
     return;
 }
-
 
 navigation.replace('Tabs', { screen: 'Home' });
 };
@@ -90,7 +92,7 @@ return (
             <View style={styles.containerFoto}>
                     <Image source={require('../../../src/assets/images/GoogleIcon.png')} style={styles.imagenGoogle} />
                     </View>
-            <Text style={[styles.subTexto1, { paddingTop: 10 }, {color: theme.textColor} ]}>¿Olvidaste tu contraseña?</Text>
+            <Text  onPress={goToRecupero} style={[styles.subTexto1, { paddingTop: 10 }, {color: theme.textColor} ]}>¿Olvidaste tu contraseña?</Text>
             <Text style={[styles.subTexto1, {color: theme.textColor}]}>
             ¿No tenés una cuenta? <Text onPress={goToRegistro} style={[{fontWeight: '900'}, {color: theme.textColor}]}>Registrate</Text>
             </Text>

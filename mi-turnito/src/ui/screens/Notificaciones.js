@@ -1,10 +1,21 @@
 import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import {CardNotificacion} from '../components/CardNotificacion.js';
+import { medicos } from '../../../medicos.js'; 
 
 export default function Notificaciones({ navigation }) {
+const { theme, isDark } = useTheme();
+const { t } = useTranslation();
 
-const { isDark, toggleTheme, theme } = useTheme();
+const [notificaciones, setNotificaciones] = useState(medicos.filter(m => m.nombre === "Silvia Domínguez"));
+
+const handleDelete = (nombre) => {
+    setNotificaciones(prev => prev.filter(item => item.nombre !== nombre));
+};
 
 return (
 <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
@@ -18,33 +29,40 @@ return (
                     style={[{color: theme.textColor}, 
                     {textShadowRadius: 1}]} />
             </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { width: "49%"}, {color: theme.textColor}]}>Notificaciones</Text>
+            <View style={styles.centrar}>
+                <Text style={[styles.tituloInicial, { width: "49%"}, {color: theme.textColor}]}>{t("notification")}</Text>
+            </View>
         </View>
     </View>
 
     <ScrollView contentContainerStyle={styles.body}>
-        <View style={styles.containerFoto}>
-            <Image
-                source={
-                    isDark
-                        ? require('../../assets/images/NotificacionDMode.png')
-                        : require('../../assets/images/NotificacionLMode.png')
-                }
-                style={styles.imagen}
-            />
-        </View>
+        {notificaciones.length === 0 ? (
+            <View style={styles.containerFoto}>
+                <Image
+                    source={
+                        isDark
+                            ? require('../../assets/images/NotificacionDMode.png')
+                            : require('../../assets/images/NotificacionLMode.png')
+                    }
+                    style={styles.imagen}
+                />
+                <Text style={[styles.subTexto,{color: theme.textColor}]}>
+                    {t("emptyNotis")}
+                </Text>
+            </View>
+        ) : (
+            <View style={styles.contenedorCard}>
+                {notificaciones.map((medico) => (
+                    <CardNotificacion
+                        key={medico.id}
+                        nombre={medico.nombre}
+                        onDelete={handleDelete}
+                    />
+                ))}
+            </View>
+        )}
+    </ScrollView>
 
-        {/*
-        //espacio para agregar un componente de notificación
-        <TouchableOpacity>
-            <View style={styles.option}>
-            <Text style={styles.optionTitle}>Agendar nuevo turno</Text>
-            <Text style={styles.optionSub}>Programá turnos de medicina general o pediatría</Text>
-            <MaterialIcons name="chevron-right" size={24} color="#4F3680" style={styles.arrow} />
-        </View>
-        </TouchableOpacity>*/}
-
-        </ScrollView>
 </SafeAreaView>
 );
 }
@@ -72,15 +90,20 @@ tituloInicial: {
     fontWeight: 'bold',
 },
 subTexto: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#655873',
     fontWeight: 500,
+    alignSelf:'center',
 },
 iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
     borderColor: '#4F3680', 
+},
+centrar:{
+    alignItems: 'center',
+    justifyContent: 'center',
 },
 //BodyTurnos
 option: {
@@ -107,11 +130,42 @@ arrow: {
     right: 15,
     top: 20,
 },
-containerFoto: {
-    alignItems: 'center',
-    position: 'absolute',
-    top: 150,
-    left: 0,
-    right: 0,
+
+contenedorCard:{
+margin: 10,
 },
+card: {
+flexDirection: 'row',
+alignItems: 'center',
+margin: 20,
+padding: 15,
+borderRadius: 12,
+shadowColor: '#000',
+shadowOpacity: 0.1,
+shadowRadius: 4,
+elevation: 2,
+},
+avatar: {
+width: 60,
+height: 60,
+borderRadius: 30,
+marginRight: 15,
+},
+name: {
+fontSize: 20,
+fontWeight: 'bold',
+},
+specialty: {
+fontSize: 16,
+color: '#655873',
+},
+body: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+},
+
+imagen:{
+    marginTop:'200',
+}
 });

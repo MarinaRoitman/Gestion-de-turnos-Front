@@ -37,13 +37,6 @@ return (
                 <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
             </View>
         </TouchableOpacity>
-        <TouchableOpacity>
-            <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
-                <Text style={[styles.optionTitle, {color: theme.textColor} ]}>Mostrar historial de turnos</Text>
-                <Text style={[styles.optionSub, {color: theme.textColor} ]}>Revisá tus turnos pasados.</Text>
-                <MaterialIcons name="chevron-right" size={24} color="#4F3680" style={[styles.arrow,{color: theme.textColor}]} />
-            </View>
-        </TouchableOpacity>
         </ScrollView>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 150 }}>

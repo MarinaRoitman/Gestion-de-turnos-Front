@@ -16,6 +16,14 @@ const [modalVisible, setModalVisible] = useState(false);
     navigation.navigate("Login")
 };
 
+    const goToAyuda = () => {
+    navigation.navigate("Ayuda")
+};
+
+    const goToMisDatos = () => {
+    navigation.navigate("MisDatos")
+};
+
 return (
 <SafeAreaView style={[{ backgroundColor: theme.backgroundSecondary }]}>
     <View style={[styles.containerGlobal, { backgroundColor: theme.backgroundSecondary }]}>
@@ -41,7 +49,7 @@ return (
 
         <View style={{ height: 20, backgroundColor: theme.backgroundSecondary }} />
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goToMisDatos}>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('myData')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
@@ -59,7 +67,7 @@ return (
         />
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goToAyuda}>
                 <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
                     <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('help')}</Text>
                     <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />

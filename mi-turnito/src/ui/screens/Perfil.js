@@ -112,6 +112,7 @@ return (
         message="¿Estás seguro que deseas salir?"
         confirmText="Cerrar sesión"
         icon="exit-to-app"
+        actionType="logout"
         />
 
         <ConfirmationModal

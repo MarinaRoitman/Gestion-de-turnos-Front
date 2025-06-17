@@ -14,6 +14,7 @@ import Ayuda from '../ui/screens/Ayuda';
 import Recupero from '../ui/screens/RecuperarCuenta'
 import Detalle from '../ui/screens/DetalleHistorial';
 import MisDatosScreen from '../ui/screens/MisDatosScreen';
+import ProximoTurno from '../ui/screens/ProximoTurno';
 
 
 
@@ -36,6 +37,7 @@ return (
         <Stack.Screen name="Ayuda" component={Ayuda} />
         <Stack.Screen name="Detalle" component={Detalle} />
         <Stack.Screen name="MisDatos" component={MisDatosScreen} />
+        <Stack.Screen name="ProximoTurno" component={ProximoTurno} />
     </Stack.Navigator>
 );
 }

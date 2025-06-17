@@ -61,6 +61,9 @@ translation: {
     textNoti:"We have confirmed your appointment with specialist {{nombre}} (si se puede aca agregar el horario seleccionado).",
     notification: "Notifications",
     emptyNotis: "You don't have notifications.",
+    //next turn
+    next: "Next appointment",
+    emptyAppointment: "You don't have any upcoming appointments.",
 }
 
 },
@@ -114,6 +117,9 @@ translation: {
     textNoti: "Hemos confirmado su cita con el especialista {{nombre}} (si se puede aca agregar el horario seleccionado).",
     notification: "Notificaciones",
     emptyNotis: "No tenés notificaciones.",
+    //nextTurn
+    next: "Próximo Turno",
+    emptyAppointment: "No tenés próximos turnos.",
 
 }
 }

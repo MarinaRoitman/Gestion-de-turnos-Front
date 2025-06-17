@@ -15,6 +15,7 @@ import ConfirmarTurno from '../ui/screens/ConfirmarTurno';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ayuda from '../ui/screens/Ayuda';
 import DetalleScreen from '../ui/screens/DetalleHistorial';
+import ProximoTurno from '../ui/screens/ProximoTurno';
 
 import { View } from 'react-native';
 // Creación de los stacks individuales
@@ -42,6 +43,7 @@ return (
     <Stack.Screen name="SeleccionarHorario" component={SeleccionarHorario} />
     <Stack.Screen name="ConfirmarTurno" component={ConfirmarTurno} />
     <Stack.Screen name="Historial" component={Historial} />
+    <Stack.Screen name="ProximoTurno" component={ProximoTurno} />
 </Stack.Navigator>
 );
 }

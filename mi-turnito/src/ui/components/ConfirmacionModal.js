@@ -7,7 +7,7 @@
     
 
 
-    export default function ConfirmationModal({ visible, onClose, onConfirm, title, message, confirmText, icon}) {
+    export default function ConfirmationModal({ visible, onClose, onConfirm, title, message, confirmText, icon, actionType }) {
     const { theme } = useTheme();
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -15,33 +15,43 @@
     const goToLogin = () => {
     navigation.navigate("Login")
 };
+    const defaultIcon = icon || (actionType === 'delete' ? 'close' : actionType === 'logout' ? 'logout' : null);
 
     return (
         <Modal visible={visible} transparent animationType="fade">
             <View style={styles.overlay}>
                 <View style={[styles.modalContainer, { backgroundColor: theme.backgroundButtomHome }]}>
                     <View style={styles.titleRow}>
-                        {icon && (
+                        {defaultIcon && (
                             <View style={[styles.iconContainer, { backgroundColor: theme.textColor }]}>
-                                <MaterialIcons name={icon} size={24} color={theme.backgroundImput} />
+                                <MaterialIcons name={defaultIcon} size={24} color={theme.backgroundTertiary} />
                             </View>
                         )}
                         <Text style={[styles.title, { color: theme.textColor }]}>{title}</Text>
                     </View>
                     <Text style={[styles.message, { color: theme.textColor }]}>{message}</Text>
                     <View style={[styles.buttonContainer, { justifyContent: 'center' }]}>
-                        <TouchableOpacity onPress={onClose} style={[styles.button1, {backgroundColor: theme.backgroundImput}]}>
+                        <TouchableOpacity onPress={onClose} style={[styles.button1, { backgroundColor: theme.backgroundImput }]}>
                             <Text style={styles.cancelText}>Cancelar</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={goToLogin} style={[styles.button,{backgroundColor: theme.modalButton}]}>
-                            <Text style={[styles.confirmText,{color: theme.backgroundImput}]}>{confirmText}</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (actionType === 'delete') {
+                                    onConfirm();
+                                } else {
+                                    goToLogin();
+                                }
+                            }}
+                            style={[styles.button, { backgroundColor: theme.modalButton }]}
+                        >
+                            <Text style={[styles.confirmText, { color: theme.backgroundImput }]}>{confirmText}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
         </Modal>
     );
-    }
+}
 
     const styles = StyleSheet.create({
     overlay: {

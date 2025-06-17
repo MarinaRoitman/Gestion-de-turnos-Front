@@ -9,6 +9,10 @@ export default function Turnos({ navigation }) {
     navigation.navigate("SeleccionarMedico")
 };
 
+    const goToProximoTurno = () => {
+    navigation.navigate("ProximoTurno")
+};
+
     const { isDark, toggleTheme, theme } = useTheme();
 
 return (
@@ -30,7 +34,7 @@ return (
             <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
         </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={goToProximoTurno}>
             <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
                 <Text style={[styles.optionTitle, {color: theme.textColor}]}>Consultar próximos turnos</Text>
                 <Text style={[styles.optionSub, {color: theme.textColor}]}>Consultá y cancelá tus turnos agendados.</Text>

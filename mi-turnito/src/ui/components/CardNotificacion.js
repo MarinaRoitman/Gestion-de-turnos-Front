@@ -14,10 +14,10 @@ return (
     <View style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]}>
         <Image source={medicos} style={styles.avatar} />
         <View style={styles.info}>
-            <Text style={styles.nombre}>
+            <Text style={[styles.nombre,{color: theme.textColor}]}>
                 {t('notiTitle')}
             </Text>
-            <Text style={styles.subinfo}>
+            <Text style={[styles.subinfo, {color: theme.textColor}]}>
                 {t('textNoti', { nombre })}
             </Text>
         </View>

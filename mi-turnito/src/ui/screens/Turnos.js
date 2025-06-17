@@ -39,7 +39,7 @@ return (
         </TouchableOpacity>
         </ScrollView>
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 150 }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 190 }}>
             <Image source={require('../../../src/assets/images/ImageTurnos.png')} style={styles.imagen}/>
         </View>
 

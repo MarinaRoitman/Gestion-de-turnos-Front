@@ -5,12 +5,16 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import { Switch } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import LanguageSelectorModal from '../components/ModalLanguage.js';
+import ConfirmationModal from '../components/ConfirmacionModal.js';
 
 export default function Perfil({ navigation }) {
 
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
 const [modalVisible, setModalVisible] = useState(false);
+const [showLogoutModal, setShowLogoutModal] = useState(false);
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+
 
     const goToLogin = () => {
     navigation.navigate("Login")
@@ -81,18 +85,18 @@ return (
                 </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('deleteAccount')}</Text>
-                    <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
-                </View>
+        <TouchableOpacity onPress={() => setShowDeleteModal(true)}>
+        <View style={[styles.option, { backgroundColor: theme.backgroundPerfil }]}>
+            <Text style={[styles.optionTitle, { color: theme.textColor }]}>{t('deleteAccount')}</Text>
+            <MaterialIcons name="chevron-right" size={24} style={[styles.arrow, { color: theme.textColor }]} />
+        </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={goToLogin}>
-                <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
-                    <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t('logout')}</Text>
-                    <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
-                </View>
+        <TouchableOpacity onPress={() => setShowLogoutModal(true)}>
+        <View style={[styles.option, { backgroundColor: theme.backgroundPerfil }]}>
+            <Text style={[styles.optionTitle, { color: theme.textColor }]}>{t('logout')}</Text>
+            <MaterialIcons name="chevron-right" size={24} style={[styles.arrow, { color: theme.textColor }]} />
+        </View>
         </TouchableOpacity>
 
         </ScrollView>
@@ -100,8 +104,30 @@ return (
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         />
+        <ConfirmationModal
+        visible={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={goToLogin}
+        title="¿Querés cerrar sesión?"
+        message="¿Estás seguro que deseas salir?"
+        confirmText="Cerrar sesión"
+        icon="exit-to-app"
+        />
 
+        <ConfirmationModal
+        visible={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={() => {
+            {goToLogin}
+            console.log('Cuenta eliminada');
+            setShowDeleteModal(false);
+        }}
+        title="¿Eliminar cuenta? 😥"
+        message="Si eliminás tu cuenta, se borrarán todos tus datos, turnos y estudios guardados. Esta acción no se puede deshacer."
+        confirmText="Eliminar cuenta"
+        />
 </SafeAreaView>
+
 );
 }
 
@@ -139,10 +165,9 @@ iconWrapper: {
 option: {
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.3,
     borderBottomColor: '#DEDEDE',
     position: 'relative',
-
 },
 optionTitle: {
     fontSize: 17,

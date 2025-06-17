@@ -18,7 +18,7 @@ return (
 <View style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
     <View style={[styles.header, { borderBottomColor: theme.borderBottomColor }]}>
     <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-        <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />@
+        <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
     </TouchableOpacity>
     <Text style={[styles.title, { color: theme.textColor }]}>{t('myData')}</Text>
     </View>

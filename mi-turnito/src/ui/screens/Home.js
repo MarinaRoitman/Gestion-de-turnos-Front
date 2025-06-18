@@ -17,6 +17,11 @@ const goToHistorial = () => {
     navigation.navigate("Historial");
 };
 
+const goToCredencial = () => {
+    navigation.navigate("Credencial");
+};
+
+
 const { isDark, toggleTheme, theme } = useTheme();
 
 return (
@@ -46,7 +51,7 @@ return (
             <View style={styles.buttonContainer}>
                 <ButtonHome title="Turnos" onPress={goToTurnos} iconName="calendar"/>
                 <ButtonHome title="Historial" onPress={goToHistorial} iconName="archive"/>
-                <ButtonHome title="Mi credencial" onPress={() => console.log('Mi credencial')} iconName="vcard" />
+                <ButtonHome title="Mi credencial" onPress={goToCredencial} iconName="vcard" />
                 <ButtonHome title="Cartilla" onPress={goToCartilla} iconName="users"/>
             </View>
         

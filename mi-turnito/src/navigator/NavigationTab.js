@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ayuda from '../ui/screens/Ayuda';
 import DetalleScreen from '../ui/screens/DetalleHistorial';
 import ProximoTurno from '../ui/screens/ProximoTurno';
+import Credencial from '../ui/screens/Credencial';
 
 import { View } from 'react-native';
 // Creación de los stacks individuales
@@ -28,6 +29,7 @@ return (
 <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HomeMain" component={Home}/>
     <Stack.Screen name="Cartilla" component={Cartilla} />
+    <Stack.Screen name="Credencial" component={Credencial} />
 </Stack.Navigator>
 );
 }

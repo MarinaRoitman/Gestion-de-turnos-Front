@@ -64,6 +64,9 @@ translation: {
     //next turn
     next: "Next appointment",
     emptyAppointment: "You don't have any upcoming appointments.",
+    //my credential
+    credential:"My Credential",
+    numCredential: "N° Credential:",
 }
 
 },
@@ -120,6 +123,9 @@ translation: {
     //nextTurn
     next: "Próximo Turno",
     emptyAppointment: "No tenés próximos turnos.",
+    //my credential
+    credential:"Mi credencial",
+    numCredential: "N° de Credencial:",
 
 }
 }

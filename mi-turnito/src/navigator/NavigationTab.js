@@ -17,11 +17,16 @@ import Ayuda from '../ui/screens/Ayuda';
 import DetalleScreen from '../ui/screens/DetalleHistorial';
 import ProximoTurno from '../ui/screens/ProximoTurno';
 import Credencial from '../ui/screens/Credencial';
+import { useTranslation } from 'react-i18next';
+
 
 import { View } from 'react-native';
 // Creación de los stacks individuales
+
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
 
 // Stack de la tab Home
 function HomeStack() {
@@ -34,6 +39,7 @@ return (
 );
 }
 
+
 // Stack de la tab Turnos
 function TurnosStack() {
 return (
@@ -41,7 +47,7 @@ return (
     <Stack.Screen name="TurnosMain" component={Turnos} />
     <Stack.Screen name="SeleccionarMedico" component={SeleccionarMedico} />
     <Stack.Screen name="Filtro" component={Filtro} />
-    <Stack.Screen name="Resultados" component={Resultados} />       
+    <Stack.Screen name="Resultados" component={Resultados} />
     <Stack.Screen name="SeleccionarHorario" component={SeleccionarHorario} />
     <Stack.Screen name="ConfirmarTurno" component={ConfirmarTurno} />
     <Stack.Screen name="Historial" component={Historial} />
@@ -49,6 +55,7 @@ return (
 </Stack.Navigator>
 );
 }
+
 
 // Stack de la tab Historial
 function HistorialStack() {
@@ -60,6 +67,7 @@ return (
 );
 }
 
+
 // Stack de la tab Notificaciones
 function NotificacionesStack() {
 return (
@@ -68,6 +76,7 @@ return (
 </Stack.Navigator>
 );
 }
+
 
 // Stack de la tab Perfil
 function PerfilStack() {
@@ -80,9 +89,12 @@ return (
 }
 
 
+
+
 // Tabs principales
 export default function NavigationTab() {
     const { theme } = useTheme();
+    const { t } = useTranslation();
 return (
 <Tab.Navigator initialRouteName="Home" screenOptions={{
         headerShown: false,
@@ -96,42 +108,44 @@ return (
         tabBarInactiveTintColor: theme.tabBarIconColor,
     }}>
 
+
     <Tab.Screen name="Turnos" component={TurnosStack} options={{
         tabBarIcon: ({ color, size }) => (
             <View style={{ position: 'absolute'}}>
             <MaterialIcons name="event" color={color} size={32} />
             </View>),
-        tabBarLabel: "Turnos",
+        tabBarLabel: t('turno'),
     }}/>
-    <Tab.Screen name="Historial" component={HistorialStack} 
+    <Tab.Screen name="Historial" component={HistorialStack}
     options={{
         tabBarIcon: ({ color, size }) => (
         <MaterialIcons name="history" color={color}size={32}/>),
-        tabBarLabel: "Historial",
+        tabBarLabel: t('history'),
     }}/>
-    <Tab.Screen name="Home" component={HomeStack} 
+    <Tab.Screen name="Home" component={HomeStack}
     options={{
         tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="home" color={color} size={32} />
         ),
-        tabBarLabel: "Inicio",
+        tabBarLabel: t('home'),
         }}
     />
-    <Tab.Screen name="Notificaciones" component={NotificacionesStack} 
+    <Tab.Screen name="Notificaciones" component={NotificacionesStack}
     options={{
         tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="notifications" color={color} size={32} />
         ),
-        tabBarLabel: "Notificaciones",
+        tabBarLabel: t('notification'),
     }}
     />
-    <Tab.Screen name="Perfil" component={PerfilStack} 
+    <Tab.Screen name="Perfil" component={PerfilStack}
     options={{
         tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="person" color={color} size={32} />
         ),
-        tabBarLabel: "Perfil",
+        tabBarLabel: t('profile'),
     }}/>
+
 
 </Tab.Navigator>
 );

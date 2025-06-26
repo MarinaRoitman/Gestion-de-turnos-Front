@@ -3,13 +3,17 @@ import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 const locales = Localization.getLocales();
 
+
 const supportedLanguages = ['es', 'en'];
+
 
 const deviceLanguage = Array.isArray(locales) && locales.length > 0
     ? locales[0].languageCode
     : 'es';
 
+
 const initialLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'es';
+
 
 const resources = {
 en: {
@@ -66,8 +70,17 @@ translation: {
     emptyAppointment: "You don't have any upcoming appointments.",
     //my credential
     credential:"My Credential",
-    numCredential: "N° Credential:",
+    numCredential: "N° Credencial:",
+    //extras
+    home:"Home",
+    turno: "Appointments",
+    //appointments
+    agendar:"Schedule a new appointment",
+    programa: "Schedule general medicine appointments.",
+    consultar: "Check upcoming appointments",
+    consultarSub:"View and cancel your scheduled appointments.",
 }
+
 
 },
 es: {
@@ -126,10 +139,21 @@ translation: {
     //my credential
     credential:"Mi credencial",
     numCredential: "N° de Credencial:",
+    //extras
+    home:"Inicio",
+    turno:"Turnos",
+    //Appointments
+    agendar:"Agendar nuevo turno",
+    programa: "Programá turnos de medicina general.",
+    consultar: "Consultar próximos turnos",
+    consultarSub:"Consultá y cancela tus turnos agendados",
+
+
 
 }
 }
 };
+
 
 i18n
 .use(initReactI18next)
@@ -142,4 +166,8 @@ interpolation: {
 },
 });
 
+
 export default i18n;
+
+
+

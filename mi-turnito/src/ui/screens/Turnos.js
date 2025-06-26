@@ -2,18 +2,25 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useTranslation } from 'react-i18next';
+
 
 export default function Turnos({ navigation }) {
+
 
     const goToNuevoTurno = () => {
     navigation.navigate("SeleccionarMedico")
 };
 
+
     const goToProximoTurno = () => {
     navigation.navigate("ProximoTurno")
 };
 
+
     const { isDark, toggleTheme, theme } = useTheme();
+    const { t } = useTranslation();
+
 
 return (
 <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>
@@ -22,34 +29,40 @@ return (
             <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate('Home')}>
                 <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
             </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { width: "30%"}, {color: theme.textColor}]}>Turnos</Text>
+            <View style={styles.centrar}>
+            <Text style={[styles.tituloInicial, { width: "50%"}, {color: theme.textColor}]}>{t("turno")}</Text>
+            </View>
         </View>
     </View>
+
 
     <ScrollView contentContainerStyle={[styles.body, {backgroundColor:theme.backgroundSecondary}]}>
         <TouchableOpacity onPress={goToNuevoTurno}>
         <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
-            <Text style={[styles.optionTitle, {color: theme.textColor}]}>Agendar nuevo turno</Text>
-            <Text style={[styles.optionSub, {color: theme.textColor}]}>Programá turnos de medicina general o pediatría</Text>
+            <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t("agendar")}</Text>
+            <Text style={[styles.optionSub, {color: theme.textColor}]}>{t("programa")}</Text>
             <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
         </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={goToProximoTurno}>
             <View style={[styles.option, {backgroundColor: theme.backgroundTertiary}]}>
-                <Text style={[styles.optionTitle, {color: theme.textColor}]}>Consultar próximos turnos</Text>
-                <Text style={[styles.optionSub, {color: theme.textColor}]}>Consultá y cancelá tus turnos agendados.</Text>
+                <Text style={[styles.optionTitle, {color: theme.textColor}]}>{t("consultar")}</Text>
+                <Text style={[styles.optionSub, {color: theme.textColor}]}>{t("consultarSub")}</Text>
                 <MaterialIcons name="chevron-right" size={24} style={[styles.arrow,{color: theme.textColor}]} />
             </View>
         </TouchableOpacity>
         </ScrollView>
 
+
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 190 }}>
             <Image source={require('../../../src/assets/images/ImageTurnos.png')} style={styles.imagen}/>
         </View>
 
+
 </SafeAreaView>
 );
 }
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -65,7 +78,7 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
+
 },
 tituloInicial: {
     fontSize: 30,
@@ -79,7 +92,7 @@ iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
-    borderColor: '#4F3680', 
+    borderColor: '#4F3680',
 },
 //BodyTurnos
 option: {
@@ -88,6 +101,7 @@ option: {
     borderBottomWidth: 1,
     borderBottomColor: '#DEDEDE',
     position: 'relative',
+
 
 },
 optionTitle: {

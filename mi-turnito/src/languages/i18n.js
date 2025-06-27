@@ -79,6 +79,27 @@ translation: {
     programa: "Schedule general medicine appointments.",
     consultar: "Check upcoming appointments",
     consultarSub:"View and cancel your scheduled appointments.",
+    //Home
+    hi: '¡Hi',
+    helpTitle: "How can we help you today? 💜",
+    myCredential: "My credential",
+    directory: "Directory",
+    filters: "Filters",
+    scheduleAppointment: "Schedule Appointment",
+    confirmAppointment: "Confirm Appointment",
+    dateAndTime: "Date and time",
+    place: 'Place',
+    chooseDateTime: "Choose date and time according to availability",
+    selectTimeFirst: "Please select a time first",
+    applyFilters: "Apply filters",
+    specialty: "Specialty",
+    professional: "Professional",
+    all: 'All',
+    confirm: "Confirm",
+    titleDelete: "Delete appointment?",
+    messageDelete: "This action cannot be undone",
+    confirmDelete: "Delete",
+
 }
 
 
@@ -147,6 +168,25 @@ translation: {
     programa: "Programá turnos de medicina general.",
     consultar: "Consultar próximos turnos",
     consultarSub:"Consultá y cancela tus turnos agendados",
+    //home
+    helpTitle: "¿Cómo podemos ayudarte hoy? 💜",
+    myCredential: "Mi credencial",
+    directory: "Cartilla",
+    filters: "Filtros",
+    scheduleAppointment: "Agendar Turno",
+    confirmAppointment: "Confirmar Turno",
+    confirm: "Confirmar",
+    dateAndTime: "Día y horario",
+    place: 'Lugar',
+    chooseDateTime: "Elegí día y horario según la disponibilidad",
+    selectTimeFirst: "Por favor, primero seleccioná un horario",
+    applyFilters: "Aplicar filtros",
+    specialty: "Especialidad",
+    professional: "Profesional",
+    all: 'Todos',
+    titleDelete: "¿Eliminar turno?",
+    messageDelete: "Esta acción no se puede deshacer",
+    confirmDelete: "Eliminar turno",
 
 
 

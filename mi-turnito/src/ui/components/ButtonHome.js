@@ -28,7 +28,7 @@ button: {
     margin: 10,
 },
 buttonText: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: 'bold',
     paddingTop: 10,
 },

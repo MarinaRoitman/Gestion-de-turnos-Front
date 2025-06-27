@@ -13,6 +13,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { medicos } from '../../../medicos.js';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Seleccionar({ navigation }) {
     const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState(null);
@@ -24,6 +25,7 @@ export default function Seleccionar({ navigation }) {
         .map(m => m.nombre))]
     : [];
     const { isDark, toggleTheme, theme } = useTheme();
+    const { t } = useTranslation();
 
     return (
         <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
@@ -36,13 +38,15 @@ export default function Seleccionar({ navigation }) {
                             style={[ {color: theme.textColor}, {textShadowRadius: 1} ]}
                         />
                     </TouchableOpacity>
-                    <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "70%", paddingLeft: 100 }]}>Filtros</Text>
+                    <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "70%", paddingLeft: 100 }]}>
+                        {t('filters')}
+                    </Text>
                 </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.body}>
                 <View style={{ width: '100%', marginBottom: 20}}>
-                    <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>Especialidad</Text>
+                    <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>{t('specialty')}</Text>
                     <View style={styles.pickerContainer}>
                     <Picker
                         selectedValue={especialidadSeleccionada}
@@ -53,7 +57,7 @@ export default function Seleccionar({ navigation }) {
                         style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
                         dropdownIconColor={theme.modalButtonText}
                     >
-                        <Picker.Item label="Todas" value={null} />
+                        <Picker.Item label={t("all")} value={null} />
                         {especialidades.map((esp, index) => (
                             <Picker.Item key={index} label={esp} value={esp} />
                         ))}
@@ -63,7 +67,7 @@ export default function Seleccionar({ navigation }) {
 
                 {especialidadSeleccionada && (
                     <View style={{ width: '100%', marginBottom: 20 }}>
-                        <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>Profesional</Text>
+                        <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>{t('professional')}</Text>
                         <View style={styles.pickerContainer}>
                         <Picker
                             selectedValue={profesionalSeleccionado}
@@ -71,7 +75,7 @@ export default function Seleccionar({ navigation }) {
                             style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
                             dropdownIconColor={theme.modalButtonText}
                         >
-                            <Picker.Item label="Todos" value={null} />
+                            <Picker.Item label={t("all")} value={null} />
                             {profesionalesDeEspecialidad.map((prof, index) => (
                                 <Picker.Item key={index} label={prof} value={prof} />
                             ))}
@@ -95,7 +99,7 @@ export default function Seleccionar({ navigation }) {
 
                 <View style={styles.botonFijo}>
                     <Button
-                    title="Aplicar Filtros"
+                    title={t('applyFilters')}
                     onPress={() => navigation.navigate('Resultados', {
                         especialidad: especialidadSeleccionada,
                         profesional: profesionalSeleccionado,

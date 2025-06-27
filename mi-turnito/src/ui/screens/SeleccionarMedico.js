@@ -4,10 +4,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos.js';
 import { medicos } from '../../../medicos.js'; 
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Seleccionar( {navigation} ) {
 
     const { isDark, toggleTheme, theme } = useTheme();
+    const { t } = useTranslation();
 
     const goToFiltro = () => {
     navigation.navigate("Filtro");
@@ -20,13 +22,19 @@ return (
             <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
                 <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
             </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { width: "70%", paddingLeft:50}, {color: theme.textColor}]}>Agendar Turno</Text>
+            <View style={styles.centrar}>
+                <Text style={[styles.tituloInicial, { width: "100%"}, {color: theme.textColor}]}>
+                    {t('scheduleAppointment')}
+                </Text>
+            </View>
         </View>
     </View>
 
     <TouchableOpacity style={[styles.filtroBtn, {backgroundColor: theme.buttonColor}]} onPress={goToFiltro}>
         <MaterialIcons name="tune" size={23} style={{color: theme.textColorSecondary}} />
-        <Text style={[styles.filtroText, {color: theme.textColorSecondary}]}>Filtros</Text>
+        <Text style={[styles.filtroText, {color: theme.textColorSecondary}]}>
+            {t('filters')}
+        </Text>
     </TouchableOpacity>
 
     <ScrollView contentContainerStyle={styles.body}>

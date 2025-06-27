@@ -3,6 +3,7 @@ import { RectangleLogin } from '../../ui/components/rectangleLogin.js';
 import { ButtonHome }  from '../../ui/components/ButtonHome.js';
 import { CardsHome } from '../../ui/components/CardsHome.js';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Home( {navigation} ) {
 const goToTurnos = () => {
@@ -23,6 +24,7 @@ const goToCredencial = () => {
 
 
 const { isDark, toggleTheme, theme } = useTheme();
+const { t } = useTranslation();
 
 return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background, flex: 1 }]}>
@@ -41,21 +43,23 @@ return (
             <View style={styles.containerContenido}>
                 <RectangleLogin style={[{ borderTopLeftRadius: 0, borderTopRightRadius: 0, top: -45, borderBottomLeftRadius: 35, borderBottomRightRadius: 35}]} />
                 <View style={{ alignItems: 'flex-start', width: '100%' }}>
-                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' },{color: theme.textColor}]}>¡Hola Macarena!</Text>
+                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' },{color: theme.textColor}]}>{t('hi')} Macarena!</Text>
                     <Text style={[styles.subTexto, { textAlign: 'left', width: '100%' }, {color: theme.textColor}]}>
-                        ¿Cómo podemos ayudarte hoy? 💜
+                        {t('helpTitle')}
                     </Text>
                 </View>
             </View>
 
             <View style={styles.buttonContainer}>
-                <ButtonHome title="Turnos" onPress={goToTurnos} iconName="calendar"/>
-                <ButtonHome title="Historial" onPress={goToHistorial} iconName="archive"/>
-                <ButtonHome title="Mi credencial" onPress={goToCredencial} iconName="vcard" />
-                <ButtonHome title="Cartilla" onPress={goToCartilla} iconName="users"/>
+                <ButtonHome title={t('turno')} onPress={goToTurnos} iconName="calendar"/>
+                <ButtonHome title={t('history')} onPress={goToHistorial} iconName="archive"/>
+                <ButtonHome title={t('myCredential')} onPress={goToCredencial} iconName="vcard" />
+                <ButtonHome title={t('directory')} onPress={goToCartilla} iconName="users"/>
             </View>
         
-        <Text style={[styles.proximoTurnoTitle, { alignItems: 'flex-start', width: '100%' }, {color: theme.textColor}]}>Próximos Turnos</Text>
+        <Text style={[styles.proximoTurnoTitle, { alignItems: 'flex-start', width: '100%' }, {color: theme.textColor}]}>
+            {t('next')}
+        </Text>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardScroll}>
                 <CardsHome

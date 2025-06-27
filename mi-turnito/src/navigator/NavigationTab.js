@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 // Creación de los stacks individuales
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -87,9 +86,6 @@ return (
 </Stack.Navigator>
 );
 }
-
-
-
 
 // Tabs principales
 export default function NavigationTab() {

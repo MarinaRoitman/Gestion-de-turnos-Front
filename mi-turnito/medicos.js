@@ -7,7 +7,7 @@ export const medicos = [
     direccion: "Bulnes 2057, Capital Federal",
     imagen: require('./src/assets/images/medicaSilvia.jpg'),
     disponibilidad: {
-    "Lunes 16 de Junio 16 de Junio": ["10:00AM", "11:00AM"],
+    "Lunes 16 de Junio": ["10:00AM", "11:00AM"],
     "Martes 17 de Junio": ["12:00PM"],
     "Jueves 19 de Junio": ["14:00PM", "15:30PM", "16:00PM", "17:0PM", "18:30PM", "19:00PM", ],
     }

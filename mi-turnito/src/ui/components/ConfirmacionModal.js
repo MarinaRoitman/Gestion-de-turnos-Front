@@ -32,7 +32,7 @@
                     <Text style={[styles.message, { color: theme.textColor }]}>{message}</Text>
                     <View style={[styles.buttonContainer, { justifyContent: 'center' }]}>
                         <TouchableOpacity onPress={onClose} style={[styles.button1, { backgroundColor: theme.backgroundImput }]}>
-                            <Text style={styles.cancelText}>Cancelar</Text>
+                            <Text style={styles.cancelText}>{t('cancel')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {

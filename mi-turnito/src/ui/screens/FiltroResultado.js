@@ -3,10 +3,12 @@ import { medicos } from '../../../medicos.js';
 import { CardsMedicos } from '../components/CardsMedicos.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Resultados({ route, navigation }) {
     const { isDark, toggleTheme, theme } = useTheme();
     const { especialidad, profesional } = route.params;
+    const { t } = useTranslation();
 
     const medicosFiltrados = medicos.filter(m =>
         (!especialidad || m.especialidad === especialidad) &&
@@ -23,8 +25,12 @@ export default function Resultados({ route, navigation }) {
                         style={[ {color: theme.textColor}, 
                         {textShadowRadius: 1} ]} />
                 </TouchableOpacity>
-                <Text style={[styles.titulo, { width: "80%", paddingLeft: 55 }, {color: theme.textColor} ]}>Agendar Turno</Text>
-            </View>
+                    <View style={styles.centrar}>
+                        <Text style={[styles.titulo, { width: "100%"}, {color: theme.textColor}]}>
+                            {t('scheduleAppointment')}
+                        </Text>
+                    </View>
+                </View>
 
             <ScrollView contentContainerStyle={styles.body}>
                 {medicosFiltrados.length > 0 ? (

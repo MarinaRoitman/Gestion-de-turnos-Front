@@ -5,12 +5,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import ButtonSecondary from '../components/ButtonSecondary.js';
 import ErrorModal from '../components/ErrorModal';
+import { useTranslation } from 'react-i18next';
 
 export default function Horario({ route, navigation }) {
     const { medico } = route.params;
     const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
     const { isDark, toggleTheme, theme } = useTheme();
     const [modalErrorVisible, setModalErrorVisible] = useState(false);
+    const { t } = useTranslation();
 
     return (
         <SafeAreaView style={[{backgroundColor:theme.backgroundTertiary}, {flex: 1}]}>
@@ -19,7 +21,11 @@ export default function Horario({ route, navigation }) {
                     <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
                         <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
                     </TouchableOpacity>
-                    <Text style={[styles.tituloInicial, { width: "80%", paddingLeft:60}, {color: theme.textColor}]}>Agendar Turno</Text>
+                    <View style={styles.centrar}>
+                        <Text style={[styles.tituloInicial, { width: "100%"}, {color: theme.textColor}]}>
+                            {t('scheduleAppointment')}
+                        </Text>
+                    </View>
                 </View>
             </View>
             <ScrollView contentContainerStyle={styles.body}>
@@ -33,8 +39,10 @@ export default function Horario({ route, navigation }) {
             <View style={[styles.infoContainer]}>
                 <MaterialIcons name="calendar-today" size={22} style={{color: theme.colorIconBackground}}/>
                 <View style={styles.infoText}>
-                <Text style={[styles.infoLabel,{color: theme.textColor}]}>Día y horario</Text>
-                <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>Elegí día y horario según la disponibilidad</Text>
+                <Text style={[styles.infoLabel,{color: theme.textColor}]}>{t('dateAndTime')}</Text>
+                <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>
+                    {t('chooseDateTime')}
+                </Text>
                 </View>
             </View>
 
@@ -86,14 +94,14 @@ export default function Horario({ route, navigation }) {
                     horario: `${horarioSeleccionado.dia} a las ${horarioSeleccionado.hora}`,
                 });
             }}
-            title="Confirmar Turno"
+            title={t('confirmAppointment')}
             />
             </View>
 
             </ScrollView>
             <ErrorModal
                 visible={modalErrorVisible}
-                message="Por favor, primero seleccioná un horario."
+                message={t('selectTimeFirst')}
                 onClose={() => setModalErrorVisible(false)}
             />
         </SafeAreaView>

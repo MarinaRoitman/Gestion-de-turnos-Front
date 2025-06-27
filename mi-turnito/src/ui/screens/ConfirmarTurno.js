@@ -4,10 +4,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos';
 import { useTheme } from '../../../src/theme/ThemeContext';
 import ButtonSecondary from '../components/ButtonSecondary';
+import { useTranslation } from 'react-i18next';
 
 export default function ConfirmarTurno({ route, navigation }) {
   const { medico, horario } = route.params;
   const { isDark, toggleTheme, theme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
@@ -16,7 +18,11 @@ export default function ConfirmarTurno({ route, navigation }) {
                 <TouchableOpacity style={[styles.iconWrapper]} onPress={() => navigation.goBack()}>
                     <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
                 </TouchableOpacity>
-                <Text style={[styles.tituloInicial, { width: "60%"}, {color: theme.textColor}]}>Confirmar Turno</Text>
+                <View style={styles.centrar}>
+                    <Text style={[styles.tituloInicial, { width: "100%"}, {color: theme.textColor}]}>
+                        {t('confirmAppointment')}
+                    </Text>
+                </View>
             </View>
         </View>
 
@@ -33,7 +39,7 @@ export default function ConfirmarTurno({ route, navigation }) {
       <View style={[styles.infoContainer, {color: theme.colorIconBackground}]}>
         <MaterialIcons name="calendar-today" size={25} style={{color: theme.colorIconBackground}} />
         <View style={styles.infoText}>
-          <Text style={[styles.infoLabel,{color: theme.textColor}]}>Día y horario</Text>
+          <Text style={[styles.infoLabel,{color: theme.textColor}]}>{t('dateAndTime')}</Text>
           <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>{horario}</Text>
         </View>
       </View>
@@ -41,14 +47,14 @@ export default function ConfirmarTurno({ route, navigation }) {
       <View style={[styles.infoContainer, {color: theme.colorIconBackground}]}>
         <MaterialIcons name="location-on" size={25} style={{color: theme.colorIconBackground}} />
         <View style={styles.infoText}>
-          <Text style={[styles.infoLabel,{color: theme.textColor}]}>Lugar</Text>
+          <Text style={[styles.infoLabel,{color: theme.textColor}]}>{t('place')}</Text>
           <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>{medico.direccion}</Text>
         </View>
       </View>
 
       <View style={styles.botonContainer}>
         <ButtonSecondary
-          title="Confirmar"
+          title={t('confirm')}
           onPress={() => navigation.popToTop()}
         />
       </View>

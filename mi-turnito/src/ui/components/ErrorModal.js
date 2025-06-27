@@ -2,9 +2,11 @@ import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function ErrorModal({ visible, message, onClose }) {
 const { theme } = useTheme();
+const { t } = useTranslation();
 
 return (
 <Modal
@@ -22,7 +24,7 @@ return (
         </Text>
         </View>
         <TouchableOpacity onPress={onClose} style={[styles.modalButton, { backgroundColor: theme.modalButton}]}>
-        <Text style={styles.modalButtonText}>Cerrar</Text>
+        <Text style={styles.modalButtonText}>{t('close')}</Text>
         </TouchableOpacity> 
     </View>
     </View>

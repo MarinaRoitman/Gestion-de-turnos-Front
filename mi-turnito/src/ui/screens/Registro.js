@@ -5,6 +5,7 @@ import RectangleLogin1 from '../../ui/components/rectangleLogin.js';
 import InputField from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { createPaciente } from '../../api/paciente.js';
 
 export default function Registro( {navigation} ) {
 const [username, setUsername] = useState('');
@@ -16,6 +17,18 @@ const [dni, setDni] = useState('');
 const [fechaNacimiento, setFechaNacimiento] = useState('');
 
 const { isDark, toggleTheme, theme } = useTheme();
+
+const handleRegistro = async () => {
+  try {
+    const paciente = await createPaciente(nombre, apellido, username, password, dni, fechaNacimiento, telefono);
+    console.log("Paciente creado:", paciente);
+    // Podés navegar al login o mostrar una alerta si querés:
+    navigation.navigate("Login");
+  } catch (error) {
+    console.error("Error al registrar paciente:", error);
+    // También podrías mostrar una alerta con el error
+  }
+};
 
 const goToLogin = () => {
     navigation.navigate("Login"); 
@@ -114,7 +127,7 @@ return (
         />
     </View>
     <View style={{ margin: 25, marginBottom:16 }}>
-        <CustomButton title="Registrarme" />
+        <CustomButton title="Registrarme" onPress={handleRegistro} />
     </View>
     </ScrollView>
 </View>

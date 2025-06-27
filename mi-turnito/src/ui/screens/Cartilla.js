@@ -13,7 +13,9 @@ export default function Cartilla({ navigation }) {
   useEffect(() => {
     async function fetchProfesionales() {
       try {
+        console.log("Cargando profesionales...");
         const data = await getProfesionales();
+        console.log("Profesionales recibidos:", JSON.stringify(data, null, 2));
         setProfesionales(data);
       } catch (error) {
         console.error("Error cargando profesionales:", error);

@@ -51,3 +51,32 @@ export async function getPacienteById(id) {
     throw error;
   }
 }
+
+export async function createPaciente(nombre, apellido, mail, password, dni, fechaNacimiento, telefono) {
+  try {
+    const data = {
+      nombre,
+      apellido,
+      mail,
+      password,
+      dni,
+      fechaNacimiento,
+      telefono
+    };
+
+    const response = await axios.post(`${hostname}/pacientes`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      auth: {
+        username: 'usuario',
+        password: '1234'
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al crear paciente:', error);
+    throw error;
+  }
+}

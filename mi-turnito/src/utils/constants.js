@@ -1,1 +1,1 @@
-export const hostname = '' //tu ip local
+export const hostname = 'http://10.0.2.2:8080';

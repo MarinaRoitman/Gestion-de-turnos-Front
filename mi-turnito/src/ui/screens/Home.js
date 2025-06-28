@@ -1,9 +1,12 @@
 import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
-import { RectangleLogin } from '../../ui/components/rectangleLogin.js';
+import { RectangleLogin } from '../components/RectangleLogin.js';
 import { ButtonHome }  from '../../ui/components/ButtonHome.js';
 import { CardsHome } from '../../ui/components/CardsHome.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext.js';
+import { getPacienteById } from '../../api/paciente.js';
 
 export default function Home( {navigation} ) {
 const goToTurnos = () => {
@@ -22,6 +25,31 @@ const goToCredencial = () => {
     navigation.navigate("Credencial");
 };
 
+const { userId } = useContext(AuthContext);
+const [paciente, setPaciente] = useState(null);
+const [loading, setLoading] = useState(true);
+
+const hoy = new Date();
+const fechaHoyString = hoy.toISOString().split('T')[0]; // YYYY-MM-DD
+
+const turnosFiltrados = paciente?.turnos?.filter(turno => turno.fecha >= fechaHoyString) || [];
+
+useEffect(() => {
+  async function fetchPaciente() {
+    try {
+      const data = await getPacienteById(userId);
+      setPaciente(data);
+    } catch (error) {
+      console.error("Error al cargar datos del paciente:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (userId) {
+    fetchPaciente();
+  }
+}, [userId]);
 
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
@@ -43,7 +71,9 @@ return (
             <View style={styles.containerContenido}>
                 <RectangleLogin style={[{ borderTopLeftRadius: 0, borderTopRightRadius: 0, top: -45, borderBottomLeftRadius: 35, borderBottomRightRadius: 35}]} />
                 <View style={{ alignItems: 'flex-start', width: '100%' }}>
-                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' },{color: theme.textColor}]}>{t('hi')} Macarena!</Text>
+                    <Text style={[styles.tituloInicial, { textAlign: 'left', width: '100%' }, { color: theme.textColor }]}>
+                        {t('hi')} {paciente?.nombre || '...'}!
+                    </Text>
                     <Text style={[styles.subTexto, { textAlign: 'left', width: '100%' }, {color: theme.textColor}]}>
                         {t('helpTitle')}
                     </Text>
@@ -62,18 +92,19 @@ return (
         </Text>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardScroll}>
-                <CardsHome
-                    especialidad="Clínica médica"
-                    fecha="21/05/25 09:00AM"
+            {turnosFiltrados.length > 0 ? (
+                turnosFiltrados.map(turno => (
+                    <CardsHome
+                    key={turno.id}
+                    especialidad={turno.profesional.matricula || "Sin matrícula"}
+                    fecha={`${turno.fecha} ${turno.hora.slice(0,5)}`}
                     imagen={require('../../../src/assets/images/medicaSilvia.jpg')}
-                    medico="Julia Martínez"
-                />
-                <CardsHome
-                    especialidad="Cardiología"
-                    fecha="22/05/25 11:30AM"
-                    imagen={require('../../../src/assets/images/medicaSilvia.jpg')}
-                    medico="Ricardo Gómez"
-                />
+                    medico={`${turno.profesional.nombre} ${turno.profesional.apellido}`}
+                    />
+                ))
+                ) : (
+                <Text style={{ color: theme.textColor, paddingLeft: 25 }}>No hay turnos agendados</Text>
+            )}
         </ScrollView>
     </ScrollView>
     </SafeAreaView>

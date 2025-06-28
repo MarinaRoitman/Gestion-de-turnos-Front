@@ -80,3 +80,47 @@ export async function createPaciente(nombre, apellido, mail, password, dni, fech
     throw error;
   }
 }
+
+export async function loginPaciente(mail, password) {
+  try {
+    const response = await axios.post(`${hostname}/pacientes/login`, {
+      mail: mail,
+      password: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      auth: {
+        username: 'usuario',
+        password: '1234'
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error al hacer login del paciente:", error);
+    throw error;
+  }
+}
+
+export async function deletePacienteById(id) {
+  try {
+    console.log('Eliminando paciente con ID:', id);
+    const endpoint = `${hostname}/pacientes/${id}`;
+    const response = await axios.delete(endpoint, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      auth: {
+        username: 'usuario',
+        password: '1234'
+      },
+      data: { id }
+    });
+    console.log('Paciente eliminado:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar paciente:', error);
+    throw error;
+  }
+}

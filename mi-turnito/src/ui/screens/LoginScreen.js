@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import  CustomButton from '../../ui/components/Button.js';
-import  RectangleLogin1 from '../../ui/components/rectangleLogin.js';
+import { RectangleLogin } from '../components/RectangleLogin.js';
 import  InputField  from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import ErrorModal from '../../ui/components/ErrorModal';
+import { loginPaciente } from '../../api/paciente.js';
+import { useAuth } from '../../context/AuthContext';
 
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
+const { login } = useAuth();
 
 const goToRegistro = () => {
     navigation.navigate("Registro"); 
@@ -18,27 +21,24 @@ const goToRecupero = () => {
     navigation.navigate("Recupero"); 
 };
 
-const handleLogin = () => {
-if (!username || !password) {
-    setErrorText("Por favor, completá todos los campos.");
-    setModalVisible(true);
-    return;
-}
+const handleLogin = async () => {
+    if (!username || !password) {
+        setErrorText("Por favor, completá todos los campos.");
+        setModalVisible(true);
+        return;
+    }
 
-if (username !== MOCK_EMAIL || password !== MOCK_PASSWORD) {
-    setErrorText("Correo o contraseña incorrectos.");
-    setModalVisible(true);
-    return;
-}
-
-navigation.replace('Tabs', { screen: 'Home' });
+    try {
+        const pacienteId = await loginPaciente(username, password);
+        login(pacienteId);
+        navigation.replace('Tabs', { screen: 'Home' });
+    } catch (error) {
+        setErrorText("Correo o contraseña incorrectos.");
+        setModalVisible(true);
+    }
 };
 
 const { isDark, toggleTheme, theme } = useTheme();
-
-const MOCK_EMAIL = "macarena@uade.com";
-const MOCK_PASSWORD = "password";
-
 const [modalVisible, setModalVisible] = useState(false);
 const [errorText, setErrorText] = useState('');
 
@@ -61,7 +61,7 @@ return (
     </View>
 
     <View style={styles.containerContenido}>
-    <RectangleLogin1 style={{ height: 718 }} />
+    <RectangleLogin style={{ height: 718 }} />
     <Text style={[styles.texto, {color: theme.textColor} ]}>Bienvenido</Text>
     <Text style={[styles.subTexto, {color: theme.textColor}]}>Inicia sesión para continuar</Text>
 

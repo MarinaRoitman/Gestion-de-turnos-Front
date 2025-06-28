@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import  CustomButton from '../../ui/components/Button.js';
-import  RectangleLogin1 from '../../ui/components/rectangleLogin.js';
+import  RectangleLogin1 from '../components/RectangleLogin.js';
 import  InputField  from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

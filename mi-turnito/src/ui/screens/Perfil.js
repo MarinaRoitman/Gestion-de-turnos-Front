@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Text,Button, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
@@ -6,6 +6,9 @@ import { Switch } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import LanguageSelectorModal from '../components/ModalLanguage.js';
 import ConfirmationModal from '../components/ConfirmacionModal.js';
+import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext.js';
+import { getPacienteById, deletePacienteById  } from '../../api/paciente.js';
 
 export default function Perfil({ navigation }) {
 
@@ -14,19 +17,37 @@ const { t } = useTranslation();
 const [modalVisible, setModalVisible] = useState(false);
 const [showLogoutModal, setShowLogoutModal] = useState(false);
 const [showDeleteModal, setShowDeleteModal] = useState(false);
+const { logout } = useAuth();
+const { userId } = useContext(AuthContext);
+const [nombre, setNombre] = useState('');
+const [apellido, setApellido] = useState('');
 
-
-    const goToLogin = () => {
+const goToLogin = () => {
     navigation.navigate("Login")
 };
 
-    const goToAyuda = () => {
+const goToAyuda = () => {
     navigation.navigate("Ayuda")
 };
 
-    const goToMisDatos = () => {
+const goToMisDatos = () => {
     navigation.navigate("MisDatos")
 };
+
+useEffect(() => {
+  async function fetchPaciente() {
+    try {
+      const data = await getPacienteById(userId);
+      setNombre(data.nombre);
+      setApellido(data.apellido);
+    } catch (error) {
+      console.error("Error al obtener el paciente:", error);
+    }
+  }
+  if (userId) {
+    fetchPaciente();
+  }
+}, [userId]);
 
 return (
 <SafeAreaView style={[{ backgroundColor: theme.backgroundSecondary }]}>
@@ -44,11 +65,11 @@ return (
     <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 200 }}>
         <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
             <Text style={[styles.optionSub, {color: theme.textColor}]}>{t('name')}</Text>
-            <Text style={[styles.optionTitle, {color: theme.textColor}]}>Macarena</Text>
+            <Text style={[styles.optionTitle, {color: theme.textColor}]}>{nombre}</Text>
         </View>
         <View style={[styles.option, {backgroundColor: theme.backgroundPerfil}]}>
             <Text style={[styles.optionSub, {color: theme.textColor}]}>{t('lastName')}</Text>
-            <Text style={[styles.optionTitle, {color: theme.textColor}]}>López</Text>
+            <Text style={[styles.optionTitle, {color: theme.textColor}]}>{apellido}</Text>
         </View>
 
         <View style={{ height: 20, backgroundColor: theme.backgroundSecondary }} />
@@ -107,7 +128,13 @@ return (
         <ConfirmationModal
         visible={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
-        onConfirm={goToLogin}
+        onConfirm={() => {
+            logout(); // borra el id del contexto
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }] // resetea el stack de navegación
+            });
+        }}
         title="¿Querés cerrar sesión?"
         message="¿Estás seguro que deseas salir?"
         confirmText="Cerrar sesión"
@@ -118,14 +145,25 @@ return (
         <ConfirmationModal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        onConfirm={() => {
-            {goToLogin}
-            console.log('Cuenta eliminada');
-            setShowDeleteModal(false);
+        onConfirm={async () => {
+            try {
+                console.log("Eliminando cuenta del usuario con ID:", userId);
+                await deletePacienteById(userId); // llamamos al endpoint
+                logout(); // limpiamos el contexto
+                navigation.reset({ // reseteamos el stack
+                    index: 0,
+                    routes: [{ name: 'Login' }]
+                });
+            } catch (error) {
+                console.error("Error al eliminar cuenta:", error);
+            } finally {
+                setShowDeleteModal(false);
+            }
         }}
         title="¿Eliminar cuenta? 😥"
         message="Si eliminás tu cuenta, se borrarán todos tus datos, turnos y estudios guardados. Esta acción no se puede deshacer."
         confirmText="Eliminar cuenta"
+        actionType="delete"
         />
 </SafeAreaView>
 

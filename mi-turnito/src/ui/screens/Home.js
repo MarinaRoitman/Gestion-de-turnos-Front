@@ -98,7 +98,11 @@ return (
                     key={turno.id}
                     especialidad={turno.profesional.matricula || "Sin matrícula"}
                     fecha={`${turno.fecha} ${turno.hora.slice(0,5)}`}
-                    imagen={require('../../../src/assets/images/medicaSilvia.jpg')}
+                    imagen={
+                        turno.profesional.foto
+                        ? { uri: `data:image/jpeg;base64,${turno.profesional.foto}` }
+                        : require('../../assets/images/medicaSilvia.jpg')
+                    }
                     medico={`${turno.profesional.nombre} ${turno.profesional.apellido}`}
                     />
                 ))

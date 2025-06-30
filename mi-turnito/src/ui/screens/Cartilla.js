@@ -13,9 +13,7 @@ export default function Cartilla({ navigation }) {
   useEffect(() => {
     async function fetchProfesionales() {
       try {
-        console.log("Cargando profesionales...");
         const data = await getProfesionales();
-        console.log("Profesionales recibidos:", JSON.stringify(data, null, 2));
         setProfesionales(data);
       } catch (error) {
         console.error("Error cargando profesionales:", error);
@@ -71,7 +69,12 @@ export default function Cartilla({ navigation }) {
               key={profesional.id}
               nombre={nombreCompleto}
               especialidad={especialidadesStr}
-              matricula={profesional.matricula || 'Sin matrÃ­cula'}
+              matricula={profesional.matricula || 'Sin matrícula'}
+              imagen={
+                profesional.foto
+                  ? { uri: `data:image/jpeg;base64,${profesional.foto}` }
+                  : require('../../assets/images/medicaSilvia.jpg')
+              }
             />
           );
         })}

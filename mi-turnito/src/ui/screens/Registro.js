@@ -21,12 +21,9 @@ const { isDark, toggleTheme, theme } = useTheme();
 const handleRegistro = async () => {
   try {
     const paciente = await createPaciente(nombre, apellido, username, password, dni, fechaNacimiento, telefono);
-    console.log("Paciente creado:", paciente);
-    // Podés navegar al login o mostrar una alerta si querés:
     navigation.navigate("Login");
   } catch (error) {
     console.error("Error al registrar paciente:", error);
-    // También podrías mostrar una alerta con el error
   }
 };
 

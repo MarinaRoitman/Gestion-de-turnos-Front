@@ -1,59 +1,56 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext.js';
-import medicaSilvia from '../../assets/images/medicaSilvia.jpg';
-import { useTranslation } from 'react-i18next';
+import medicaSilvia from '../../assets/images/medicaSilvia.jpg'; // Imagen por defecto
 
-export const CardsMedicos = ({ nombre, especialidad, matricula, onPress}) => {
+export const CardsMedicos = ({ nombre, especialidad, matricula, imagen, onPress }) => {
+  const { theme } = useTheme();
 
-        const { isDark, toggleTheme, theme } = useTheme();
-
-return (
-    <TouchableOpacity style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]} onPress={onPress}>
-        <Image source={medicaSilvia} style={styles.avatar} />
-        <View style={styles.info}>
-            <Text style={[styles.nombre, {color: theme.textColor}]}>{nombre}</Text>
-            <Text style={[styles.especialidad, {color: theme.textColor}]}>{especialidad}</Text>
-            <Text style={[styles.matricula, {color: theme.textColor}]}>{matricula}</Text>
-        </View>
+  return (
+    <TouchableOpacity style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]} onPress={onPress}>
+      <Image
+        source={imagen ? imagen : medicaSilvia}
+        style={styles.avatar}
+      />
+      <View style={styles.info}>
+        <Text style={[styles.nombre, { color: theme.textColor }]}>{nombre}</Text>
+        <Text style={[styles.especialidad, { color: theme.textColor }]}>{especialidad}</Text>
+        <Text style={[styles.matricula, { color: theme.textColor }]}>{matricula}</Text>
+      </View>
     </TouchableOpacity>
-);
+  );
 };
 
 const styles = StyleSheet.create({
-card: {
+  card: {
     borderRadius: 12,
     padding: 13,
     marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
     width: '97%',
-},
-avatar: {
+  },
+  avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-},
-info: {
+  },
+  info: {
     flex: 1,
     marginLeft: 10,
-},
-nombre: {
+  },
+  nombre: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#4F3680',
-},
-especialidad: {
+  },
+  especialidad: {
     fontSize: 14,
-    color: '#4F3680',
-},
-matricula: {
+  },
+  matricula: {
     fontSize: 13,
-    color: '#6D6D6D',
-},
+  },
 });

@@ -49,7 +49,7 @@ translation: {
     noteMedical: "Medication adjustment to improve glycemic control. A thyroid study is ordered.",
     //my data
     personalData: "Personal Data",
-    contact: "Contact",
+    contact: "Login Info",
     healthInsurance: "Health Insurance",
     birthDate: "Birth Date",
     phone: "Phone",
@@ -138,7 +138,7 @@ translation: {
     //my data
     myData: "Mis Datos",
     personalData: "Datos personales",
-    contact: "Contacto",
+    contact: "Info Login",
     healthInsurance: "Obra social",
     birthDate: "Fecha de nacimiento",
     phone: "Teléfono",

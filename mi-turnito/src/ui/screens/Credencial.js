@@ -1,62 +1,92 @@
-    import React from 'react';
-    import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
-    import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-    import { useTheme } from '../../theme/ThemeContext';
-    import { useTranslation } from 'react-i18next';
-    import { LinearGradient } from 'expo-linear-gradient';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import { LinearGradient } from 'expo-linear-gradient';
+import { getPacienteById } from '../../api/paciente';
+import { AuthContext } from '../../context/AuthContext';
 
-    export default function Credencial({ navigation }) {
-    const { theme } = useTheme();
-    const { t } = useTranslation();
+export default function Credencial({ navigation }) {
+  const { theme } = useTheme();
+  const { t } = useTranslation();
+  const { userId } = useContext(AuthContext);
 
-    const patient = {
-        name: 'MACARENA LÓPEZ',
-        credentialNumber: '20 006308 00 202',
-        plan: 'O',
-    };
+  const [paciente, setPaciente] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundTertiary }}>
-        {/* Header */}
-        <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-            <MaterialIcons name="arrow-back-ios-new" size={28} style={[{ color: theme.textColor }]} />
-            </TouchableOpacity>
-            <Text style={[styles.tituloInicial, { color: theme.textColor }]}>{t('credential')}</Text>
+  useEffect(() => {
+    async function fetchPaciente() {
+      try {
+        const data = await getPacienteById(userId);
+        setPaciente(data);
+      } catch (error) {
+        console.error("Error al cargar datos del paciente:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (userId) {
+      fetchPaciente();
+    }
+  }, [userId]);
+
+  const afiliacion = paciente?.afiliaciones?.[0] ?? null;
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundTertiary }}>
+      {/* Header */}
+      <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
+        <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+          <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
+        </TouchableOpacity>
+        <Text style={[styles.tituloInicial, { color: theme.textColor }]}>{t('credential')}</Text>
+      </View>
+
+      {loading ? (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color="#4F3680" />
         </View>
-
-        {/* Tarjeta de credencial */}
+      ) : afiliacion && paciente ? (
         <View style={styles.container}>
-            <LinearGradient
+          <LinearGradient
             colors={['#a47de5', '#4F3680']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.card}
-            >
-            {/* Líneas horizontales decorativas */}
+          >
+            {/* Líneas decorativas */}
             <View style={styles.lines}>
-                {[...Array(14)].map((_, i) => (
+              {[...Array(14)].map((_, i) => (
                 <View key={i} style={styles.line} />
-                ))}
+              ))}
             </View>
 
-            {/* Logo */}
             <Image
-                source={require('../../assets/images/LogoTurnito.png')}
-                style={styles.logo}
-                resizeMode="contain"
+              source={require('../../assets/images/LogoTurnito.png')}
+              style={styles.logo}
+              resizeMode="contain"
             />
 
-            {/* Info */}
-            <Text style={styles.name}>{patient.name}</Text>
+            <Text style={styles.name}>
+              {(paciente.nombre + ' ' + paciente.apellido).toUpperCase()}
+            </Text>
             <Text style={styles.label}>{t('numCredential')}</Text>
-            <Text style={styles.credentialNumber}>{patient.credentialNumber}</Text>
-            <Text style={styles.plan}>Plan "{patient.plan}"</Text>
-            </LinearGradient>
+            <Text style={styles.credentialNumber}>{afiliacion.nroAfiliado}</Text>
+            <Text style={styles.plan}>Plan "{afiliacion.plan?.nombre || 'Desconocido'}"</Text>
+          </LinearGradient>
         </View>
-        </SafeAreaView>
-    );
-    }
+      ) : (
+        <View style={styles.centered}>
+          <Text style={[{ color: theme.textColor, fontSize: 18, textAlign: 'center', marginHorizontal: 40 }]}>
+            {t('noCredentialFound') || 'No se encontró una afiliación válida para mostrar una credencial.'}
+          </Text>
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
 
     const styles = StyleSheet.create({
     contenedorHeader: {

@@ -1,73 +1,121 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { ScrollView, StyleSheet, View, Modal, Text, TouchableOpacity } from 'react-native';
 import EditableInput from '../components/InputTabs';
 import { useTheme } from '../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import ButtonSecondary from '../components/ButtonSecondary';
-import { Modal, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { AuthContext } from '../../context/AuthContext';
+import { getPacienteById, modifyPaciente } from '../../api/paciente';
 
 export default function ContactoTab() {
-const { theme } = useTheme();
-const { t } = useTranslation();
-const [modalVisible, setModalVisible] = useState(false);
+  const { theme } = useTheme();
+  const { t } = useTranslation();
+  const { userId } = useContext(AuthContext);
 
-const handleConfirm = () => {
-setModalVisible(true);
-// agregar lógica para guardar los datos
-};
+  const [modalVisible, setModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-return (
-<ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 100 }}>
-    
-    <View style={styles.contenedorTabs}>
-    <EditableInput
-    label={t('email')}
-    value="mlopez@gmail.com"
-    keyboardType="email-address"
-    editable={false}
-    inputStyle={{ backgroundColor: 'lightgray' }}
-    />
-    <EditableInput
-    label={t('password')}
-    value="********"
-    secureTextEntry
-    />
-    </View>
-    <View style={styles.botonContainer}>
-    <ButtonSecondary
-        title={t('save')}
-        onPress={handleConfirm}
-    />
-    </View>
+  // Guardamos todo el paciente original para enviar datos que no se modifican acá
+  const [pacienteOriginal, setPacienteOriginal] = useState(null);
 
-<Modal
-animationType="fade"
-transparent={true}
-visible={modalVisible}
-onRequestClose={() => setModalVisible(false)}
->
-<View style={styles.modalOverlay}>
-        <View style={[styles.modalContainer, { backgroundColor: theme.modalBackground }]}>
-        <View style={styles.modalContent}>
-            <MaterialIcons name="check-circle" size={43} color="#4CAF50" style={styles.iconCheck} />
-            <View style={styles.textContainer}>
-            <Text style={[styles.modalTitle, { color: theme.textColor }]}>
-                {t('successTitle')}
-            </Text>
-            <Text style={[styles.modalSubtitle, { color: theme.textColor }]}>
-                {t('success')}
-            </Text>
+  // Solo la contraseña editable
+  const [password, setPassword] = useState('');
+  const [passwordPlaceholder, setPasswordPlaceholder] = useState('********');
+
+  useEffect(() => {
+    async function fetchPaciente() {
+        if (!userId) return;
+        try {
+        const paciente = await getPacienteById(userId);
+        setPacienteOriginal(paciente);
+        
+        if (paciente.password) {
+            setPasswordPlaceholder('*'.repeat(paciente.password.length));
+        } else {
+            setPasswordPlaceholder('********');
+        }
+        setPassword('');
+        } catch (error) {
+        console.error("Error al cargar datos del paciente:", error);
+        }
+    }
+    fetchPaciente();
+    }, [userId]);
+
+  const handleConfirm = async () => {
+    if (!pacienteOriginal) return;
+
+    try {
+      await modifyPaciente(
+        pacienteOriginal.id,
+        pacienteOriginal.nombre,
+        pacienteOriginal.apellido,
+        pacienteOriginal.mail,
+        password || pacienteOriginal.password,
+        pacienteOriginal.dni,
+        pacienteOriginal.fechaNacimiento,
+        pacienteOriginal.telefono
+      );
+      setModalVisible(true);
+      setErrorMessage(null);
+    } catch (error) {
+      console.error("Error al modificar contraseña:", error);
+      setErrorMessage(t("errorUpdatingData") || "Error actualizando datos");
+    }
+  };
+
+  return (
+    <ScrollView
+      style={{ backgroundColor: theme.backgroundSecondary }}
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
+      <View style={styles.contenedorTabs}>
+        <EditableInput
+          label={t('email')}
+          value={pacienteOriginal?.mail || '...'}
+          keyboardType="email-address"
+          editable={false}
+          inputStyle={{ backgroundColor: 'lightgray' }}
+        />
+        <EditableInput
+          label={t('password')}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          placeholder={passwordPlaceholder}
+        />
+      </View>
+
+      {errorMessage && (
+        <Text style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{errorMessage}</Text>
+      )}
+
+      <View style={styles.botonContainer}>
+        <ButtonSecondary title={t('save')} onPress={handleConfirm} />
+      </View>
+
+      <Modal animationType="fade" transparent visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContainer, { backgroundColor: theme.modalBackground }]}>
+            <View style={styles.modalContent}>
+              <MaterialIcons name="check-circle" size={43} color="#4CAF50" style={styles.iconCheck} />
+              <View style={styles.textContainer}>
+                <Text style={[styles.modalTitle, { color: theme.textColor }]}>{t('successTitle')}</Text>
+                <Text style={[styles.modalSubtitle, { color: theme.textColor }]}>{t('success')}</Text>
+              </View>
             </View>
+            <TouchableOpacity
+              style={[styles.modalButton, { backgroundColor: theme.modalButton }]}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Ok</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity style={[styles.modalButton, {backgroundColor: theme.modalButton}]} onPress={() => setModalVisible(false)}>
-            <Text style={styles.modalButtonText}>Ok</Text>
-        </TouchableOpacity>
-        </View>
-    </View>
-    </Modal>
-</ScrollView>
-);
+      </Modal>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -124,3 +124,24 @@ export async function deletePacienteById(id) {
     throw error;
   }
 }
+
+export async function modifyPaciente(id, nombre, apellido, mail, password, dni, fechaNacimiento, telefono) {
+  try {
+    const data = {id, nombre, apellido, mail, password, dni, fechaNacimiento, telefono};
+
+    const response = await axios.put(`${hostname}/pacientes/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      auth: {
+        username: "usuario",
+        password: "1234",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(`Error al modificar paciente con ID ${id}:`, error);
+    throw error;
+  }
+}

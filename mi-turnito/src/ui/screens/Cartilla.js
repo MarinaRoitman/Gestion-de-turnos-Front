@@ -49,7 +49,7 @@ export default function Cartilla({ navigation }) {
       </View>
 
       <ScrollView contentContainerStyle={styles.body}>
-        {loading && <Text style={{ color: theme.textColor }}>Cargando profesionales...</Text>}
+        {loading && <Text style={{ color: theme.textColor }}>{"Loading professionals" || "Cargando profesionales..."}</Text>}
 
         {!loading && profesionales.length === 0 && (
           <Text style={{ color: theme.textColor }}>No se encontraron profesionales.</Text>

@@ -21,6 +21,7 @@ return (
 <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 100 }}>
     <View style={styles.contenedorTabs}>
         <EmailInput label={t('healthInsurance')} value="Swiss Medical" />
+        <EmailInput label={"Plan"} value="210" />
         <EmailInput label={t('insuranceId')} value="80004123201904" />
     </View>
 

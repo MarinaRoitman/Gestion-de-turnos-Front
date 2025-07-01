@@ -48,34 +48,42 @@ export default function HistorialScreen({ navigation }) {
       </View>
 
       <ScrollView style={{ padding: 15 }}>
-        {turnosAnteriores.map(turno => (
-          <View key={turno.id} style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
-            <View style={styles.row}>
-              <Image
-                source={
+        {turnosAnteriores.length > 0 ? (
+          turnosAnteriores.map(turno => (
+            <View key={turno.id} style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
+              <View style={styles.row}>
+                <Image
+                  source={
                     turno.profesional.foto
-                    ? { uri: `data:image/jpeg;base64,${turno.profesional.foto}` }
-                    : require('../../assets/images/medicaSilvia.jpg')
-                }
-                style={styles.avatar}
+                      ? { uri: `data:image/jpeg;base64,${turno.profesional.foto}` }
+                      : require('../../assets/images/medicaSilvia.jpg')
+                  }
+                  style={styles.avatar}
                 />
-              <View style={styles.info}>
-                <Text style={[styles.name, { color: theme.textColor }]}>
-                  {turno.profesional.nombre} {turno.profesional.apellido}
-                </Text>
-                <Text style={[styles.specialty, { color: theme.textColor }]}>
-                  {t('Date')}: {turno.fecha} {turno.hora}
-                </Text>
+                <View style={styles.info}>
+                  <Text style={[styles.name, { color: theme.textColor }]}>
+                    {turno.profesional.nombre} {turno.profesional.apellido}
+                  </Text>
+                  <Text style={[styles.specialty, { color: theme.textColor }]}>
+                    {t('Date')}: {turno.fecha} {turno.hora}
+                  </Text>
+                </View>
               </View>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: theme.modalButton }]}
+                onPress={() => navigation.navigate('Detalle', { turno })}
+              >
+                <Text style={[styles.buttonText, { color: theme.backgroundImput }]}>{t('details')}</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: theme.modalButton }]}
-              onPress={() => navigation.navigate('Detalle', { turno })}
-            >
-              <Text style={[styles.buttonText, { color: theme.backgroundImput }]}>{t('details')}</Text>
-            </TouchableOpacity>
+          ))
+        ) : (
+          <View style={styles.noTurnosContainer}>
+            <Text style={[styles.noTurnosText, { color: theme.textColor }]}>
+              {t('No past appointments to show') || 'No hay turnos pasados para mostrar.'}
+            </Text>
           </View>
-        ))}
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,111 +1,145 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { CardsMedicos } from '../components/CardsMedicos';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import ButtonSecondary from '../components/ButtonSecondary.js';
 import ErrorModal from '../components/ErrorModal';
 import { useTranslation } from 'react-i18next';
+import { getTurnosPorProfesional } from '../../api/turno';
 
 export default function Horario({ route, navigation }) {
-    const { medico } = route.params;
-    const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
-    const { isDark, toggleTheme, theme } = useTheme();
-    const [modalErrorVisible, setModalErrorVisible] = useState(false);
-    const { t } = useTranslation();
+  const { medico } = route.params;
+  const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
+  const [turnosDisponibles, setTurnosDisponibles] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { theme } = useTheme();
+  const [modalErrorVisible, setModalErrorVisible] = useState(false);
+  const { t } = useTranslation();
 
-    return (
-        <SafeAreaView style={[{backgroundColor:theme.backgroundTertiary}, {flex: 1}]}>
-            <View style={styles.containerGlobal}>
-                <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }, {backgroundColor: theme.backgroundTertiary}]}>
-                    <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                        <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
-                    </TouchableOpacity>
-                    <View style={styles.centrar}>
-                        <Text style={[styles.tituloInicial, { width: "100%"}, {color: theme.textColor}]}>
-                            {t('scheduleAppointment')}
-                        </Text>
-                    </View>
-                </View>
-            </View>
-            <ScrollView contentContainerStyle={styles.body}>
-                <CardsMedicos
-                    nombre={medico.nombre}
-                    especialidad={medico.especialidad}
-                    direccion={medico.direccion}
-                    imagen={medico.imagen}
-                />
+  useEffect(() => {
+    async function cargarTurnos() {
+      try {
+        const turnos = await getTurnosPorProfesional(medico.id);
+        const disponibles = turnos.filter(t => t.estado?.nombre === 'Disponible');
+        const agrupados = {};
 
-            <View style={[styles.infoContainer]}>
-                <MaterialIcons name="calendar-today" size={22} style={{color: theme.colorIconBackground}}/>
-                <View style={styles.infoText}>
-                <Text style={[styles.infoLabel,{color: theme.textColor}]}>{t('dateAndTime')}</Text>
-                <Text style={[styles.infoLabelSecundario,{color: theme.textColor}]}>
-                    {t('chooseDateTime')}
-                </Text>
-                </View>
-            </View>
+        disponibles.forEach(turno => {
+          const dia = turno.fecha;
+          const hora = turno.hora.slice(0, 5);
+          if (!agrupados[dia]) agrupados[dia] = [];
+          agrupados[dia].push({ hora, turno });
+        });
 
-{Object.entries(medico.disponibilidad || {}).map(([dia, horarios]) => (
-    <View key={dia} style={styles.diaContainer}>
-        <Text style={[styles.subtitulo, { color: theme.textColor }]}>{dia}</Text>
-        <View style={styles.horariosContainer}>
-            {horarios.map((hora, i) => {
-                const isSelected = horarioSeleccionado?.dia === dia && horarioSeleccionado?.hora === hora;
-                return (
-                    <TouchableOpacity
-                        key={i}
-                        style={[
-                            styles.horarioButton,
-                            {
-                                backgroundColor: isSelected ? theme.buttonColor : theme.backgroundSecondary,
-                                borderColor: theme.buttonColor,
-                            }
-                        ]}
-                        onPress={() => setHorarioSeleccionado({ dia, hora })}
-                    >
-                        <Text style={[
-                            styles.horarioTexto,
-                            { color: isSelected ? theme.textColorSecondary : theme.buttonColor }
-                        ]}>
-                            {hora}
-                        </Text>
-                    </TouchableOpacity>
-                );
-            })}
+        setTurnosDisponibles(agrupados);
+      } catch (e) {
+        console.error('Error al cargar turnos disponibles:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    cargarTurnos();
+  }, [medico.id]);
+
+  const handleConfirmar = () => {
+    if (!horarioSeleccionado) {
+      setModalErrorVisible(true);
+      return;
+    }
+
+    navigation.navigate('ConfirmarTurno', {
+      turno: horarioSeleccionado.turno, // enviamos el objeto completo
+      medico,
+    });
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundTertiary }}>
+      {/* Header */}
+      <View style={styles.containerGlobal}>
+        <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back-ios-new" size={28} color={theme.textColor} />
+          </TouchableOpacity>
+          <Text style={[styles.tituloInicial, { color: theme.textColor }]}>{t('scheduleAppointment')}</Text>
         </View>
-    </View>
-))}
-            <View style={{ paddingTop: 5, position: 'relative', alignContent: 'center' }}>
-            <ButtonSecondary
-            style={[
-                styles.botonConfirmar,
-                !horarioSeleccionado && { opacity: 0.5 }
-            ]}
-            disabled={!horarioSeleccionado}
-            onPress={() => {
-                if (!horarioSeleccionado) {
-                    setModalErrorVisible(true);
-                    return;
-                }
+      </View>
 
-                navigation.navigate('ConfirmarTurno', {
-                    medico,
-                    horario: `${horarioSeleccionado.dia} a las ${horarioSeleccionado.hora}`,
-                });
-            }}
-            title={t('confirmAppointment')}
-            />
+      <ScrollView contentContainerStyle={styles.body}>
+        <CardsMedicos
+          nombre={`${medico.nombre} ${medico.apellido}`}
+          especialidad={medico.especialidades?.map(e => e.nombre).join(', ') || 'Sin especialidad'}
+          direccion="Clínica Central"
+          imagen={
+            medico.foto
+              ? { uri: `data:image/jpeg;base64,${medico.foto}` }
+              : require('mi-turnito/src/assets/images/medicaSilvia.jpg')
+          }
+        />
+
+        <View style={styles.infoContainer}>
+          <MaterialIcons name="calendar-today" size={22} color={theme.colorIconBackground} />
+          <View style={styles.infoText}>
+            <Text style={[styles.infoLabel, { color: theme.textColor }]}>{t('dateAndTime')}</Text>
+            <Text style={[styles.infoLabelSecundario, { color: theme.textColor }]}>{t('chooseDateTime')}</Text>
+          </View>
+        </View>
+
+        {loading ? (
+          <ActivityIndicator size="large" color={theme.textColor} style={{ marginTop: 30 }} />
+        ) : (
+          Object.entries(turnosDisponibles).map(([fecha, horarios]) => (
+            <View key={fecha} style={styles.diaContainer}>
+              <Text style={[styles.subtitulo, { color: theme.textColor }]}>{fecha}</Text>
+              <View style={styles.horariosContainer}>
+                {horarios.map(({ hora, turno }, i) => {
+                  const isSelected = horarioSeleccionado?.turno?.id === turno.id;
+                  return (
+                    <TouchableOpacity
+                      key={i}
+                      style={[
+                        styles.horarioButton,
+                        {
+                          backgroundColor: isSelected ? theme.buttonColor : theme.backgroundSecondary,
+                          borderColor: theme.buttonColor,
+                        },
+                      ]}
+                      onPress={() => setHorarioSeleccionado({ dia: fecha, hora, turno })}
+                    >
+                      <Text
+                        style={{
+                          color: isSelected ? theme.textColorSecondary : theme.buttonColor,
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {hora}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             </View>
+          ))
+        )}
 
-            </ScrollView>
-            <ErrorModal
-                visible={modalErrorVisible}
-                message={t('selectTimeFirst')}
-                onClose={() => setModalErrorVisible(false)}
-            />
-        </SafeAreaView>
-    );
+        <View style={{ paddingTop: 5 }}>
+          <ButtonSecondary
+            style={[styles.botonConfirmar, !horarioSeleccionado && { opacity: 0.5 }]}
+            disabled={!horarioSeleccionado}
+            onPress={handleConfirmar}
+            title={t('confirmAppointment')}
+          />
+        </View>
+      </ScrollView>
+
+      <ErrorModal
+        visible={modalErrorVisible}
+        message={t('selectTimeFirst')}
+        onClose={() => setModalErrorVisible(false)}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -98,6 +98,7 @@ export async function loginPaciente(mail, password) {
 
     return response.data;
   } catch (error) {
+    print(response)
     console.error("Error al hacer login del paciente:", error);
     throw error;
   }

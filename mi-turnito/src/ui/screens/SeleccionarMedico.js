@@ -1,56 +1,81 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos.js';
-import { medicos } from '../../../medicos.js'; 
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
+import { getProfesionales } from '../../api/profesional';
 
-export default function Seleccionar( {navigation} ) {
-
+export default function Seleccionar({ navigation }) {
     const { isDark, toggleTheme, theme } = useTheme();
     const { t } = useTranslation();
+
+    const [medicos, setMedicos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProfesionales() {
+        try {
+            const data = await getProfesionales();
+            setMedicos(data);
+        } catch (error) {
+            console.error('Error al obtener profesionales:', error);
+        } finally {
+            setLoading(false);
+        }
+        }
+
+        fetchProfesionales();
+    }, []);
 
     const goToFiltro = () => {
     navigation.navigate("Filtro");
 };
 
 return (
-<SafeAreaView style={[{backgroundColor:theme.backgroundTertiary}, {flex: 1}]}>
-    <View style={styles.containerGlobal}>
-        <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }, {backgroundColor: theme.backgroundTertiary}]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
-            </TouchableOpacity>
-            <View style={styles.centrar}>
-                <Text style={[styles.tituloInicial, { width: "100%"}, {color: theme.textColor}]}>
-                    {t('scheduleAppointment')}
-                </Text>
-            </View>
+    <SafeAreaView style={[{ backgroundColor: theme.backgroundTertiary }, { flex: 1 }]}>
+      <View style={styles.containerGlobal}>
+        <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
+          </TouchableOpacity>
+          <View style={styles.centrar}>
+            <Text style={[styles.tituloInicial, { color: theme.textColor }]}>
+              {t('scheduleAppointment')}
+            </Text>
+          </View>
         </View>
-    </View>
+      </View>
 
-    <TouchableOpacity style={[styles.filtroBtn, {backgroundColor: theme.buttonColor}]} onPress={goToFiltro}>
-        <MaterialIcons name="tune" size={23} style={{color: theme.textColorSecondary}} />
-        <Text style={[styles.filtroText, {color: theme.textColorSecondary}]}>
-            {t('filters')}
+      <TouchableOpacity style={[styles.filtroBtn, { backgroundColor: theme.buttonColor }]} onPress={goToFiltro}>
+        <MaterialIcons name="tune" size={23} style={{ color: theme.textColorSecondary }} />
+        <Text style={[styles.filtroText, { color: theme.textColorSecondary }]}>
+          {t('filters')}
         </Text>
-    </TouchableOpacity>
+      </TouchableOpacity>
 
-    <ScrollView contentContainerStyle={styles.body}>
-        {medicos.map((medico) => (
+      {loading ? (
+        <ActivityIndicator size="large" color={theme.textColor} style={{ marginTop: 30 }} />
+      ) : (
+        <ScrollView contentContainerStyle={styles.body}>
+          {medicos.map((medico) => (
             <CardsMedicos
-                key={medico.id}
-                nombre={medico.nombre}
-                especialidad={medico.especialidad}
-                direccion={medico.direccion}
-                imagen={medico.imagen}
-                onPress={() => navigation.navigate("SeleccionarHorario", { medico })}
+              key={medico.id}
+              nombre={`${medico.nombre} ${medico.apellido}`}
+              especialidad={medico.especialidades?.map(e => e.nombre).join(', ') || 'Sin especialidad'}
+              direccion="Clínica Central"
+              imagen={
+                medico.foto
+                  ? { uri: `data:image/jpeg;base64,${medico.foto}` }
+                  : require('mi-turnito/src/assets/images/medicaSilvia.jpg')
+              }
+              onPress={() => navigation.navigate("SeleccionarHorario", { medico })}
             />
-        ))}
-    </ScrollView>
-</SafeAreaView>
-);
+          ))}
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

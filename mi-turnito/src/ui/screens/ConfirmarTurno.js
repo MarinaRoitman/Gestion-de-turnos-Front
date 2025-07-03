@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos';
@@ -9,33 +9,30 @@ import { reservarTurno } from '../../api/turno';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { crearNotificacion } from '../../api/notificacion';
+import { Modal } from 'react-native'; 
 
 export default function ConfirmarTurno({ route, navigation }) {
   const { medico, turno } = route.params;
   const { theme } = useTheme();
   const { t } = useTranslation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fechaFormateada = turno.fecha.split('-').reverse().join('/');
   const horaFormateada = turno.hora.slice(0, 5);
 
   const { userId } = useContext(AuthContext);
 
-  const handleConfirmar = async () => {
-    try {
-      await reservarTurno(turno.id, userId);
-
-      const mensaje = `Reservaste un turno para el día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${medico.nombre} ${medico.apellido}`;
-
-      await crearNotificacion(mensaje, turno.id, userId);
-
-      Alert.alert(t('success'), t('appointmentConfirmed'), [
-        { text: 'OK', onPress: () => navigation.popToTop() }
-      ]);
-    } catch (error) {
-      console.error('Error al confirmar turno o crear notificación:', error);
-      Alert.alert(t('error'), t('errorConfirmingAppointment'));
-    }
-  };
+const handleConfirmar = async () => {
+  try {
+    await reservarTurno(turno.id, userId);
+    const mensaje = `Reservaste un turno para el día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${medico.nombre} ${medico.apellido}`;
+    await crearNotificacion(mensaje, turno.id, userId);
+    setModalVisible(true);
+  } catch (error) {
+    console.error('Error al confirmar turno o crear notificación:', error);
+    Alert.alert(t('error'), t('errorConfirmingAppointment'));
+  }
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
@@ -93,8 +90,57 @@ export default function ConfirmarTurno({ route, navigation }) {
           />
         </View>
       </ScrollView>
+      <Modal
+  animationType="fade"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <View style={{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  }}>
+    <View style={{
+      backgroundColor: theme.modalBackground,
+      borderRadius: 12,
+      padding: 24,
+      width: 300,
+      alignItems: 'center',
+    }}>
+      <MaterialIcons name="check-circle" size={43} color="#4CAF50" style={{ marginBottom: 12 }} />
+      <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textColor, marginBottom: 8 }}>
+        {t('success')}
+      </Text>
+      <TouchableOpacity
+        onPress={() => {
+          setModalVisible(false);
+          navigation.navigate('Home');
+        }}
+        style={{
+          backgroundColor: theme.modalButton,
+          borderRadius: 8,
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          width: 200,
+        }}
+      >
+        <Text style={{
+          color: '#fff',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          fontSize: 14,
+        }}>
+          OK
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
     </SafeAreaView>
-  );
+  
+);
 }
 
 const styles = StyleSheet.create({

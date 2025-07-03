@@ -6,22 +6,81 @@ import ButtonSecondary from '../components/ButtonSecondary';
 import React, { useState } from 'react';
 import { Modal, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Picker } from '@react-native-picker/picker';
+
 
 export default function ObraSocialTab() {
 const { theme } = useTheme();
 const { t } = useTranslation();
+
 const [modalVisible, setModalVisible] = useState(false);
+const [selectedObraSocial, setSelectedObraSocial] = useState('swiss');
+const [selectedPlan, setSelectedPlan] = useState('210');
+
+const obrasSociales = [
+    { label: 'Swiss Medical', value: 'swiss' },
+    { label: 'OSDE', value: 'osde' },
+    { label: 'Galeno', value: 'galeno' },
+];
+
+const planesPorObra = {
+    swiss: ['210', '310', '410'],
+    osde: ['210', '310'],
+    galeno: ['220', '330', '440'],
+};
 
 const handleConfirm = () => {
-setModalVisible(true);
-// agregar lógica para guardar los datos
+    setModalVisible(true);
 };
 
 return (
 <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 100 }}>
     <View style={styles.contenedorTabs}>
-        <EmailInput label={t('healthInsurance')} value="Swiss Medical" />
-        <EmailInput label={"Plan"} value="210" />
+
+        <View style={{ marginHorizontal: 37, marginBottom: 20 }}>
+        <Text style={[{ color: theme.textColor, marginBottom: 6 }, styles.filtroLabel]}>{t('healthInsurance')}</Text>
+            <View
+            style={{
+                borderRadius: 16,
+                overflow: 'hidden',
+                backgroundColor: theme.backgroundImput,
+            }}
+            >
+                <Picker
+                    selectedValue={selectedObraSocial}
+                    onValueChange={(itemValue) => {
+                    setSelectedObraSocial(itemValue);
+                    setSelectedPlan(planesPorObra[itemValue][0]);
+                    }}
+                    dropdownIconColor={theme.textColor}
+                    style={[{ color: theme.modalButtonText },{backgroundColor: theme.backgroundImput}]}
+                >
+                    {obrasSociales.map((obra) => (
+                    <Picker.Item key={obra.value} label={obra.label} value={obra.value} />
+                    ))}
+                </Picker>
+            </View>
+        </View>
+
+        <View style={{ marginHorizontal: 37, marginBottom: 20 }}>
+        <Text style={[{ color: theme.textColor, marginBottom: 6 }, styles.filtroLabel]}>Plan</Text>
+        <View style={{
+                borderRadius: 16,
+                overflow: 'hidden',
+                backgroundColor: theme.backgroundImput,
+            }}>
+            <Picker
+            selectedValue={selectedPlan}
+            onValueChange={(itemValue) => setSelectedPlan(itemValue)}
+            dropdownIconColor={theme.textColor}
+            style={[{ color: theme.modalButtonText },{backgroundColor: theme.backgroundImput}]}
+            >
+            {planesPorObra[selectedObraSocial].map((plan) => (
+                <Picker.Item key={plan} label={plan} value={plan} />
+            ))}
+            </Picker>
+        </View>
+        </View>
         <EmailInput label={t('insuranceId')} value="80004123201904" />
     </View>
 
@@ -70,7 +129,7 @@ botonContainer: {
 flex: 1,
 justifyContent: 'center',
 alignItems: 'center',
-marginTop: 390,
+marginTop: 284,
 },
 modalOverlay: {
 flex: 1,
@@ -117,4 +176,24 @@ fontWeight: 'bold',
 textAlign: 'center',
 fontSize: 14,
 },
+pickerContainer: {
+borderRadius: 8,
+overflow: 'hidden',
+marginBottom: 10,
+},
+filtroLabel: {
+fontWeight: 'bold',
+fontSize: 20,
+marginBottom: 4,
+},
+pickerContainer: {
+borderRadius: 8,
+height: 50,
+justifyContent: 'center',
+paddingHorizontal: 12,
+overflow: 'hidden',
+borderWidth: 1,
+borderColor: '#ccc', // opcional
+},
+
 });

@@ -99,6 +99,8 @@ translation: {
     titleDelete: "Delete appointment?",
     messageDelete: "This action cannot be undone",
     confirmDelete: "Delete",
+    //No specialty
+    noSpecialty: "No specialty",
 
 }
 
@@ -187,6 +189,8 @@ translation: {
     titleDelete: "¿Eliminar turno?",
     messageDelete: "Esta acción no se puede deshacer",
     confirmDelete: "Eliminar turno",
+    //Sin especialidad
+    noSpecialty: "Sin especialidad",
 
 
 

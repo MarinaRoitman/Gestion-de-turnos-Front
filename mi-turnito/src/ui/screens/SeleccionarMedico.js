@@ -33,7 +33,7 @@ export default function Seleccionar({ navigation }) {
 };
 
 return (
-    <SafeAreaView style={[{ backgroundColor: theme.backgroundTertiary }, { flex: 1 }]}>
+    <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary , flex: 1 }}>
       <View style={styles.containerGlobal}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
           <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
@@ -81,7 +81,6 @@ return (
 const styles = StyleSheet.create({
 containerGlobal: {
     alignItems: 'center',
-    backgroundColor: '#F0F0F0',
 },
 //TurnitoHeader
 contenedorHeader: {

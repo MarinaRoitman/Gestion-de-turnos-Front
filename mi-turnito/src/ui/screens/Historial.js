@@ -20,7 +20,7 @@ export default function HistorialScreen({ navigation }) {
 
         const filtrados = paciente.turnos.filter(turno => {
           const fechaTurno = new Date(turno.fecha);
-          return fechaTurno < hoy;
+          return fechaTurno < hoy || turno.estado?.id === 1;
         });
 
         setTurnosAnteriores(filtrados);

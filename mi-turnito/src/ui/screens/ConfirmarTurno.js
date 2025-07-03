@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { reservarTurno } from '../../api/turno';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
+import { crearNotificacion } from '../../api/notificacion';
 
 export default function ConfirmarTurno({ route, navigation }) {
   const { medico, turno } = route.params;
@@ -21,11 +22,17 @@ export default function ConfirmarTurno({ route, navigation }) {
 
   const handleConfirmar = async () => {
     try {
-      await reservarTurno(turno, userId);
+      await reservarTurno(turno.id, userId);
+
+      const mensaje = `Reservaste un turno para el día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${medico.nombre} ${medico.apellido}`;
+
+      await crearNotificacion(mensaje, turno.id, userId);
+
       Alert.alert(t('success'), t('appointmentConfirmed'), [
         { text: 'OK', onPress: () => navigation.popToTop() }
       ]);
     } catch (error) {
+      console.error('Error al confirmar turno o crear notificación:', error);
       Alert.alert(t('error'), t('errorConfirmingAppointment'));
     }
   };

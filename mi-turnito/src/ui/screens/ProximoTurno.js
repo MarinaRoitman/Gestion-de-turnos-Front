@@ -1,93 +1,110 @@
-import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import  ProximoCard from '../components/CardProximoTurno.js';
-import { medicos } from '../../../medicos.js'; 
-import ConfirmationModal from '../components/ConfirmacionModal.js'
+import { useState, useEffect, useContext } from 'react';
+import ProximoCard from '../components/CardProximoTurno.js';
+import ConfirmationModal from '../components/ConfirmacionModal.js';
+import { AuthContext } from '../../context/AuthContext.js';
+import { getTurnosFuturosPorPaciente, cancelarTurno } from '../../api/turno.js';
+import { crearNotificacion } from '../../api/notificacion.js';
 
 export default function ProximoTurno({ navigation }) {
-const { theme, isDark } = useTheme();
-const { t } = useTranslation();
+  const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
+  const { userId } = useContext(AuthContext);
 
-const [selectedMedico, setSelectedMedico] = useState(null);
-const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [turnosProximos, setTurnosProximos] = useState([]);
+  const [selectedTurno, setSelectedTurno] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-const [turnosProximos, setTurnosProximos] = useState(
-    medicos.filter(m => m.nombre === "Silvia Domínguez")
-);
+  useEffect(() => {
+    const fetchTurnos = async () => {
+      try {
+        const turnos = await getTurnosFuturosPorPaciente(userId);
+        const turnosValidos = turnos.filter(t => t.estado?.id !== 1);
+        setTurnosProximos(turnosValidos);
+      } catch (error) {
+        console.error("Error al cargar turnos futuros:", error);
+      }
+    };
+    fetchTurnos();
+  }, []);
 
-const handleDelete = (nombre) => {
-    setTurnosProximos(prev => prev.filter(item => item.nombre !== nombre));
-};
+  const handleDelete = async () => {
+    try {
+        await cancelarTurno(selectedTurno.id, userId);
 
-return (
-<SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
+        const fechaFormateada = selectedTurno.fecha.split('-').reverse().join('/');
+        const horaFormateada = selectedTurno.hora.slice(0, 5);
+        const nombreProfesional = `${selectedTurno.profesional.nombre} ${selectedTurno.profesional.apellido}`;
+        const mensaje = `Cancelaste el turno del día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${nombreProfesional}`;
 
-    <View style={styles.header}>
+        await crearNotificacion(mensaje, selectedTurno.id, userId);
+
+        setTurnosProximos(prev => prev.filter(t => t.id !== selectedTurno.id));
+        setShowDeleteModal(false);
+    } catch (error) {
+        console.error("Error al cancelar el turno o crear la notificación:", error);
+    }
+    };
+
+  return (
+    <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
+      <View style={styles.header}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                <MaterialIcons 
-                    name="arrow-back-ios-new" 
-                    size={28} color="#4F3680" 
-                    style={[{color: theme.textColor}, 
-                    {textShadowRadius: 1}]} />
-            </TouchableOpacity>
-            <View style={styles.centrar}>
-                <Text style={[styles.tituloInicial, { width: "60%"}, {color: theme.textColor}]}>{t("next")}</Text>
-            </View>
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
+          </TouchableOpacity>
+          <View style={styles.centrar}>
+            <Text style={[styles.tituloInicial, { color: theme.textColor }]}>{t("next")}</Text>
+          </View>
         </View>
-    </View>
+      </View>
 
-    <ScrollView contentContainerStyle={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
         {turnosProximos.length === 0 ? (
-            <View style={styles.containerFoto}>
-                <Image
-                    source={
-                        isDark
-                            ? require('../../assets/images/NotificacionDMode.png')
-                            : require('../../assets/images/NotificacionLMode.png')
-                    }
-                    style={styles.imagen}
-                />
-                <Text style={[styles.subTexto,{color: theme.textColor}]}>
-                    {t("emptyAppointment")}
-                </Text>
-            </View>
+          <View style={styles.containerFoto}>
+            <Image
+              source={isDark
+                ? require('../../assets/images/NotificacionDMode.png')
+                : require('../../assets/images/NotificacionLMode.png')}
+              style={styles.imagen}
+            />
+            <Text style={[styles.subTexto, { color: theme.textColor }]}>
+              {t("emptyAppointment")}
+            </Text>
+          </View>
         ) : (
-            <View style={styles.contenedorCard}>
-                {turnosProximos.map((medico) => (
-                <ProximoCard 
-                key={medico.id}
-                nombre={medico.nombre}
-                foto={medico.foto}
-                fechaTurno={medico.fechaTurno}
+          <View style={styles.contenedorCard}>
+            {turnosProximos.map(turno => (
+              <ProximoCard
+                key={turno.id}
+                nombre={`${turno.profesional.nombre} ${turno.profesional.apellido}`}
+                foto={turno.profesional.foto}
+                fechaTurno={`${turno.fecha} ${turno.hora.slice(0, 5)}`}
                 onDelete={() => {
-                    setSelectedMedico(medico.nombre);
-                    setShowDeleteModal(true);
+                  setSelectedTurno(turno);
+                  setShowDeleteModal(true);
                 }}
-                />
-                ))}
-            </View>
+              />
+            ))}
+          </View>
         )}
-        
-    </ScrollView>
-        <ConfirmationModal 
+      </ScrollView>
+
+      <ConfirmationModal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        onConfirm={() => {
-            handleDelete(selectedMedico);
-            setShowDeleteModal(false);
-        }}
+        onConfirm={handleDelete}
         title={t('titleDelete')}
         message={t('messageDelete')}
         confirmText={t('confirmDelete')}
         icon="delete"
         actionType="delete"
-        />
-</SafeAreaView>
-);
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

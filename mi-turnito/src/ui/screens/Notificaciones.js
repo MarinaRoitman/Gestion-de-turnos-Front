@@ -1,70 +1,86 @@
-import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import {CardNotificacion} from '../components/CardNotificacion.js';
-import { medicos } from '../../../medicos.js'; 
+import { useEffect, useState, useContext } from 'react';
+import { CardNotificacion } from '../components/CardNotificacion.js';
+import { AuthContext } from '../../context/AuthContext.js';
+import { getNotificacionesVisibles, eliminarNotificacion } from '../../api/notificacion.js';
 
 export default function Notificaciones({ navigation }) {
-const { theme, isDark } = useTheme();
-const { t } = useTranslation();
+  const { theme, isDark } = useTheme();
+  const { t } = useTranslation();
+  const { userId } = useContext(AuthContext);
 
-const [notificaciones, setNotificaciones] = useState(medicos.filter(m => m.nombre === "Silvia Domínguez"));
+  const [notificaciones, setNotificaciones] = useState([]);
 
-const handleDelete = (nombre) => {
-    setNotificaciones(prev => prev.filter(item => item.nombre !== nombre));
-};
+  useEffect(() => {
+    const fetchNotificaciones = async () => {
+      try {
+        const data = await getNotificacionesVisibles(userId);
+        setNotificaciones(data);
+      } catch (error) {
+        console.error("Error al traer notificaciones:", error);
+      }
+    };
+    fetchNotificaciones();
+  }, []);
 
-return (
-<SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
+  const handleDelete = async (idNotificacion) => {
+    try {
+      await eliminarNotificacion(idNotificacion);
+      setNotificaciones(prev => prev.filter(n => n.id !== idNotificacion));
+    } catch (error) {
+      console.error("Error al eliminar notificación:", error);
+    }
+  };
 
-    <View style={styles.header}>
+  return (
+    <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
+      <View style={styles.header}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate('Home')}>
-                <MaterialIcons 
-                    name="arrow-back-ios-new" 
-                    size={28} color="#4F3680" 
-                    style={[{color: theme.textColor}, 
-                    {textShadowRadius: 1}]} />
-            </TouchableOpacity>
-            <View style={styles.centrar}>
-                <Text style={[styles.tituloInicial, { width: "49%"}, {color: theme.textColor}]}>{t("notification")}</Text>
-            </View>
+          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate('Home')}>
+            <MaterialIcons
+              name="arrow-back-ios-new"
+              size={28}
+              style={{ color: theme.textColor, textShadowRadius: 1 }}
+            />
+          </TouchableOpacity>
+          <View style={styles.centrar}>
+            <Text style={[styles.tituloInicial, { color: theme.textColor }]}>
+              {t("notification")}
+            </Text>
+          </View>
         </View>
-    </View>
+      </View>
 
-    <ScrollView contentContainerStyle={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
         {notificaciones.length === 0 ? (
-            <View style={styles.containerFoto}>
-                <Image
-                    source={
-                        isDark
-                            ? require('../../assets/images/NotificacionDMode.png')
-                            : require('../../assets/images/NotificacionLMode.png')
-                    }
-                    style={styles.imagen}
-                />
-                <Text style={[styles.subTexto,{color: theme.textColor}]}>
-                    {t("emptyNotis")}
-                </Text>
-            </View>
+          <View style={styles.containerFoto}>
+            <Image
+              source={isDark
+                ? require('../../assets/images/NotificacionDMode.png')
+                : require('../../assets/images/NotificacionLMode.png')}
+              style={styles.imagen}
+            />
+            <Text style={[styles.subTexto, { color: theme.textColor }]}>
+              {t("emptyNotis")}
+            </Text>
+          </View>
         ) : (
-            <View style={styles.contenedorCard}>
-                {notificaciones.map((medico) => (
-                    <CardNotificacion
-                        key={medico.id}
-                        nombre={medico.nombre}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </View>
+          <View style={styles.contenedorCard}>
+            {notificaciones.map((noti) => (
+              <CardNotificacion
+                key={noti.id}
+                nombre={noti.texto}
+                onDelete={() => handleDelete(noti.id)}
+              />
+            ))}
+          </View>
         )}
-    </ScrollView>
-
-</SafeAreaView>
-);
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({

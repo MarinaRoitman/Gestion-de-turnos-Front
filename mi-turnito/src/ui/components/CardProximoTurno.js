@@ -1,25 +1,32 @@
-    import React from 'react';
-    import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-    import { useTheme } from '../../theme/ThemeContext.js';
-    import medicaSilvia from '../../assets/images/medicaSilvia.jpg';
-    import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useTheme } from '../../theme/ThemeContext.js';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import medicaSilvia from '../../assets/images/medicaSilvia.jpg';
 
-    export default function ProximoCard({ nombre, foto, fechaTurno, onDelete }) {
-    const { theme } = useTheme();
+export default function ProximoCard({ nombre, foto, fechaTurno, onDelete }) {
+  const { theme } = useTheme();
 
-    return (
-        <View style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
-        <Image source={medicaSilvia} style={styles.avatar} />
-        <View style={styles.info}>
-            <Text style={[styles.nombre, { color: theme.textColor }]}>{nombre}</Text>
-            <Text style={[styles.fecha, { color: theme.textColor }]}>agregar fecha del turno seleccionado</Text>
-        </View>
-        <TouchableOpacity onPress={onDelete}>
-            <MaterialIcons name="delete" size={26} color="red" />
-        </TouchableOpacity>
-        </View>
-    );
-    }
+  return (
+    <View style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
+      <Image
+        source={
+          foto
+            ? { uri: `data:image/jpeg;base64,${foto}` }
+            : medicaSilvia
+        }
+        style={styles.avatar}
+      />
+      <View style={styles.info}>
+        <Text style={[styles.nombre, { color: theme.textColor }]}>{nombre}</Text>
+        <Text style={[styles.fecha, { color: theme.textColor }]}>{fechaTurno}</Text>
+      </View>
+      <TouchableOpacity onPress={onDelete}>
+        <MaterialIcons name="delete" size={26} color="red" />
+      </TouchableOpacity>
+    </View>
+  );
+}
 
     const styles = StyleSheet.create({
     card: {

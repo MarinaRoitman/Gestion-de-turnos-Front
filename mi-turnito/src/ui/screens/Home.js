@@ -32,7 +32,9 @@ const [loading, setLoading] = useState(true);
 const hoy = new Date();
 const fechaHoyString = hoy.toISOString().split('T')[0]; // YYYY-MM-DD
 
-const turnosFiltrados = paciente?.turnos?.filter(turno => turno.fecha >= fechaHoyString) || [];
+const turnosFiltrados = paciente?.turnos?.filter(turno => 
+  turno.fecha >= fechaHoyString && turno.estado?.id === 3
+) || [];
 
 useEffect(() => {
   async function fetchPaciente() {

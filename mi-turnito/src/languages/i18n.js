@@ -4,7 +4,11 @@ import * as Localization from 'expo-localization';
 const locales = Localization.getLocales();
 
 
+
+
 const supportedLanguages = ['es', 'en'];
+
+
 
 
 const deviceLanguage = Array.isArray(locales) && locales.length > 0
@@ -12,12 +16,40 @@ const deviceLanguage = Array.isArray(locales) && locales.length > 0
     : 'es';
 
 
+
+
 const initialLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'es';
+
+
 
 
 const resources = {
 en: {
 translation: {
+    //Login
+    welcome: "Welcome",
+    loginToContinue: "Log in to continue",
+    email: "Email",
+    password: "Password",
+    login: "Log In",
+    forgotPassword: "Forgot your password?",
+    noAccount: "Don't have an account?",
+    register: "Sign up",
+    orLoginWith: "Or login with",
+    enterEmail: "Enter your email",
+    enterPassword: "Enter your password",
+    recoverPassword: "Recover password",
+    resetInstructions: "Enter your email address and we will send you a link to reset your password",
+    send: "Send",
+    signUp: "Sign up",
+    //sign up
+    enterFirstName: "Enter your first name",
+    enterLastName: "Enter your last name",
+    enterDNI: "Enter your ID",
+    enterBirthDate: "Enter your birth date",
+    enterPhone: "Enter your phone number",
+    enterEmail: "Enter your email",
+    enterPassword: "Enter your password",
     //perfil
     profile: "Profile",
     name: "First Name",
@@ -102,12 +134,39 @@ translation: {
     //No specialty
     noSpecialty: "No specialty",
 
+
 }
+
+
 
 
 },
 es: {
 translation: {
+    //Login
+    welcome: "Bienvenido",
+    loginToContinue: "Inicia sesión para continuar",
+    email: "Correo",
+    password: "Contraseña",
+    login: "Iniciar sesión",
+    forgotPassword: "¿Olvidaste tu contraseña?",
+    noAccount: "¿No tenés una cuenta?",
+    register: "Registrate",
+    orLoginWith: "O acceder con",
+    enterEmail: "Ingresá tu correo",
+    enterPassword: "Ingresa tu contraseña",
+    recoverPassword: "Recuperar contraseña",
+    resetInstructions: "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
+    send: "Enviar",
+    signUp: "Registrarse",
+    //sign up
+    enterFirstName: "Ingresá tu nombre",
+    enterLastName: "Ingresá tu apellido",
+    enterDNI: "Ingresá tu DNI",
+    enterBirthDate: "Ingresá tu fecha de nacimiento",
+    enterPhone: "Ingresá tu teléfono",
+    enterEmail: "Ingresá tu correo",
+    enterPassword: "Ingresá tu contraseña",
     //profile
     profile: "Perfil",
     name: "Nombre",
@@ -191,12 +250,11 @@ translation: {
     confirmDelete: "Eliminar turno",
     //Sin especialidad
     noSpecialty: "Sin especialidad",
-
-
-
 }
 }
 };
+
+
 
 
 i18n
@@ -211,7 +269,6 @@ interpolation: {
 });
 
 
+
+
 export default i18n;
-
-
-

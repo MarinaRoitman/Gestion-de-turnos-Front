@@ -7,11 +7,14 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 
+
 export default function Recuperar( {navigation} ) {
+
 
 const [correo, setCorreo] = useState('');
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
+
 
 return (
 <View style={[styles.containerGlobal, { backgroundColor: theme.background }]}>
@@ -37,23 +40,26 @@ return (
             </View>
         </View>
 
+
         <View style={[styles.containerContenido, { paddingTop: 10 }]}>
             <RectangleLogin1 style={{ height: 800 }}  />
-            <Text style={styles.texto}>Recuperar constraseña</Text>
-            <Text style={styles.subTexto}>
-                Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+            <Text style={[styles.texto, {color: theme.textColor}]}>{t('recoverPassword')}</Text>
+            <Text style={[styles.subTexto,{color: theme.textColor}]}>
+                {t('resetInstructions')}
             </Text>
+
 
             <View style={[styles.containerForm, { marginTop: 0 }]}>
                 <InputField
-                    label="Correo electrónico"
+                    label={t('email')}
                     onChangeText={setCorreo}
                     value={correo}
                     placeholder={"pepe@example.com"}
                 />
 
+
                 <View style={{ paddingTop: 299 }}>
-                <CustomButton title="Enviar" />
+                <CustomButton title={t('send')} />
                 </View>
             </View>
         </View>
@@ -61,6 +67,7 @@ return (
 </View>
 );
 };
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -121,10 +128,10 @@ contenedorHeader: {
     width: '100%',
     flexDirection: 'row',      
     alignItems: 'center',      
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     paddingTop: 25,
-    paddingHorizontal: 30,     
-    position: 'relative', 
+    paddingHorizontal: 30,    
+    position: 'relative',
     },
 iconWrapper: {
     padding: 8,

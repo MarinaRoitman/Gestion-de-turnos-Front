@@ -6,6 +6,8 @@ import InputField from '../../ui/components/Inputs.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createPaciente } from '../../api/paciente.js';
+import { useTranslation } from 'react-i18next';
+
 
 export default function Registro( {navigation} ) {
 const [username, setUsername] = useState('');
@@ -15,8 +17,9 @@ const [apellido, setApellido] = useState('');
 const [telefono, setTelefono] = useState('');
 const [dni, setDni] = useState('');
 const [fechaNacimiento, setFechaNacimiento] = useState('');
-
+const { t } = useTranslation();
 const { isDark, toggleTheme, theme } = useTheme();
+
 
 const handleRegistro = async () => {
   try {
@@ -27,9 +30,11 @@ const handleRegistro = async () => {
   }
 };
 
+
 const goToLogin = () => {
-    navigation.navigate("Login"); 
+    navigation.navigate("Login");
 };
+
 
 return (
 <View style={[styles.containerGlobal, { backgroundColor: theme.background }]}>
@@ -44,6 +49,7 @@ return (
             />
         </TouchableOpacity>
 
+
     <View style={{ flex: 1, alignItems: 'flex-end' }}>
         <Image
             source={
@@ -56,80 +62,89 @@ return (
     </View>
     </View>
 
+
     <View style={styles.containerContenido}>
         <RectangleLogin1 style={styles.rectangleRegistro}/>
-        <Text style={styles.texto}>Registrarse</Text>
+        <Text style={[styles.texto,{color: theme.textColor}]}>{t('register')}</Text>
     </View>
+
 
     <View style={styles.containerForm}>
         <InputField
-            label="Nombre"
+            label={t('name')}
             isPassword={false}
             onChangeText={setNombre}
             value={nombre}
-            placeholder={"Ingresá tu nombre"}
+            placeholder={t("enterFirstName")}
         />
 
+
         <InputField
-            label="Apellido"
+            label={t('lastName')}
             isPassword={false}
             onChangeText={setApellido}
-            placeholder={"Ingresá tu apellido"}
+            placeholder={t("enterLastName")}
             value={apellido}
         />
 
+
         <InputField
-            label="Dni"
+            label={t('dni')}
             isPassword={false}
             onChangeText={setDni}
-            placeholder={"Ingresá tu DNI"}
+            placeholder={t("enterDNI")}
             keyboardType="numeric"
             value={dni}
         />
 
+
         <InputField
-            label="Teléfono"
+            label={t('phone')}
             isPassword={false}
             onChangeText={setTelefono}
             value={telefono}
-            placeholder={"Ingresá tu teléfono"}
+            placeholder={t('enterPhone')}
             keyboardType="numeric"
         />
 
+
         <InputField
-            label="Fecha de Nacimiento"
+            label={t('birthDate')}
             isPassword={false}
             onChangeText={setFechaNacimiento}
             value={fechaNacimiento}
-            placeholder={"Ingresá tu fecha de nacimiento"}
+            placeholder={t('enterBirthDate')}
             keyboardType="date"
         />
 
+
         <InputField
-            label="Correo"
+            label={t('email')}
             isPassword={false}
             onChangeText={setUsername}
             value={username}
-            placeholder={"Ingresá tu correo"}
+            placeholder={t('enterEmail')}
             keyboardType="mail-address"
         />
 
+
         <InputField
-            label="Contraseña"
+            label={t('password')}
             isPassword={true}
             onChangeText={setPassword}
             value={password}
-            placeholder={"Ingresá tu contraseña"}
+            placeholder={t('enterPassword')}
             secureTextEntry={true}
         />
     </View>
     <View style={{ margin: 25, marginBottom:16 }}>
-        <CustomButton title="Registrarme" onPress={handleRegistro} />
+        <CustomButton title={t('signUp')} onPress={handleRegistro} />
     </View>
     </ScrollView>
 </View>
 );
 };
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -179,10 +194,10 @@ contenedorHeader: {
     width: '100%',
     flexDirection: 'row',      
     alignItems: 'center',      
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     paddingTop: 25,
-    paddingHorizontal: 30,     
-    position: 'relative', 
+    paddingHorizontal: 30,    
+    position: 'relative',
     },
 iconWrapper: {
     padding: 8,

@@ -7,19 +7,25 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import ErrorModal from '../../ui/components/ErrorModal';
 import { loginPaciente } from '../../api/paciente.js';
 import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+
 
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 const { login } = useAuth();
+const { t } = useTranslation();
+
 
 const goToRegistro = () => {
-    navigation.navigate("Registro"); 
+    navigation.navigate("Registro");
 };
 
+
 const goToRecupero = () => {
-    navigation.navigate("Recupero"); 
+    navigation.navigate("Recupero");
 };
+
 
 const handleLogin = async () => {
     if (!username || !password) {
@@ -27,6 +33,7 @@ const handleLogin = async () => {
         setModalVisible(true);
         return;
     }
+
 
     try {
         const pacienteId = await loginPaciente(username, password);
@@ -38,9 +45,11 @@ const handleLogin = async () => {
     }
 };
 
+
 const { isDark, toggleTheme, theme } = useTheme();
 const [modalVisible, setModalVisible] = useState(false);
 const [errorText, setErrorText] = useState('');
+
 
 return (
 <ScrollView contentContainerStyle={[styles.containerGlobal, { backgroundColor: theme.background }]} keyboardShouldPersistTaps="handled">
@@ -60,41 +69,46 @@ return (
     />
     </View>
 
+
     <View style={styles.containerContenido}>
     <RectangleLogin style={{ height: 718 }} />
-    <Text style={[styles.texto, {color: theme.textColor} ]}>Bienvenido</Text>
-    <Text style={[styles.subTexto, {color: theme.textColor}]}>Inicia sesión para continuar</Text>
+    <Text style={[styles.texto, {color: theme.textColor} ]}>{t('welcome')}</Text>
+    <Text style={[styles.subTexto, {color: theme.textColor}]}>{t('loginToContinue')}</Text>
+
 
     <View style={styles.containerForm}>
         <InputField
-        label="Correo"
+        label={t('email')}
         isPassword={false}
         onChangeText={setUsername}
         value={username}
-        placeholder={"Ingresá tu correo"}
+        placeholder={t('enterEmail')}
         keyboardType="mail-address"
         />
 
+
         <InputField
-        label="Contraseña"
+        label={t('password')}
         isPassword={true}
         onChangeText={setPassword}
         value={password}
-        placeholder={"Ingresá tu contraseña"}
+        placeholder={t('enterPassword')}
         secureTextEntry={true}
         />
 
+
         <View style={{ marginTop: 10 }}>
-        <CustomButton onPress={handleLogin} title="Iniciar sesión" />
+        <CustomButton onPress={handleLogin} title={t('login')} />
+
 
         <View style={styles.containerExtras}>
-            <Text style={[styles.subTexto1, {color: theme.textColor} ]}>O acceder con</Text>
+            <Text style={[styles.subTexto1, {color: theme.textColor} ]}>{t('orLoginWith')}</Text>
             <View style={styles.containerFoto}>
                     <Image source={require('../../../src/assets/images/GoogleIcon.png')} style={styles.imagenGoogle} />
                     </View>
-            <Text  onPress={goToRecupero} style={[styles.subTexto1, { paddingTop: 10 }, {color: theme.textColor} ]}>¿Olvidaste tu contraseña?</Text>
+            <Text  onPress={goToRecupero} style={[styles.subTexto1, { paddingTop: 10 }, {color: theme.textColor} ]}>{t('forgotPassword')}</Text>
             <Text style={[styles.subTexto1, {color: theme.textColor}]}>
-            ¿No tenés una cuenta? <Text onPress={goToRegistro} style={[{fontWeight: '900'}, {color: theme.textColor}]}>Registrate</Text>
+            {t('noAccount')} <Text onPress={goToRegistro} style={[{fontWeight: '900'}, {color: theme.textColor}]}>{t('register')}</Text>
             </Text>
         </View>
         </View>
@@ -103,6 +117,7 @@ return (
 </ScrollView>
 );
 };
+
 
 const styles = StyleSheet.create({
 containerGlobal: {

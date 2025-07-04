@@ -17,7 +17,10 @@ export default function Seleccionar({ navigation }) {
         async function fetchProfesionales() {
         try {
             const data = await getProfesionales();
-            setMedicos(data);
+            const disponibles = data.filter(profesional =>
+              profesional.turnos?.some(turno => turno.estado?.id === 4) // Solo turnos disponibles
+            );
+            setMedicos(disponibles);
         } catch (error) {
             console.error('Error al obtener profesionales:', error);
         } finally {

@@ -26,7 +26,7 @@ const handleConfirmar = async () => {
   try {
     await reservarTurno(turno.id, userId);
     const mensaje = `Reservaste un turno para el día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${medico.nombre} ${medico.apellido}`;
-    await crearNotificacion(mensaje, turno.id, userId);
+    await crearNotificacion(mensaje, turno.id, userId, "Reservaste un turno!");
     setModalVisible(true);
   } catch (error) {
     console.error('Error al confirmar turno o crear notificación:', error);
@@ -79,7 +79,9 @@ const handleConfirmar = async () => {
           <MaterialIcons name="location-on" size={25} color={theme.colorIconBackground} />
           <View style={styles.infoText}>
             <Text style={[styles.infoLabel, { color: theme.textColor }]}>{t('place')}</Text>
-            <Text style={[styles.infoLabelSecundario, { color: theme.textColor }]}>{/* vacío */}</Text>
+            <Text style={[styles.infoLabelSecundario, { color: theme.textColor }]}>
+              {medico.direccion || 'Sin dirección'}
+            </Text>
           </View>
         </View>
 

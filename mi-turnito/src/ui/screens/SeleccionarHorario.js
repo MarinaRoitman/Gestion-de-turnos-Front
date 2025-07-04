@@ -21,7 +21,7 @@ export default function Horario({ route, navigation }) {
     async function cargarTurnos() {
       try {
         const turnos = await getTurnosPorProfesional(medico.id);
-        const disponibles = turnos.filter(t => t.estado?.nombre === 'Disponible');
+        const disponibles = turnos.filter(t => t.estado?.id === 4); //Solo turnos disponibles
         const agrupados = {};
 
         disponibles.forEach(turno => {

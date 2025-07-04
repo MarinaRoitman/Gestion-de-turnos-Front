@@ -72,6 +72,7 @@ export default function Notificaciones({ navigation }) {
             {notificaciones.map((noti) => (
               <CardNotificacion
                 key={noti.id}
+                // titulo={t("notiTitle")} // ver despues cómo hacer con cancelar turno
                 nombre={noti.texto}
                 onDelete={() => handleDelete(noti.id)}
               />

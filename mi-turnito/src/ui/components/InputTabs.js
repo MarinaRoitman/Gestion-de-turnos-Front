@@ -13,7 +13,7 @@ secureTextEntry,
 editable = true,
 onPressIcon,
 iconName = 'edit',
-inputStyle = {}, // 👈 nuevo
+inputStyle = {}, // nuevo
 }) => {
 const { theme } = useTheme();
 
@@ -29,7 +29,7 @@ return (
             backgroundColor: theme.backgroundImput,
             color: theme.textColorLogin,
         },
-        inputStyle, // 👈 se aplica el override acá
+        inputStyle, // se aplica el override acá
         ]}
         placeholder={placeholder}
         placeholderTextColor={theme.placeholderText}

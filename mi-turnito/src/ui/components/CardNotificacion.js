@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
-export const CardNotificacion = ({ nombre , onDelete}) => {
+export const CardNotificacion = ({ titulo, nombre , onDelete}) => {
 const { theme, isDark } = useTheme();
 const { t } = useTranslation();
 
@@ -15,7 +15,7 @@ return (
         <Image source={medicos} style={styles.avatar} />
         <View style={styles.info}>
             <Text style={[styles.nombre,{color: theme.textColor}]}>
-                {t('notiTitle')}
+                { titulo }
             </Text>
             <Text style={[styles.subinfo, {color: theme.textColor}]}>
                 {t('textNoti', { nombre })}

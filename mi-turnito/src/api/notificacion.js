@@ -17,13 +17,14 @@ export async function getNotificacionesVisibles(pacienteId) {
   }
 }
 
-export async function crearNotificacion(texto, idTurno, idPaciente) {
+export async function crearNotificacion(texto, idTurno, idPaciente, titulo) {
   try {
     const url = `${hostname}/notificaciones`;
     const payload = {
       texto,
       idTurno,
-      idPaciente
+      idPaciente,
+      titulo
     };
 
     const response = await axios.post(url, payload, {

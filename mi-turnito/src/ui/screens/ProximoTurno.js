@@ -40,7 +40,7 @@ export default function ProximoTurno({ navigation }) {
         const nombreProfesional = `${selectedTurno.profesional.nombre} ${selectedTurno.profesional.apellido}`;
         const mensaje = `Cancelaste el turno del día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${nombreProfesional}`;
 
-        await crearNotificacion(mensaje, selectedTurno.id, userId);
+        await crearNotificacion(mensaje, selectedTurno.id, userId, "Cancelaste un turno");
 
         setTurnosProximos(prev => prev.filter(t => t.id !== selectedTurno.id));
         setShowDeleteModal(false);

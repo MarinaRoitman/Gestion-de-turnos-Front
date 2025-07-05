@@ -1,53 +1,80 @@
-import { View, ScrollView, StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import { medicos } from '../../../medicos.js';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, StyleSheet, Text, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { CardsMedicos } from '../components/CardsMedicos.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
+import { getProfesionalesPorEspecialidad } from '../../api/profesional.js';
 
 export default function Resultados({ route, navigation }) {
-    const { isDark, toggleTheme, theme } = useTheme();
-    const { especialidad, profesional } = route.params;
+    const { theme } = useTheme();
     const { t } = useTranslation();
+    const { especialidad, especialidadId } = route.params;
 
-    const medicosFiltrados = medicos.filter(m =>
-        (!especialidad || m.especialidad === especialidad) &&
-        (!profesional || m.nombre === profesional)
-    );
+    const [medicos, setMedicos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProfesionales() {
+            try {
+                const data = await getProfesionalesPorEspecialidad(especialidadId);
+                const conDisponibles = data.filter(m =>
+                    m.turnos?.some(turno => turno.estado?.id === 4)
+                );
+                setMedicos(conDisponibles);
+            } catch (error) {
+                console.error('Error al traer profesionales filtrados:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchProfesionales();
+    }, [especialidadId]);
 
     return (
-        <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>
-            
+        <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
             <View style={[styles.header, { borderBottomColor: theme.borderBottomColor }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialIcons 
-                        name="arrow-back-ios-new" size={28} 
-                        style={[ {color: theme.textColor}, 
-                        {textShadowRadius: 1} ]} />
+                    <MaterialIcons
+                        name="arrow-back-ios-new"
+                        size={28}
+                        style={{ color: theme.textColor }}
+                    />
                 </TouchableOpacity>
-                    <View style={styles.centrar}>
-                        <Text style={[styles.titulo, { width: "100%"}, {color: theme.textColor}]}>
-                            {t('scheduleAppointment')}
-                        </Text>
-                    </View>
+                <View style={styles.centrar}>
+                    <Text style={[styles.titulo, { color: theme.textColor }]}>
+                        {t('scheduleAppointment')}
+                    </Text>
                 </View>
+            </View>
 
-            <ScrollView contentContainerStyle={styles.body}>
-                {medicosFiltrados.length > 0 ? (
-                    medicosFiltrados.map(medico => (
-                        <CardsMedicos
-                            key={medico.id}
-                            nombre={medico.nombre}
-                            especialidad={medico.especialidad}
-                            direccion={medico.direccion}
-                            imagen={medico.imagen}
-                            onPress={() => navigation.navigate("SeleccionarHorario", { medico })}
-                        />
-                    ))
-                ) : (
-                    <Text>No se encontraron médicos con esos filtros.</Text>
-                )}
-            </ScrollView>
+            {loading ? (
+                <ActivityIndicator size="large" color={theme.textColor} style={{ marginTop: 30 }} />
+            ) : (
+                <ScrollView contentContainerStyle={styles.body}>
+                    {medicos.length > 0 ? (
+                        medicos.map((medico) => (
+                            <CardsMedicos
+                                key={medico.id}
+                                nombre={`${medico.nombre} ${medico.apellido}`}
+                                especialidad={especialidad}
+                                direccion={medico.direccion || "Clínica Central"}
+                                imagen={
+                                    medico.foto
+                                        ? { uri: `data:image/jpeg;base64,${medico.foto}` }
+                                        : require('mi-turnito/src/assets/images/medicaSilvia.jpg')
+                                }
+                                onPress={() => navigation.navigate("SeleccionarHorario", { medico })}
+                            />
+                        ))
+                    ) : (
+                        <Text style={{ color: theme.textColor }}>
+                            {t('noProfessionalsFound')}
+                        </Text>
+                    )}
+                </ScrollView>
+            )}
         </SafeAreaView>
     );
 }
@@ -60,6 +87,10 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingHorizontal: 16,
         borderBottomWidth: 5,
+    },
+    centrar: {
+        flex: 1,
+        alignItems: 'center',
     },
     titulo: {
         fontSize: 30,

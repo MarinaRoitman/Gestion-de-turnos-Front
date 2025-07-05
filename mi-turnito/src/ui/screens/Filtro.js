@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     StyleSheet,
@@ -11,104 +11,85 @@ import {
 import Button from '../components/Button.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
-import { medicos } from '../../../medicos.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
+import { getEspecialidades } from '../../api/especialidad.js';
 
 export default function Seleccionar({ navigation }) {
     const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState(null);
-    const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
-    const especialidades = [...new Set(medicos.map(m => m.especialidad))];
-    const profesionalesDeEspecialidad = especialidadSeleccionada
-    ? [...new Set(medicos
-        .filter(m => m.especialidad === especialidadSeleccionada)
-        .map(m => m.nombre))]
-    : [];
-    const { isDark, toggleTheme, theme } = useTheme();
+    const [especialidades, setEspecialidades] = useState([]);
+    const { theme, isDark } = useTheme();
     const { t } = useTranslation();
 
+    useEffect(() => {
+        const fetchEspecialidades = async () => {
+            try {
+                const data = await getEspecialidades();
+                setEspecialidades(data);
+            } catch (error) {
+                console.error("Error al traer especialidades:", error);
+            }
+        };
+        fetchEspecialidades();
+    }, []);
+
     return (
-        <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>   
+        <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>   
             <View style={styles.containerGlobal}>
                 <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
                     <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
-                        <MaterialIcons
-                            name="arrow-back-ios-new"
-                            size={28}
-                            style={[ {color: theme.textColor}, {textShadowRadius: 1} ]}
-                        />
+                        <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
                     </TouchableOpacity>
-                    <Text style={[styles.tituloInicial, {color: theme.textColor} ,{ width: "70%", paddingLeft: 100 }]}>
+                    <Text style={[styles.tituloInicial, { color: theme.textColor, width: "70%", paddingLeft: 100 }]}>
                         {t('filters')}
                     </Text>
                 </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.body}>
-                <View style={{ width: '100%', marginBottom: 20}}>
-                    <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>{t('specialty')}</Text>
+                <View style={{ width: '100%', marginBottom: 20 }}>
+                    <Text style={[styles.filtroLabel, { color: theme.textColor }]}>{t('specialty')}</Text>
                     <View style={styles.pickerContainer}>
-                    <Picker
-                        selectedValue={especialidadSeleccionada}
-                        onValueChange={(value) => {
-                            setEspecialidadSeleccionada(value);
-                            setProfesionalSeleccionado(null); // Reset profesional when especialidad changes
-                        }}
-                        style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
-                        dropdownIconColor={theme.modalButtonText}
-                    >
-                        <Picker.Item label={t("all")} value={null} />
-                        {especialidades.map((esp, index) => (
-                            <Picker.Item key={index} label={esp} value={esp} />
-                        ))}
-                    </Picker>
-                    </View> 
-                </View>
-
-                {especialidadSeleccionada && (
-                    <View style={{ width: '100%', marginBottom: 20 }}>
-                        <Text style={[ styles.filtroLabel, {color: theme.textColor} ]}>{t('professional')}</Text>
-                        <View style={styles.pickerContainer}>
                         <Picker
-                            selectedValue={profesionalSeleccionado}
-                            onValueChange={(value) => setProfesionalSeleccionado(value)}
+                            selectedValue={especialidadSeleccionada}
+                            onValueChange={(value) => setEspecialidadSeleccionada(value)}
                             style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
                             dropdownIconColor={theme.modalButtonText}
                         >
-                            <Picker.Item label={t("all")} value={null} />
-                            {profesionalesDeEspecialidad.map((prof, index) => (
-                                <Picker.Item key={index} label={prof} value={prof} />
+                            {especialidades.map((esp) => (
+                                <Picker.Item key={esp.id} label={esp.nombre} value={esp.nombre} />
                             ))}
                         </Picker>
-                        </View>
-                    </View>
-                )}
+                    </View> 
+                </View>
             </ScrollView>    
 
             <View style={styles.containerFoto}>
                 <Image
-                    source={
-                        isDark
-                            ? require('../../assets/images/FiltroDMode.png')
-                            : require('../../assets/images/FiltroLMode.png')
-                    }
+                    source={isDark
+                        ? require('../../assets/images/FiltroDMode.png')
+                        : require('../../assets/images/FiltroLMode.png')}
                     style={styles.imagen}
                 />
-                </View>
+            </View>
 
-
-                <View style={styles.botonFijo}>
-                    <Button
+            <View style={styles.botonFijo}>
+                <Button
                     title={t('applyFilters')}
-                    onPress={() => navigation.navigate('Resultados', {
-                        especialidad: especialidadSeleccionada,
-                        profesional: profesionalSeleccionado,
-                    })}
-                    />
-                </View>
+                    onPress={() => {
+                        const especialidadObj = especialidades.find(e => e.nombre === especialidadSeleccionada);
+                        navigation.navigate('Resultados', {
+                            especialidad: especialidadSeleccionada,
+                            especialidadId: especialidadObj?.id
+                        });
+                    }}
+                />
+            </View>
         </SafeAreaView>
     );
 }
+
+
 const styles = StyleSheet.create({
     containerGlobal: {
         alignItems: 'center',

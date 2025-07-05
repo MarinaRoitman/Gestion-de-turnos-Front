@@ -118,6 +118,7 @@ const handleConfirmar = async () => {
       <TouchableOpacity
         onPress={() => {
           setModalVisible(false);
+          // hacer invocacion a la home, pasar un state a la siguiente pantalla
           navigation.navigate('Home');
         }}
         style={{

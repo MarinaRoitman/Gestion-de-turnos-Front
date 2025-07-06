@@ -6,6 +6,8 @@ import { useTheme } from '../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import ImagenModal from '../../ui/components/ImagenModal';
 import { getProfesionalPorId } from '../../api/profesional';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 export default function DetalleScreen({ navigation }) {
   const route = useRoute();
@@ -13,11 +15,65 @@ export default function DetalleScreen({ navigation }) {
   const { theme } = useTheme();
   const { t } = useTranslation();
 
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalImage, setModalImage] = useState(null);
 
+
   const [profesional, setProfesional] = useState(null);
+
+
+  const formatearFechaHora = (fecha, hora) => {
+  const [año, mes, dia] = fecha.split("-");
+  const horaCorta = hora.slice(0, 5);
+  return `${dia}/${mes}/${año} ${horaCorta}`;
+};
+
+
+const getEstadoStyle = (estado) => {
+  switch (estado) {
+    case 'Reservado':
+      return { backgroundColor: '#DCC6F8' };
+    case 'Cancelado':
+      return { backgroundColor: '#F8D6D6' };
+    case 'Cumplido':
+      return { backgroundColor: '#C6F8DB' };
+    case 'Disponible':
+      return { backgroundColor: '#D6EAF8' };
+    default:
+      return { backgroundColor: '#E0E0E0' };
+  }
+};
+
+
+const getEstadoTextStyle = (estado) => {
+  switch (estado) {
+    case 'Reservado':
+      return { color: '#6A0DAD' };
+    case 'Cancelado':
+      return { color: '#C62828' };
+    case 'Cumplido':
+      return { color: '#2E7D32' };
+    case 'Disponible':
+      return { color: '#1565C0' };
+    default:
+      return { color: '#555' };
+  }
+};
+const fechaFormateada = formatearFechaHora(turno.fecha, turno.hora);
+
+
+const traducirEstado = (estado) => {
+  const mapping = {
+    'Reservado': 'Reserved',
+    'Cancelado': 'Cancelled',
+    'Cumplido': 'Completed',
+    'Disponible': 'Available',
+  };
+  return t(mapping[estado] || 'Unknown');
+};
+
 
   useEffect(() => {
     async function fetchProfesionalCompleto() {
@@ -29,18 +85,22 @@ export default function DetalleScreen({ navigation }) {
         }
     }
 
+
     fetchProfesionalCompleto();
     }, [turno.profesional.id]);
+
 
   if (!profesional) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.backgroundTertiary }}>
-        <Text style={{ color: theme.textColor }}>Cargando datos del profesional...</Text>
+        <Text style={{ color: theme.textColor }}>{t('loadDetails')}</Text>
       </View>
     );
   }
 
-  const especialidadesStr = profesional.especialidades?.map((e) => e.nombre).join(', ') || 'No disponible';
+
+  const especialidadesStr = profesional.especialidades?.map((e) => e.nombre).join(', ') || t('noAvailable');
+
 
   return (
     <>
@@ -49,11 +109,13 @@ export default function DetalleScreen({ navigation }) {
           <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
             <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: theme.textColor }]}>{t('Detail')}</Text>
+          <Text style={[styles.headerTitle, { color: theme.textColor }]}>{t('detail')}</Text>
         </View>
 
-        <View style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
-          <Image
+
+        <View style={[styles.cardGrande, { backgroundColor: theme.colorBackgroundCard }]}>
+          <View style={styles.cardSimple}>
+            <Image
             source={
               profesional.foto
                 ? { uri: `data:image/jpeg;base64,${profesional.foto}` }
@@ -65,52 +127,65 @@ export default function DetalleScreen({ navigation }) {
             <Text style={[styles.name, { color: theme.textColor }]}>
               {profesional.nombre} {profesional.apellido}
             </Text>
-            <Text style={[styles.specialty, { color: theme.textColor }]}>Matrícula: {profesional.matricula}</Text>
-            <Text style={[styles.specialty, { color: theme.textColor }]}>Especialidad: {especialidadesStr}</Text>
+            <Text style={[styles.specialty, { color: theme.textColor }]}>
+              <FontAwesome name="stethoscope" size={20} style={{ color: theme.textColor }} />  {especialidadesStr}
+            </Text>
+            <Text style={[styles.noteText, { color: theme.textColor }]}>
+              <FontAwesome name="clock-o" size={20} style={{ color: theme.textColor }} />  {fechaFormateada}
+            </Text>
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: theme.textColor }]}>{t('Date')}</Text>
-          <View style={[styles.noteBox, { backgroundColor: theme.colorBackgroundCard }]}>
-            <Text style={[styles.noteText, { color: theme.textColor }]}>
-              {turno.fecha} - {turno.hora?.slice(0, 5)}
-            </Text>
-            <Text style={[styles.noteDate, { color: theme.textColor }]}>
-              Estado: {turno.estado?.nombre || 'Desconocido'}
-            </Text>
+
+          <View style={styles.estadoWrapper}>
+            <Text style={[styles.estadoLabel, {color: theme.textColor}]}>{t('state')}:</Text>
+            <View style={[styles.estadoBadge, getEstadoStyle(turno.estado?.nombre)]}>
+              <Text style={[styles.estadoTexto, getEstadoTextStyle(turno.estado?.nombre)]}>
+                {traducirEstado(turno.estado?.nombre)}
+              </Text>
+            </View>
           </View>
-        </View>
+
 
         <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: theme.textColor }]}>{t('note')}</Text>
-            <View style={[styles.noteBox, { backgroundColor: theme.colorBackgroundCard }]}>
-                <Text style={[styles.noteText, { color: theme.textColor }]}>
+            <View style={[styles.noteBox, { backgroundColor: theme.backgroundImput }]}>
+                <Text style={[styles.noteText, { color: theme.placeholderText }]}>
                 {turno.notas || t('No notes yet')}
                 </Text>
             </View>
         </View>
 
-        {turno.imagenes?.length > 0 && (
-        <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: theme.textColor }]}>{t('imageMedical')}</Text>
-            {turno.imagenes.map((img, index) => (
-            <TouchableOpacity
-                key={img.id || index}
-                style={[styles.radioCard, { backgroundColor: theme.colorBackgroundCard }]}
-                onPress={() => {
-                setModalTitle(img.nombre || `${t('image')} ${index + 1}`);
-                setModalImage({ uri: `data:image/jpeg;base64,${img.imagen}` });
-                setModalVisible(true);
-                }}
-            >
-                <Image source={{ uri: `data:image/jpeg;base64,${img.imagen}` }} style={styles.radioImage} />
-                <Text style={[styles.radioText, { color: theme.textColor }]}>{img.nombre || t('seeImg')}</Text>
-            </TouchableOpacity>
-            ))}
+
+<View style={styles.section}>
+  <Text style={[styles.sectionTitle, { color: theme.textColor }]}>{t('imageMedical')}</Text>
+
+
+        {turno.imagenes?.length > 0 ? (
+        turno.imagenes.map((img, index) => (
+        <TouchableOpacity
+          key={img.id || index}
+          style={[styles.radioCard, { backgroundColor: theme.colorBackgroundCard }]}
+          onPress={() => {
+            setModalTitle(img.nombre || `${t('image')} ${index + 1}`);
+            setModalImage({ uri: `data:image/jpeg;base64,${img.imagen}` });
+            setModalVisible(true);
+          }}
+        >
+          <Image source={{ uri: `data:image/jpeg;base64,${img.imagen}` }} style={styles.radioImage} />
+          <Text style={[styles.radioText, { color: theme.textColor }]}>{img.nombre || t('seeImg')}</Text>
+        </TouchableOpacity>
+        ))
+        ) : (
+        <View style={[{ padding: 20, alignItems: 'center' }]}>
+          <Text style={{ color: theme.textColor }}>{t('noImages')}</Text>
         </View>
         )}
+        </View>
+       
+        </View>
       </ScrollView>
+
 
       <ImagenModal
         visible={modalVisible}
@@ -121,6 +196,7 @@ export default function DetalleScreen({ navigation }) {
     </>
   );
 }
+
 
 const styles = StyleSheet.create({
   header: {
@@ -139,16 +215,32 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
+  cardSimple:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 20,
+    padding: 15,
+  },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     margin: 20,
     padding: 15,
+    borderRadius: 0.,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  cardGrande:{
     borderRadius: 12,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    margin: 20,
   },
   avatar: {
     width: 60,
@@ -161,12 +253,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   specialty: {
-    fontSize: 14,
-    marginTop: 2,
+    fontSize: 15,
+    marginTop: 4,
+    marginBottom: 4,
   },
   section: {
     marginHorizontal: 20,
     marginBottom: 20,
+   
   },
   sectionTitle: {
     fontSize: 18,
@@ -175,7 +269,13 @@ const styles = StyleSheet.create({
   },
   noteBox: {
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 2,
+    borderColor: '#ccc',
+    borderWidth: 0.5,
   },
   noteText: {
     fontSize: 14,
@@ -202,4 +302,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 10,
   },
+  estadoWrapper: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  marginRight: 20,
+},
+
+
+estadoLabel: {
+  fontSize: 14,
+  marginRight: 6,
+  fontWeight: '500',
+},
+
+
+estadoBadge: {
+  paddingHorizontal: 10,
+  paddingVertical: 4,
+  borderRadius: 15,
+},
+
+
+estadoTexto: {
+  fontSize: 13,
+  fontWeight: '600',
+},
 });

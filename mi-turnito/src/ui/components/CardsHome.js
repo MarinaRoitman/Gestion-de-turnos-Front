@@ -1,24 +1,34 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext.js';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 export const CardsHome = ({ especialidad, fecha, imagen, medico }) => {
 
+
     const { isDark, toggleTheme, theme } = useTheme();
+
 
 return (
     <View style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]}>
         <View style={styles.cardHeader}>
-            <Text style={[styles.specialty, {color: theme.textColor}]}>{especialidad}</Text>
-            <Text style={[styles.date, {color: theme.textColor}]}>{fecha}</Text>
+            <Text style={[styles.specialty, {color: theme.textColor}]}>{medico}</Text>
+            <Text style={[styles.date, {color: theme.colorBackgroundCard}, {backgroundColor: theme.textColor}]}>{fecha}</Text>
         </View>
         <View style={styles.cardBody}>
             <Image source={imagen} style={styles.avatar} />
-            <Text style={[styles.doctorName, {color: theme.textColor}]}>{medico}</Text>
+            <View style={[styles.doctorName,{ flexDirection: 'row', alignItems: 'center' }]}>
+                <FontAwesome name="map-marker" size={20} style={{ color: theme.textColor }} />
+                <Text style={[{color: theme.textColor, marginLeft: 5, paddingLeft: 0}]}>
+                    {especialidad}
+                </Text>
+            </View>
         </View>
     </View>
 );
 };
+
 
 const styles = StyleSheet.create({
 card: {
@@ -33,9 +43,9 @@ cardHeader: {
     marginBottom: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    gap: 30,
+    gap: 5,
 },
 specialty: {
     fontSize: 16,
@@ -69,8 +79,11 @@ doctorName: {
     borderColor: '#AFAFAF',
     borderWidth: 0.7,
     padding: 8,
-    width: 210,
+    width: 200,
     borderRadius: 17,
     paddingLeft: 16,
+},
+directionLogo: {
+    paddingRight: 5,
 },
 });

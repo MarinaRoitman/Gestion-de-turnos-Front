@@ -9,14 +9,24 @@ import { AuthContext } from '../../context/AuthContext.js';
 import { getTurnosFuturosPorPaciente, cancelarTurno } from '../../api/turno.js';
 import { crearNotificacion } from '../../api/notificacion.js';
 
+
 export default function ProximoTurno({ navigation }) {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
 
+
   const [turnosProximos, setTurnosProximos] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+
+  const formatearFechaHora = (fecha, hora) => {
+  const [año, mes, dia] = fecha.split("-");
+  const horaCorta = hora.slice(0, 5);
+  return `${dia}/${mes}/${año} ${horaCorta}`;
+};
+
 
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -31,16 +41,20 @@ export default function ProximoTurno({ navigation }) {
     fetchTurnos();
   }, []);
 
+
   const handleDelete = async () => {
     try {
         await cancelarTurno(selectedTurno.id, userId);
+
 
         const fechaFormateada = selectedTurno.fecha.split('-').reverse().join('/');
         const horaFormateada = selectedTurno.hora.slice(0, 5);
         const nombreProfesional = `${selectedTurno.profesional.nombre} ${selectedTurno.profesional.apellido}`;
         const mensaje = `Cancelaste el turno del día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${nombreProfesional}`;
 
+
         await crearNotificacion(mensaje, selectedTurno.id, userId, "Cancelaste un turno");
+
 
         setTurnosProximos(prev => prev.filter(t => t.id !== selectedTurno.id));
         setShowDeleteModal(false);
@@ -48,6 +62,7 @@ export default function ProximoTurno({ navigation }) {
         console.error("Error al cancelar el turno o crear la notificación:", error);
     }
     };
+
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
@@ -61,6 +76,7 @@ export default function ProximoTurno({ navigation }) {
           </View>
         </View>
       </View>
+
 
       <ScrollView contentContainerStyle={styles.body}>
         {turnosProximos.length === 0 ? (
@@ -82,7 +98,7 @@ export default function ProximoTurno({ navigation }) {
                 key={turno.id}
                 nombre={`${turno.profesional.nombre} ${turno.profesional.apellido}`}
                 foto={turno.profesional.foto}
-                fechaTurno={`${turno.fecha} ${turno.hora.slice(0, 5)}`}
+                fechaTurno={formatearFechaHora(turno.fecha, turno.hora)}
                 onDelete={() => {
                   setSelectedTurno(turno);
                   setShowDeleteModal(true);
@@ -92,6 +108,7 @@ export default function ProximoTurno({ navigation }) {
           </View>
         )}
       </ScrollView>
+
 
       <ConfirmationModal
         visible={showDeleteModal}
@@ -106,6 +123,7 @@ export default function ProximoTurno({ navigation }) {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -122,7 +140,7 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
+   
 },
 tituloInicial: {
     fontSize: 30,
@@ -139,7 +157,7 @@ iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
-    borderColor: '#4F3680', 
+    borderColor: '#4F3680',
 },
 centrar:{
     alignItems: 'center',
@@ -153,6 +171,7 @@ option: {
     borderBottomWidth: 1,
     borderBottomColor: '#DEDEDE',
     position: 'relative',
+
 
 },
 optionTitle: {
@@ -170,6 +189,7 @@ arrow: {
     right: 15,
     top: 20,
 },
+
 
 contenedorCard:{
 margin: 10,
@@ -205,6 +225,7 @@ body: {
     alignItems: 'center',
     gap: 10,
 },
+
 
 imagen:{
     marginTop:'200',

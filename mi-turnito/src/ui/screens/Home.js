@@ -8,33 +8,48 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getPacienteById } from '../../api/paciente.js';
 
+
 export default function Home( {navigation} ) {
 const goToTurnos = () => {
     navigation.navigate("Turnos");
 };
 
+
 const goToCartilla = () => {
     navigation.navigate("Cartilla");
 };
+
 
 const goToHistorial = () => {
     navigation.navigate("Historial");
 };
 
+
 const goToCredencial = () => {
     navigation.navigate("Credencial");
 };
+
 
 const { userId } = useContext(AuthContext);
 const [paciente, setPaciente] = useState(null);
 const [loading, setLoading] = useState(true);
 
+
+const formatearFechaHora = (fecha, hora) => {
+  const [año, mes, dia] = fecha.split("-");
+  const horaCorta = hora.slice(0, 5);
+  return `${dia}/${mes}/${año} ${horaCorta}`;
+};
+
+
 const hoy = new Date();
 const fechaHoyString = hoy.toISOString().split('T')[0]; // YYYY-MM-DD
 
-const turnosFiltrados = paciente?.turnos?.filter(turno => 
+
+const turnosFiltrados = paciente?.turnos?.filter(turno =>
   turno.fecha >= fechaHoyString && turno.estado?.id === 3
 ) || [];
+
 
 useEffect(() => {
   async function fetchPaciente() {
@@ -48,13 +63,16 @@ useEffect(() => {
     }
   }
 
+
   if (userId) {
     fetchPaciente();
   }
 }, [userId]);
 
+
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
+
 
 return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background, flex: 1 }]}>
@@ -70,6 +88,7 @@ return (
                 />
             </View>
 
+
             <View style={styles.containerContenido}>
                 <RectangleLogin style={[{ borderTopLeftRadius: 0, borderTopRightRadius: 0, top: -45, borderBottomLeftRadius: 35, borderBottomRightRadius: 35}]} />
                 <View style={{ alignItems: 'flex-start', width: '100%' }}>
@@ -82,16 +101,18 @@ return (
                 </View>
             </View>
 
+
             <View style={styles.buttonContainer}>
                 <ButtonHome title={t('turno')} onPress={goToTurnos} iconName="calendar"/>
                 <ButtonHome title={t('history')} onPress={goToHistorial} iconName="archive"/>
                 <ButtonHome title={t('myCredential')} onPress={goToCredencial} iconName="vcard" />
                 <ButtonHome title={t('directory')} onPress={goToCartilla} iconName="users"/>
             </View>
-        
+       
         <Text style={[styles.proximoTurnoTitle, { alignItems: 'flex-start', width: '100%' }, {color: theme.textColor}]}>
             {t('next')}
         </Text>
+
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cardScroll}>
             {turnosFiltrados.length > 0 ? (
@@ -99,7 +120,7 @@ return (
                     <CardsHome
                     key={turno.id}
                     especialidad={turno.profesional.matricula || "Sin matrícula"}
-                    fecha={`${turno.fecha} ${turno.hora.slice(0,5)}`}
+                    fecha={formatearFechaHora(turno.fecha, turno.hora)}
                     imagen={
                         turno.profesional.foto
                         ? { uri: `data:image/jpeg;base64,${turno.profesional.foto}` }
@@ -116,6 +137,7 @@ return (
     </SafeAreaView>
 );
 }
+
 
 const styles = StyleSheet.create({
 containerGlobal: {

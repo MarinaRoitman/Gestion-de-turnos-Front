@@ -8,6 +8,7 @@ import ErrorModal from '../components/ErrorModal';
 import { useTranslation } from 'react-i18next';
 import { getTurnosPorProfesional } from '../../api/turno';
 
+
 export default function Horario({ route, navigation }) {
   const { medico } = route.params;
   const [horarioSeleccionado, setHorarioSeleccionado] = useState(null);
@@ -16,6 +17,11 @@ export default function Horario({ route, navigation }) {
   const { theme } = useTheme();
   const [modalErrorVisible, setModalErrorVisible] = useState(false);
   const { t } = useTranslation();
+  const formatearFecha = (fecha) => {
+  const [año, mes, dia] = fecha.split("-");
+  return `${dia}/${mes}/${año}`;
+};
+
 
   useEffect(() => {
     async function cargarTurnos() {
@@ -24,12 +30,14 @@ export default function Horario({ route, navigation }) {
         const disponibles = turnos.filter(t => t.estado?.id === 4); //Solo turnos disponibles
         const agrupados = {};
 
+
         disponibles.forEach(turno => {
           const dia = turno.fecha;
           const hora = turno.hora.slice(0, 5);
           if (!agrupados[dia]) agrupados[dia] = [];
           agrupados[dia].push({ hora, turno });
         });
+
 
         setTurnosDisponibles(agrupados);
       } catch (e) {
@@ -39,8 +47,10 @@ export default function Horario({ route, navigation }) {
       }
     }
 
+
     cargarTurnos();
   }, [medico.id]);
+
 
   const handleConfirmar = () => {
     if (!horarioSeleccionado) {
@@ -48,11 +58,13 @@ export default function Horario({ route, navigation }) {
       return;
     }
 
+
     navigation.navigate('ConfirmarTurno', {
       turno: horarioSeleccionado.turno, // enviamos el objeto completo
       medico,
     });
   };
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundTertiary }}>
@@ -66,10 +78,11 @@ export default function Horario({ route, navigation }) {
         </View>
       </View>
 
+
       <ScrollView contentContainerStyle={styles.body}>
         <CardsMedicos
           nombre={`${medico.nombre} ${medico.apellido}`}
-          especialidad={medico.especialidades?.map(e => e.nombre).join(', ') || 'Sin especialidad'}
+          especialidad={medico.especialidades?.length ? medico.especialidades.map(e => e.nombre).join(', ') : t('noSpecialty')}
           direccion="Clínica Central"
           imagen={
             medico.foto
@@ -77,6 +90,7 @@ export default function Horario({ route, navigation }) {
               : require('mi-turnito/src/assets/images/medicaSilvia.jpg')
           }
         />
+
 
         <View style={styles.infoContainer}>
           <MaterialIcons name="calendar-today" size={22} color={theme.colorIconBackground} />
@@ -86,12 +100,13 @@ export default function Horario({ route, navigation }) {
           </View>
         </View>
 
+
         {loading ? (
           <ActivityIndicator size="large" color={theme.textColor} style={{ marginTop: 30 }} />
         ) : (
           Object.entries(turnosDisponibles).map(([fecha, horarios]) => (
             <View key={fecha} style={styles.diaContainer}>
-              <Text style={[styles.subtitulo, { color: theme.textColor }]}>{fecha}</Text>
+              <Text style={[styles.subtitulo, { color: theme.textColor }]}>{formatearFecha(fecha)}</Text>
               <View style={styles.horariosContainer}>
                 {horarios.map(({ hora, turno }, i) => {
                   const isSelected = horarioSeleccionado?.turno?.id === turno.id;
@@ -123,6 +138,7 @@ export default function Horario({ route, navigation }) {
           ))
         )}
 
+
         <View style={{ paddingTop: 5 }}>
           <ButtonSecondary
             style={[styles.botonConfirmar, !horarioSeleccionado && { opacity: 0.5 }]}
@@ -133,6 +149,7 @@ export default function Horario({ route, navigation }) {
         </View>
       </ScrollView>
 
+
       <ErrorModal
         visible={modalErrorVisible}
         message={t('selectTimeFirst')}
@@ -141,6 +158,7 @@ export default function Horario({ route, navigation }) {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
     contenedorHeader: {
@@ -151,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
+   
     },
     tituloInicial: {
         fontSize: 30,
@@ -161,7 +179,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 30,
     top: 87,
-    borderColor: '#4F3680', 
+    borderColor: '#4F3680',
     },
     arrow: {
         position: 'absolute',
@@ -233,6 +251,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     },
 
+
     infoText: {
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -245,5 +264,6 @@ const styles = StyleSheet.create({
     infoLabelSecundario: {
         fontSize: 15,
     },
+
 
 });

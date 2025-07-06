@@ -6,7 +6,15 @@ const locales = Localization.getLocales();
 
 
 
+
+
+
+
 const supportedLanguages = ['es', 'en'];
+
+
+
+
 
 
 
@@ -18,7 +26,15 @@ const deviceLanguage = Array.isArray(locales) && locales.length > 0
 
 
 
+
+
+
+
 const initialLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'es';
+
+
+
+
 
 
 
@@ -71,14 +87,27 @@ translation: {
     info: "For more information call:",
     //historial
     history: "History",
+    detail: "Detail",
     details: "See detail",
+    matricula: "License",
     image: "View medical image",
     close: "Close",
     note: "Doctor's notes",
+    date: "Date",
     last: "Previous studies",
     imageMedical: "X-ray / Ultrasounds",
     seeImg: "See image",
     noteMedical: "Medication adjustment to improve glycemic control. A thyroid study is ordered.",
+    unknown: "Unknown",
+    state: "State",
+    reserved: "Reserved",
+    cancelled: "Cancelled",
+    completed: "Completed",
+    available: "Available",
+    noAvailable: "No available",
+    loadDetails: "Loading profesional data",
+    fechaAgendada: "Scheduled date",
+    noImages: "No medical images available",
     //my data
     personalData: "Personal Data",
     contact: "Login Info",
@@ -94,9 +123,10 @@ translation: {
     save: "Save data",
     //notifications
     notiTitle:"We've confirmed your appointment! 🥳",
-    textNoti:"We have confirmed your appointment with specialist {{nombre}} (si se puede aca agregar el horario seleccionado).",
+    textNoti:"We have confirmed your appointment with specialist {{nombre}}",
     notification: "Notifications",
     emptyNotis: "You don't have notifications.",
+    appointmentMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}} {{apellido}}",
     //next turn
     next: "Next appointment",
     emptyAppointment: "You don't have any upcoming appointments.",
@@ -133,9 +163,16 @@ translation: {
     confirmDelete: "Delete",
     //No specialty
     noSpecialty: "No specialty",
+   
+
+
 
 
 }
+
+
+
+
 
 
 
@@ -188,14 +225,29 @@ translation: {
     info: "Para más información llamar a:",
     //history
     history: "Historial",
+    detail: "Detalle",
+    matricula: "Matrícula",
     details: "Ver detalle",
     image: "Imagen del estudio",
     close: "Cerrar",
     note: "Notas del médico",
+    date: "Fecha",
     last: "Estudios anteriores",
     imageMedical: "radiografía / Ecografías",
     seeImg: "Ver imagen",
     noteMedical: "Ajuste en la medicación para mejorar el control glucémico. Se solicita estudio de tiroides.",
+    unknown: "Desconocido",
+    state: "Estado",
+    reserved: "Reservado",
+    cancelled: "Cancelado",
+    completed: "Cumplido",
+    available: "Disponible",
+    noAvailable: "No disponible",
+    loadDetails: "Cargando datos del profesional...",
+    fechaAgendada: "Fecha agendada",
+    noImages: "No hay imágenes médicas disponibles",
+
+
     //my data
     myData: "Mis Datos",
     personalData: "Datos personales",
@@ -212,9 +264,12 @@ translation: {
     save:"Guardar datos",
     //notificacions
     notiTitle:"¡Confirmamos tu Turno! 🥳",
-    textNoti: "Hemos confirmado su cita con el especialista {{nombre}} (si se puede aca agregar el horario seleccionado).",
+    textNoti: "Hemos confirmado su cita con el especialista {{nombre}}",
     notification: "Notificaciones",
     emptyNotis: "No tenés notificaciones.",
+    appointmentMessage: "Reservaste un turno para el día {{fecha}} a las {{hora}} con el/la profesional {{nombre}} {{apellido}}",
+
+
     //nextTurn
     next: "Próximo Turno",
     emptyAppointment: "No tenés próximos turnos.",
@@ -230,6 +285,7 @@ translation: {
     consultar: "Consultar próximos turnos",
     consultarSub:"Consultá y cancela tus turnos agendados",
     //home
+    hi: '¡Hola',
     helpTitle: "¿Cómo podemos ayudarte hoy? 💜",
     myCredential: "Mi credencial",
     directory: "Cartilla",
@@ -257,6 +313,10 @@ translation: {
 
 
 
+
+
+
+
 i18n
 .use(initReactI18next)
 .init({
@@ -267,6 +327,10 @@ interpolation: {
     escapeValue: false,
 },
 });
+
+
+
+
 
 
 

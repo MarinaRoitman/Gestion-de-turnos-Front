@@ -6,11 +6,19 @@ import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../../context/AuthContext';
 import { getPacienteById } from '../../api/paciente';
 
+
 export default function HistorialScreen({ navigation }) {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
   const [turnosAnteriores, setTurnosAnteriores] = useState([]);
+  const formatearFechaHora = (fechaStr, horaStr) => {
+  const [year, month, day] = fechaStr.split('-');
+  const fechaFormateada = `${day}/${month}/${year}`;
+  const horaFormateada = horaStr?.slice(0, 5);
+  return `${fechaFormateada} ${horaFormateada}`;
+};
+
 
   useEffect(() => {
     async function fetchTurnos() {
@@ -18,10 +26,12 @@ export default function HistorialScreen({ navigation }) {
         const paciente = await getPacienteById(userId);
         const hoy = new Date();
 
+
         const filtrados = paciente.turnos.filter(turno => {
           const fechaTurno = new Date(turno.fecha);
           return fechaTurno < hoy || turno.estado?.id === 1;
         });
+
 
         setTurnosAnteriores(filtrados);
       } catch (error) {
@@ -29,10 +39,12 @@ export default function HistorialScreen({ navigation }) {
       }
     }
 
+
     if (userId) {
       fetchTurnos();
     }
   }, [userId]);
+
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
@@ -46,6 +58,7 @@ export default function HistorialScreen({ navigation }) {
           </View>
         </View>
       </View>
+
 
       <ScrollView style={{ padding: 15 }}>
         {turnosAnteriores.length > 0 ? (
@@ -65,7 +78,7 @@ export default function HistorialScreen({ navigation }) {
                     {turno.profesional.nombre} {turno.profesional.apellido}
                   </Text>
                   <Text style={[styles.specialty, { color: theme.textColor }]}>
-                    {t('Date')}: {turno.fecha} {turno.hora}
+                    {t('fechaAgendada')}: {formatearFechaHora(turno.fecha, turno.hora)}
                   </Text>
                 </View>
               </View>
@@ -88,6 +101,7 @@ export default function HistorialScreen({ navigation }) {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   contenedorHeader: {

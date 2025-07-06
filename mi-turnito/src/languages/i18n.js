@@ -80,6 +80,12 @@ translation: {
     cancel: "Cancel",
     spanish: "Spanish",
     english: "English",
+    logoutTitle: "Do you want to log out?",
+    logoutMessage: "Are you sure you want to log out?",
+    logoutConfirm: "Log out",
+    deleteAccountTitle: "Delete account? 😥",
+    deleteAccountMessage: "If you delete your account, all your data, appointments, and saved studies will be erased. This action cannot be undone.",
+    deleteAccountConfirm: "Delete account",
     //centro de ayuda
     center: "Help center",
     question: "How can we help?",
@@ -141,6 +147,7 @@ translation: {
     programa: "Schedule general medicine appointments.",
     consultar: "Check upcoming appointments",
     consultarSub:"View and cancel your scheduled appointments.",
+    sinDirectory: "No directory",
     //Home
     hi: '¡Hi',
     helpTitle: "How can we help you today? 💜",
@@ -163,16 +170,26 @@ translation: {
     confirmDelete: "Delete",
     //No specialty
     noSpecialty: "No specialty",
-   
-
-
-
+    //CodigoRecupero
+    mailValidation: "Please enter a valid email address.",
+    mailNoExist: "The email address does not exist in our records.",
+    IngresaCodigo: "Enter code",
+    IngresaCodigoSub: "Enter the code you received in your email to recover your account",
+    confirmCode: "Confirm Code",
+    code: "Code",
+    codeEmpty: "Please enter the code.",
+    errorCode: "The code you entered is incorrect. Please try again.",
+    confirmPassword: "Confirm Password",
+    newPassword: "New Password",
+    repeatPassword: "Repeat Password",
+    updatePassword: "Update Password",
+    newPasswordSub: "Enter your new password to recover your account",
+    passwordUpdated: "Your password has been updated successfully.",
+    passwordUnmatched: "The passwords do not match. Please try again.",
+    passwordSame: "The new password cannot be the same as the old one.",
+    passwordEmpty: "Please enter a password.",
 
 }
-
-
-
-
 
 
 
@@ -218,6 +235,12 @@ translation: {
     cancel: "Cancelar",
     spanish: "Español",
     english: "Inglés",
+    logoutTitle: "¿Querés cerrar sesión?",
+    logoutMessage: "¿Estás seguro que deseas salir?",
+    logoutConfirm: "Cerrar sesión",
+    deleteAccountTitle: "¿Eliminar cuenta? 😥",
+    deleteAccountMessage: "Si eliminás tu cuenta, se borrarán todos tus datos, turnos y estudios guardados. Esta acción no se puede deshacer.",
+    deleteAccountConfirm: "Eliminar cuenta",
     //help center
     center: "Centro de ayuda",
     question: "¿Con qué podemos ayudar?",
@@ -246,8 +269,6 @@ translation: {
     loadDetails: "Cargando datos del profesional...",
     fechaAgendada: "Fecha agendada",
     noImages: "No hay imágenes médicas disponibles",
-
-
     //my data
     myData: "Mis Datos",
     personalData: "Datos personales",
@@ -268,8 +289,6 @@ translation: {
     notification: "Notificaciones",
     emptyNotis: "No tenés notificaciones.",
     appointmentMessage: "Reservaste un turno para el día {{fecha}} a las {{hora}} con el/la profesional {{nombre}} {{apellido}}",
-
-
     //nextTurn
     next: "Próximo Turno",
     emptyAppointment: "No tenés próximos turnos.",
@@ -284,6 +303,7 @@ translation: {
     programa: "Programá turnos de medicina general.",
     consultar: "Consultar próximos turnos",
     consultarSub:"Consultá y cancela tus turnos agendados",
+    sinDirectory: "Sin Dirección",
     //home
     hi: '¡Hola',
     helpTitle: "¿Cómo podemos ayudarte hoy? 💜",
@@ -305,7 +325,24 @@ translation: {
     messageDelete: "Esta acción no se puede deshacer",
     confirmDelete: "Eliminar turno",
     //Sin especialidad
+    mailValidation: "Por favor, ingresá un correo electrónico válido.",
+    mailNoExist: "El correo electrónico ingresado no existe en nuestros registros.",
     noSpecialty: "Sin especialidad",
+    IngresaCodigo: "Ingresá tu código",
+    code: "Código",
+    IngresaCodigoSub: "Ingresá el código que recibiste en tu correo para recuperar tu cuenta",
+    confirmCode: "Confirmar código",
+    errorCode: "El código que ingresaste es incorrecto. Por favor, intentá nuevamente.",
+    codeEmpty: "Por favor, ingresá el código.",
+    confirmPassword: "Confirmar contraseña",
+    newPassword: "Nueva contraseña",
+    repeatPassword: "Repetir contraseña",
+    updatePassword: "Actualizar contraseña",
+    newPasswordSub: "Ingresá tu nueva contraseña para recuperar tu cuenta",
+    passwordUpdated: "Tu contraseña se actualizó correctamente.",
+    passwordUnmatched: "Las contraseñas no coinciden. Por favor, intentá nuevamente.",
+    passwordSame: "La nueva contraseña no puede ser igual a la anterior.",
+    passwordEmpty: "Please enter a password.",
 }
 }
 };

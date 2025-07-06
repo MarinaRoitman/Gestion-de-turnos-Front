@@ -8,28 +8,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
 
-export default function Recuperar( {navigation} ) {
 
 
-const [correo, setCorreo] = useState('');
+export default function CodigoRecupero( {navigation} ) {
+
+
+const [Code, setCode] = useState('');
 const [modalVisible, setModalVisible] = useState(false);
 const [modalMessage, setModalMessage] = useState('');
 
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
-
-const goToCodigoRecupero = () => {
-  if (correo.trim() === "") {
-    setModalMessage(t('mailValidation'));
-    setModalVisible(true);
-  } else if (correo.toLowerCase() !== "mfede@gmail.com") {
-    setModalMessage(t('mailNoExist'));
-    setModalVisible(true);
-  } else {
-    navigation.navigate("CodigoRecupero");
-  }
-};
-
 
 
 return (
@@ -59,24 +48,38 @@ return (
 
         <View style={[styles.containerContenido, { paddingTop: 10 }]}>
             <RectangleLogin1 style={{ height: 800 }}  />
-            <Text style={[styles.texto, {color: theme.textColor}]}>{t('recoverPassword')}</Text>
+            <Text style={[styles.texto, {color: theme.textColor}]}>{t('IngresaCodigo')}</Text>
             <Text style={[styles.subTexto,{color: theme.textColor}]}>
-                {t('resetInstructions')}
+                {t('IngresaCodigoSub')}
             </Text>
 
 
             <View style={[styles.containerForm, { marginTop: 0 }]}>
                 <InputField
-                    label={t('email')}
-                    onChangeText={setCorreo}
-                    value={correo}
-                    placeholder={"pepe@example.com"}
+                    label={t('code')}
+                    onChangeText={setCode}
+                    value={Code}
+                    keyboardType="numeric"
+                    placeholder={"****"}
                 />
 
+
                 <View style={{ paddingTop: 299 }}>
-                <CustomButton 
-                    title={t('send')}
-                    onPress={goToCodigoRecupero} />
+                <CustomButton
+                title={t('send')}
+                onPress={() => {
+                    if (Code.trim() === '') {
+                    setModalMessage(t('codeEmpty'));
+                    setModalVisible(true);
+                    } else if (Code !== '1234') {
+                    setModalMessage(t('errorCode'));
+                    setModalVisible(true);
+                    } else {
+                    navigation.navigate('ContrasenaRecupero');
+                    console.log('Código correcto');
+                    }
+                }}
+                />
                 </View>
             </View>
         </View>

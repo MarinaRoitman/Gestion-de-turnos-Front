@@ -38,7 +38,6 @@ export default function Horario({ route, navigation }) {
           agrupados[dia].push({ hora, turno });
         });
 
-
         setTurnosDisponibles(agrupados);
       } catch (e) {
         console.error('Error al cargar turnos disponibles:', e);

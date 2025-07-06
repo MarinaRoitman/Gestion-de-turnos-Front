@@ -16,7 +16,8 @@ import Detalle from '../ui/screens/DetalleHistorial';
 import MisDatosScreen from '../ui/screens/MisDatosScreen';
 import ProximoTurno from '../ui/screens/ProximoTurno';
 import Credencial from '../ui/screens/Credencial';
-
+import CodigoRecupero from '../ui/screens/CodigoRecupero';
+import ContrasenaRecupero from '../ui/screens/ContrasenaRecupero';
 
 
 const Stack = createNativeStackNavigator();
@@ -40,6 +41,8 @@ return (
         <Stack.Screen name="MisDatos" component={MisDatosScreen} />
         <Stack.Screen name="ProximoTurno" component={ProximoTurno} />
         <Stack.Screen name="Credencial" component={Credencial} />
+        <Stack.Screen name="CodigoRecupero" component={CodigoRecupero} />
+        <Stack.Screen name="ContrasenaRecupero" component={ContrasenaRecupero} />
     </Stack.Navigator>
 );
 }

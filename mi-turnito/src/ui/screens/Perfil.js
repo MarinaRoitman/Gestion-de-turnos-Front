@@ -135,9 +135,9 @@ return (
                 routes: [{ name: 'Login' }] // resetea el stack de navegación
             });
         }}
-        title="¿Querés cerrar sesión?"
-        message="¿Estás seguro que deseas salir?"
-        confirmText="Cerrar sesión"
+        title={t('logoutTitle')}
+        message={t('logoutMessage')}
+        confirmText={t('logoutConfirm')}
         icon="exit-to-app"
         actionType="logout"
         />
@@ -160,9 +160,9 @@ return (
                 setShowDeleteModal(false);
             }
         }}
-        title="¿Eliminar cuenta? 😥"
-        message="Si eliminás tu cuenta, se borrarán todos tus datos, turnos y estudios guardados. Esta acción no se puede deshacer."
-        confirmText="Eliminar cuenta"
+        title={t('deleteAccountTitle')}
+        message={t('deleteAccountMessage')}
+        confirmText={t('deleteAccountConfirm')}
         actionType="delete"
         />
 </SafeAreaView>

@@ -80,7 +80,7 @@ const handleConfirmar = async () => {
           <View style={styles.infoText}>
             <Text style={[styles.infoLabel, { color: theme.textColor }]}>{t('place')}</Text>
             <Text style={[styles.infoLabelSecundario, { color: theme.textColor }]}>
-              {medico.direccion || 'Sin dirección'}
+              {medico.direccion || t('sinDirectory')}
             </Text>
           </View>
         </View>
@@ -93,11 +93,11 @@ const handleConfirmar = async () => {
         </View>
       </ScrollView>
       <Modal
-  animationType="fade"
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={() => setModalVisible(false)}
->
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
   <View style={{
     flex: 1,
     justifyContent: 'center',

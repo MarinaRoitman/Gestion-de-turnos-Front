@@ -233,7 +233,7 @@ translation: {
     note: "Notas del médico",
     date: "Fecha",
     last: "Estudios anteriores",
-    imageMedical: "radiografía / Ecografías",
+    imageMedical: "Radiografía / Ecografías",
     seeImg: "Ver imagen",
     noteMedical: "Ajuste en la medicación para mejorar el control glucémico. Se solicita estudio de tiroides.",
     unknown: "Desconocido",

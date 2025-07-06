@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Picker } from '@react-native-picker/picker';
 import { getPacienteById } from '../../api/paciente';
 import { getObrasSociales } from '../../api/obraSocial';
-import { updateAfiliacion } from '../../api/afiliacion';
+import { updateAfiliacion, createAfiliacion } from '../../api/afiliacion';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function ObraSocialTab() {
@@ -16,7 +16,6 @@ export default function ObraSocialTab() {
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [obrasSociales, setObrasSociales] = useState([]);
   const [planes, setPlanes] = useState([]);
   const [selectedObraSocialId, setSelectedObraSocialId] = useState(null);
@@ -25,6 +24,9 @@ export default function ObraSocialTab() {
   const [afiliacionId, setAfiliacionId] = useState(null);
   const [fechaAlta, setFechaAlta] = useState('');
   const [fechaFin, setFechaFin] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,9 +50,14 @@ export default function ObraSocialTab() {
           if (obra) {
             setPlanes(obra.planes);
           }
+        } else {
+          // Si no hay afiliación, setear fechas por defecto
+          const today = new Date().toISOString().split('T')[0];
+          setFechaAlta(today);
+          setFechaFin('');
         }
       } catch (err) {
-        console.error("Error cargando datos:", err);
+        console.log("Error cargando datos:", err);
       }
     };
     fetchData();
@@ -61,7 +68,6 @@ export default function ObraSocialTab() {
     const obraSeleccionada = obrasSociales.find(o => o.id === selectedObraSocialId);
     if (obraSeleccionada) {
       setPlanes(obraSeleccionada.planes);
-      // si el plan actual no pertenece a la nueva obra social, seleccionar el primero
       if (!obraSeleccionada.planes.find(p => p.id === selectedPlanId)) {
         setSelectedPlanId(obraSeleccionada.planes[0]?.id || null);
       }
@@ -70,24 +76,44 @@ export default function ObraSocialTab() {
 
   const handleGuardar = async () => {
     try {
-      await updateAfiliacion(
-        afiliacionId,
-        nroAfiliado,
-        fechaAlta,
-        fechaFin,
-        selectedObraSocialId,
-        selectedPlanId
-      );
+      if (afiliacionId) {
+        await updateAfiliacion(
+          afiliacionId,
+          nroAfiliado,
+          fechaAlta,
+          fechaFin,
+          selectedObraSocialId,
+          selectedPlanId
+        );
+      } else {
+        setFechaAlta(new Date().toISOString().split('T')[0])
+        setFechaFin(null)
+        await createAfiliacion(
+          nroAfiliado,
+          fechaAlta,
+          fechaFin,
+          userId,
+          selectedObraSocialId,
+          selectedPlanId
+        );
+      }
+
+      setIsSuccess(true);
+      setModalMessage(t('success')); // o "Afiliación actualizada correctamente"
       setModalVisible(true);
+
     } catch (error) {
-      console.error("Error al actualizar la afiliación:", error);
+      console.log("Error al guardar afiliación:", error);
+      setIsSuccess(false);
+      setModalMessage(t('verifyData')); // o "Error al guardar. Verificá los datos e intentá de nuevo."
+      setModalVisible(true);
     }
   };
+
 
   return (
     <ScrollView style={{ backgroundColor: theme.backgroundSecondary }} contentContainerStyle={{ paddingBottom: 100 }}>
       <View style={styles.contenedorTabs}>
-        {/* Obra social */}
         <View style={{ marginHorizontal: 37, marginBottom: 20 }}>
           <Text style={[{ color: theme.textColor, marginBottom: 6 }, styles.filtroLabel]}>{t('healthInsurance')}</Text>
           <View style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: theme.backgroundImput }}>
@@ -104,7 +130,6 @@ export default function ObraSocialTab() {
           </View>
         </View>
 
-        {/* Plan */}
         <View style={{ marginHorizontal: 37, marginBottom: 20 }}>
           <Text style={[{ color: theme.textColor, marginBottom: 6 }, styles.filtroLabel]}>Plan</Text>
           <View style={{ borderRadius: 16, overflow: 'hidden', backgroundColor: theme.backgroundImput }}>
@@ -121,24 +146,30 @@ export default function ObraSocialTab() {
           </View>
         </View>
 
-        {/* Número de afiliado */}
         <EmailInput label={t('insuranceId')} value={nroAfiliado} onChangeText={setNroAfiliado} />
       </View>
 
-      {/* Botón guardar */}
       <View style={styles.botonContainer}>
         <ButtonSecondary title={t('save')} onPress={handleGuardar} />
       </View>
 
-      {/* Modal de éxito */}
       <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContainer, { backgroundColor: theme.modalBackground }]}>
             <View style={styles.modalContent}>
-              <MaterialIcons name="check-circle" size={43} color="#4CAF50" style={styles.iconCheck} />
+              <MaterialIcons
+                name={isSuccess ? "check-circle" : "error"}
+                size={43}
+                color={isSuccess ? "#4CAF50" : "#F44336"}
+                style={styles.iconCheck}
+              />
               <View style={styles.textContainer}>
-                <Text style={[styles.modalTitle, { color: theme.textColor }]}>{t('successTitle')}</Text>
-                <Text style={[styles.modalSubtitle, { color: theme.textColor }]}>{t('success')}</Text>
+                <Text style={[styles.modalTitle, { color: isSuccess ? "#4CAF50" : "#F44336" }]}>
+                  {isSuccess ? t('successTitle') : t('errorTitle')}
+                </Text>
+                <Text style={[styles.modalSubtitle, { color: theme.textColor }]}>
+                  {modalMessage}
+                </Text>
               </View>
             </View>
             <TouchableOpacity
@@ -154,80 +185,68 @@ export default function ObraSocialTab() {
   );
 }
 
-const styles = StyleSheet.create({
-contenedorTabs: {
-gap: 8,
-paddingTop: 10,
-},
-botonContainer: {
-flex: 1,
-justifyContent: 'center',
-alignItems: 'center',
-marginTop: 284,
-},
-modalOverlay: {
-flex: 1,
-justifyContent: 'center',
-alignItems: 'center',
-backgroundColor: 'rgba(0,0,0,0.5)',
-},
-modalContainer: {
-width: 340,
-padding: 20,
-borderRadius: 12,
-alignItems: 'center',
-},
-modalContent: {
-flexDirection: 'row',
-alignItems: 'center',
-marginBottom: 20,
-width:300,
-},
-iconCheck: {
-marginRight: 19,
-},
-textContainer: {
-flex: 1,
-},
-modalTitle: {
-fontSize: 17,
-fontWeight: 'bold',
-},
-modalSubtitle: {
-fontSize: 15,
-marginTop: 4,
-},
-modalButton: {
-backgroundColor: '#4F3680',
-borderRadius: 8,
-paddingHorizontal: 20,
-paddingVertical: 10,
-width: 270,
-},
-modalButtonText: {
-color: '#fff',
-fontWeight: 'bold',
-textAlign: 'center',
-fontSize: 14,
-},
-pickerContainer: {
-borderRadius: 8,
-overflow: 'hidden',
-marginBottom: 10,
-},
-filtroLabel: {
-fontWeight: 'bold',
-fontSize: 20,
-marginBottom: 4,
-},
-pickerContainer: {
-borderRadius: 8,
-height: 50,
-justifyContent: 'center',
-paddingHorizontal: 12,
-overflow: 'hidden',
-borderWidth: 1,
-borderColor: '#ccc', // opcional
-},
+// Estilos idénticos a los que ya tenías
 
+
+
+const styles = StyleSheet.create({
+  contenedorTabs: {
+    gap: 8,
+    paddingTop: 10,
+  },
+  botonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 284,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    width: 340,
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  modalContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: 300,
+  },
+  iconCheck: {
+    marginRight: 19,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  modalTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  modalSubtitle: {
+    fontSize: 15,
+    marginTop: 4,
+  },
+  modalButton: {
+    borderRadius: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    width: 270,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  filtroLabel: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 4,
+  },
 });

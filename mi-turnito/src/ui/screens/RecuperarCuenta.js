@@ -7,6 +7,7 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
+import { enviarCorreo } from '../../api/recupero.js';
 
 export default function Recuperar( {navigation} ) {
 
@@ -18,15 +19,29 @@ const [modalMessage, setModalMessage] = useState('');
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
 
-const goToCodigoRecupero = () => {
+const goToCodigoRecupero = async () => {
   if (correo.trim() === "") {
     setModalMessage(t('mailValidation'));
     setModalVisible(true);
-  } else if (correo.toLowerCase() !== "mfede@gmail.com") {
-    setModalMessage(t('mailNoExist'));
+    return;
+  }
+
+  try {
+    const codigo = Math.floor(1000 + Math.random() * 9000);
+
+    // Mandar correo
+    await enviarCorreo({
+      to: correo,
+      subject: "Recuperá tu cuenta",
+      text: `Ingresá este código en la aplicación para restablecer tu contraseña: ${codigo}`
+    });
+
+    navigation.navigate("CodigoRecupero", { codigo, correo });
+
+  } catch (error) {
+    setModalMessage(t('errorSendingMail') || "Hubo un problema al enviar el correo.");
     setModalVisible(true);
-  } else {
-    navigation.navigate("CodigoRecupero");
+    console.error("Error al enviar correo:", error);
   }
 };
 

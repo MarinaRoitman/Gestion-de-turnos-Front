@@ -10,9 +10,9 @@ import ErrorModal from '../../ui/components/ErrorModal';
 
 
 
-export default function CodigoRecupero( {navigation} ) {
+export default function CodigoRecupero( {navigation, route} ) {
 
-
+const { codigo, correo } = route.params;
 const [Code, setCode] = useState('');
 const [modalVisible, setModalVisible] = useState(false);
 const [modalMessage, setModalMessage] = useState('');
@@ -66,20 +66,20 @@ return (
 
                 <View style={{ paddingTop: 299 }}>
                 <CustomButton
-                title={t('send')}
-                onPress={() => {
-                    if (Code.trim() === '') {
-                    setModalMessage(t('codeEmpty'));
-                    setModalVisible(true);
-                    } else if (Code !== '1234') {
-                    setModalMessage(t('errorCode'));
-                    setModalVisible(true);
-                    } else {
-                    navigation.navigate('ContrasenaRecupero');
-                    console.log('Código correcto');
-                    }
-                }}
-                />
+                    title={t('send')}
+                    onPress={() => {
+                        if (Code.trim() === '') {
+                            setModalMessage(t('codeEmpty'));
+                            setModalVisible(true);
+                        } else if (Code !== String(codigo)) {
+                            setModalMessage(t('errorCode'));
+                            setModalVisible(true);
+                        } else {
+                            console.log('Código correcto');
+                            navigation.navigate('ContrasenaRecupero', { correo });  // ContraseñaRecupero recibe el correo de la cuenta a editar
+                        }
+                    }}
+                    />
                 </View>
             </View>
         </View>

@@ -343,6 +343,8 @@ translation: {
     passwordUnmatched: "Las contraseñas no coinciden. Por favor, intentá nuevamente.",
     passwordSame: "La nueva contraseña no puede ser igual a la anterior.",
     passwordEmpty: "Please enter a password.",
+    errorTitle: "Error",
+    verifyData: "Verificá los datos ingresados."
 }
 }
 };

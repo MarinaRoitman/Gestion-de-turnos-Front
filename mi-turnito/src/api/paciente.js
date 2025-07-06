@@ -146,3 +146,18 @@ export async function modifyPaciente(id, nombre, apellido, mail, password, dni, 
     throw error;
   }
 }
+
+export async function getPacienteByEmail(email) {
+  try {
+    const response = await axios.get(`${hostname}/pacientes/mail/${email}`, {
+      auth: {
+        username: "usuario",
+        password: "1234",
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener paciente por email:`, error);
+    throw error;
+  }
+}

@@ -7,9 +7,10 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
+import { getPacienteByEmail, modifyPaciente } from '../../api/paciente';
 
-export default function ContrasenaRecupero({ navigation }) {
-
+export default function ContrasenaRecupero({ navigation, route }) {
+const { correo } = route.params;
 const [CodeNew, setCodeNew] = useState('');
 const [CodeRepeat, setCodeRepeat] = useState('');
 
@@ -20,44 +21,50 @@ const [modalSuccess, setModalSuccess] = useState(false);
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
 
-// Mock contraseña anterior
-const oldPasswordMock = "1111";
+const handleUpdatePassword = async () => {
+    const newPass = CodeNew.trim();
+    const repeatPass = CodeRepeat.trim();
 
-const handleUpdatePassword = () => {
-  const newPass = CodeNew.trim();
-  const repeatPass = CodeRepeat.trim();
-  const oldPass = oldPasswordMock.trim();
+    if (newPass === '' || repeatPass === '') {
+      setModalMessage(t('passwordEmpty'));
+      setModalVisible(true);
+      return;
+    }
 
-  if (newPass === '' || repeatPass === '') {
-    setModalMessage(t('passwordEmpty'));
-    setModalVisible(true);
-    return;
-  }
+    if (newPass !== repeatPass) {
+      setModalMessage(t('passwordUnmatched'));
+      setModalVisible(true);
+      return;
+    }
 
-  if (newPass !== repeatPass) {
-    setModalMessage(t('passwordUnmatched'));
-    setModalVisible(true);
-    return;
-  }
+    try {
+      const paciente = await getPacienteByEmail(correo);
 
-  if (newPass === oldPass) {
-    setModalMessage(t('passwordSame'));
-    setModalVisible(true);
-    return;
-  }
+      await modifyPaciente(
+        paciente.id,
+        paciente.nombre,
+        paciente.apellido,
+        paciente.mail,
+        newPass, // la contraseña nueva
+        paciente.dni,
+        paciente.fechaNacimiento,
+        paciente.telefono
+      );
 
-  setModalMessage(t('passwordUpdated'));
-  setModalVisible(true);
-  setModalSuccess(true);
+      setModalMessage(t('passwordUpdated'));
+      setModalSuccess(true);
+      setModalVisible(true);
+    } catch (error) {
+      setModalMessage("Error al actualizar la contraseña");
+      setModalVisible(true);
+    }
 };
 
 const onModalClose = () => {
 setModalVisible(false);
 if (modalSuccess) {
-    // Redirigir a login (mock)
     navigation.navigate("Login");
     setModalSuccess(false);
-    // Limpiar inputs
     setCodeNew('');
     setCodeRepeat('');
 }

@@ -76,7 +76,7 @@ export async function createPaciente(nombre, apellido, mail, password, dni, fech
 
     return response.data;
   } catch (error) {
-    console.error('Error al crear paciente:', error);
+    console.log('Error al crear paciente:', error);
     throw error;
   }
 }

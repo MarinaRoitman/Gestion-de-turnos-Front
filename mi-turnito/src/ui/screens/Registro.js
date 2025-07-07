@@ -7,6 +7,7 @@ import { useTheme } from '../../theme/ThemeContext.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createPaciente } from '../../api/paciente.js';
 import { useTranslation } from 'react-i18next';
+import ErrorModal from '../../ui/components/ErrorModal';
 
 
 export default function Registro( {navigation} ) {
@@ -19,14 +20,33 @@ const [dni, setDni] = useState('');
 const [fechaNacimiento, setFechaNacimiento] = useState('');
 const { t } = useTranslation();
 const { isDark, toggleTheme, theme } = useTheme();
-
+const [modalVisible, setModalVisible] = useState(false);
+const [modalMessage, setModalMessage] = useState('');
+const [modalType, setModalType] = useState('error');
 
 const handleRegistro = async () => {
   try {
-    const paciente = await createPaciente(nombre, apellido, username, password, dni, fechaNacimiento, telefono);
+    const paciente = await createPaciente(
+      nombre,
+      apellido,
+      username,
+      password,
+      dni,
+      fechaNacimiento,
+      telefono
+    );
     navigation.navigate("Login");
   } catch (error) {
-    console.error("Error al registrar paciente:", error);
+    console.log("Error al registrar paciente:", error);
+
+    if (error.response && error.response.status === 400 && error.response.data?.message?.includes("email")) {
+      setModalMessage("Ya hay un usuario registrado con ese email.");
+    } else {
+      setModalMessage("Ocurrió un error al registrar el paciente.");
+    }
+
+    setModalType('error');
+    setModalVisible(true);
   }
 };
 
@@ -140,6 +160,12 @@ return (
     <View style={{ margin: 25, marginBottom:16 }}>
         <CustomButton title={t('signUp')} onPress={handleRegistro} />
     </View>
+    <ErrorModal
+        visible={modalVisible}
+        message={modalMessage}
+        onClose={() => setModalVisible(false)}
+        type={modalType}
+    />
     </ScrollView>
 </View>
 );

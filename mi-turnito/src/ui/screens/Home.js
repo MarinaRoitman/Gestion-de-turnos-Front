@@ -119,7 +119,7 @@ return (
                 turnosFiltrados.map(turno => (
                     <CardsHome
                     key={turno.id}
-                    especialidad={turno.profesional.matricula || "Sin matrícula"}
+                    especialidad={turno.profesional.direccion || "Sin direccion"}
                     fecha={formatearFechaHora(turno.fecha, turno.hora)}
                     imagen={
                         turno.profesional.foto

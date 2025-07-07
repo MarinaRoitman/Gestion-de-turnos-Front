@@ -9,7 +9,8 @@ import { reservarTurno } from '../../api/turno';
 import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { crearNotificacion } from '../../api/notificacion';
-import { Modal } from 'react-native'; 
+import { Modal } from 'react-native';
+
 
 export default function ConfirmarTurno({ route, navigation }) {
   const { medico, turno } = route.params;
@@ -17,15 +18,22 @@ export default function ConfirmarTurno({ route, navigation }) {
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
 
+
   const fechaFormateada = turno.fecha.split('-').reverse().join('/');
   const horaFormateada = turno.hora.slice(0, 5);
 
+
   const { userId } = useContext(AuthContext);
+
 
 const handleConfirmar = async () => {
   try {
     await reservarTurno(turno.id, userId);
-    const mensaje = `Reservaste un turno para el día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${medico.nombre} ${medico.apellido}`;
+    const mensaje = t('notificationMessage', {
+      fecha: fechaFormateada,
+      hora: horaFormateada,
+      nombre: `${medico.nombre} ${medico.apellido}`
+    });
     await crearNotificacion(mensaje, turno.id, userId, "Reservaste un turno!");
     setModalVisible(true);
   } catch (error) {
@@ -33,6 +41,7 @@ const handleConfirmar = async () => {
     Alert.alert(t('error'), t('errorConfirmingAppointment'));
   }
 };
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
@@ -51,6 +60,7 @@ const handleConfirmar = async () => {
         </View>
       </View>
 
+
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <View style={styles.card}>
           <CardsMedicos
@@ -65,6 +75,7 @@ const handleConfirmar = async () => {
           />
         </View>
 
+
         <View style={styles.infoContainer}>
           <MaterialIcons name="calendar-today" size={25} color={theme.colorIconBackground} />
           <View style={styles.infoText}>
@@ -75,6 +86,7 @@ const handleConfirmar = async () => {
           </View>
         </View>
 
+
         <View style={styles.infoContainer}>
           <MaterialIcons name="location-on" size={25} color={theme.colorIconBackground} />
           <View style={styles.infoText}>
@@ -84,6 +96,7 @@ const handleConfirmar = async () => {
             </Text>
           </View>
         </View>
+
 
         <View style={styles.botonContainer}>
           <ButtonSecondary
@@ -142,9 +155,10 @@ const handleConfirmar = async () => {
   </View>
 </Modal>
     </SafeAreaView>
-  
+ 
 );
 }
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -159,7 +173,7 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
+   
 },
 tituloInicial: {
     fontSize: 30,

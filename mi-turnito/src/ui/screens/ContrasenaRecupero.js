@@ -17,6 +17,7 @@ const [CodeRepeat, setCodeRepeat] = useState('');
 const [modalVisible, setModalVisible] = useState(false);
 const [modalMessage, setModalMessage] = useState('');
 const [modalSuccess, setModalSuccess] = useState(false);
+const [modalType, setModalType] = useState('error');
 
 const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
@@ -50,7 +51,7 @@ const handleUpdatePassword = async () => {
         paciente.fechaNacimiento,
         paciente.telefono
       );
-
+      setModalType('success');
       setModalMessage(t('passwordUpdated'));
       setModalSuccess(true);
       setModalVisible(true);
@@ -63,6 +64,7 @@ const handleUpdatePassword = async () => {
 const onModalClose = () => {
 setModalVisible(false);
 if (modalSuccess) {
+    setModalType('success');
     navigation.navigate("Login");
     setModalSuccess(false);
     setCodeNew('');
@@ -131,6 +133,7 @@ return (
         visible={modalVisible}
         message={modalMessage}
         onClose={onModalClose}
+        type={modalType}
     />
     </ScrollView>
 </View>

@@ -114,7 +114,7 @@ return (
             onChangeText={setFechaNacimiento}
             value={fechaNacimiento}
             placeholder={t('enterBirthDate')}
-            keyboardType="date"
+            keyboardType="numbers-and-punctuation"
         />
 
 

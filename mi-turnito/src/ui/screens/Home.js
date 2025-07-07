@@ -130,7 +130,9 @@ return (
                     />
                 ))
                 ) : (
-                <Text style={{ color: theme.textColor, paddingLeft: 25 }}>{t("No scheduled appointments") || "No hay turnos agendados"}</Text>
+                    <View style={{ flex:1, justifyContent: 'center', alignItems: 'center', padding: 20,}}>
+                    <Text style={{ color: theme.textColor, paddingLeft: 25 }}>{t("noScheduled")}</Text>
+                    </View>
             )}
         </ScrollView>
     </ScrollView>

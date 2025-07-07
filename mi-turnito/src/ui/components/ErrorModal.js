@@ -4,9 +4,20 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
-export default function ErrorModal({ visible, message, onClose }) {
+
+export default function ErrorModal({ visible, message, onClose, type = 'error' }) {
 const { theme } = useTheme();
 const { t } = useTranslation();
+
+
+const iconData = {
+error: { name: 'error-outline', color: '#D32F2F' },  
+success: { name: 'check-circle-outline', color: '#2E7D32' }
+};
+
+
+const { name, color } = iconData[type] || iconData.error;
+
 
 return (
 <Modal
@@ -15,22 +26,23 @@ return (
     visible={visible}
     onRequestClose={onClose}
 >
-    <View style={[styles.modalContainer]}>
-    <View style={[styles.modalContent, { backgroundColor: theme.modalBackground}]}>
+    <View style={styles.modalContainer}>
+    <View style={[styles.modalContent, { backgroundColor: theme.modalBackground }]}>
         <View style={styles.row}>
-        <MaterialIcons name="error-outline" size={30} color="#D32F2F" style={styles.icon} />
+        <MaterialIcons name={name} size={30} color={color} style={styles.icon} />
         <Text style={[styles.modalText, { color: theme.textColor }]}>
             {message}
         </Text>
         </View>
-        <TouchableOpacity onPress={onClose} style={[styles.modalButton, { backgroundColor: theme.modalButton}]}>
+        <TouchableOpacity onPress={onClose} style={[styles.modalButton, { backgroundColor: theme.modalButton }]}>
         <Text style={styles.modalButtonText}>{t('close')}</Text>
-        </TouchableOpacity> 
+        </TouchableOpacity>
     </View>
     </View>
 </Modal>
 );
 }
+
 
 const styles = StyleSheet.create({
 modalContainer: {

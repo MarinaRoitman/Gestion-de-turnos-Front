@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
 import { enviarCorreo } from '../../api/recupero.js';
 
+
 export default function Recuperar( {navigation} ) {
 
 
@@ -32,8 +33,8 @@ const goToCodigoRecupero = async () => {
     // Mandar correo
     await enviarCorreo({
       to: correo,
-      subject: "Recuperá tu cuenta",
-      text: `Ingresá este código en la aplicación para restablecer tu contraseña: ${codigo}`
+      subject: t('recoverPasswordSubject'),
+      text: t('recoverPasswordText', { codigo }),
     });
 
     navigation.navigate("CodigoRecupero", { codigo, correo });

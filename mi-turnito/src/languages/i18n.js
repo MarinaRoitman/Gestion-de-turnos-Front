@@ -3,41 +3,13 @@ import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 const locales = Localization.getLocales();
 
-
-
-
-
-
-
-
 const supportedLanguages = ['es', 'en'];
-
-
-
-
-
-
-
 
 const deviceLanguage = Array.isArray(locales) && locales.length > 0
     ? locales[0].languageCode
     : 'es';
 
-
-
-
-
-
-
-
 const initialLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'es';
-
-
-
-
-
-
-
 
 const resources = {
 en: {
@@ -58,11 +30,13 @@ translation: {
     resetInstructions: "Enter your email address and we will send you a link to reset your password",
     send: "Send",
     signUp: "Sign up",
+    camposEmptys: "Please fill in all fields.",
+    mailOrPassError: "Incorrect email or password.",
     //sign up
     enterFirstName: "Enter your first name",
     enterLastName: "Enter your last name",
     enterDNI: "Enter your ID",
-    enterBirthDate: "Enter your birth date",
+    enterBirthDate: "Enter your birth date (YYYY-MM-DD)",
     enterPhone: "Enter your phone number",
     enterEmail: "Enter your email",
     enterPassword: "Enter your password",
@@ -114,6 +88,7 @@ translation: {
     loadDetails: "Loading profesional data",
     fechaAgendada: "Scheduled date",
     noImages: "No medical images available",
+    turnosEmptys: "You don't have any past appointments to show.",
     //my data
     personalData: "Personal Data",
     contact: "Login Info",
@@ -132,7 +107,7 @@ translation: {
     textNoti:"We have confirmed your appointment with specialist {{nombre}}",
     notification: "Notifications",
     emptyNotis: "You don't have notifications.",
-    appointmentMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}} {{apellido}}",
+    notificationMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}}",
     //next turn
     next: "Next appointment",
     emptyAppointment: "You don't have any upcoming appointments.",
@@ -168,6 +143,7 @@ translation: {
     titleDelete: "Delete appointment?",
     messageDelete: "This action cannot be undone",
     confirmDelete: "Delete",
+    noScheduled: "No scheduled appointments",
     //No specialty
     noSpecialty: "No specialty",
     //CodigoRecupero
@@ -188,6 +164,8 @@ translation: {
     passwordUnmatched: "The passwords do not match. Please try again.",
     passwordSame: "The new password cannot be the same as the old one.",
     passwordEmpty: "Please enter a password.",
+    recoverPasswordText: "Enter this code in the app to reset your password: {{codigo}}",
+    noCredentialFound:"No valid affiliation found to display a credential.",
 
 }
 
@@ -213,11 +191,13 @@ translation: {
     resetInstructions: "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña",
     send: "Enviar",
     signUp: "Registrarse",
+    camposEmptys: "Por favor, completá todos los campos.",
+    mailOrPassError: "Correo o contraseña incorrectos.",
     //sign up
     enterFirstName: "Ingresá tu nombre",
     enterLastName: "Ingresá tu apellido",
     enterDNI: "Ingresá tu DNI",
-    enterBirthDate: "Ingresá tu fecha de nacimiento",
+    enterBirthDate: "Ingresá tu fecha de nacimiento (YYYY-MM-DD)",
     enterPhone: "Ingresá tu teléfono",
     enterEmail: "Ingresá tu correo",
     enterPassword: "Ingresá tu contraseña",
@@ -269,6 +249,7 @@ translation: {
     loadDetails: "Cargando datos del profesional...",
     fechaAgendada: "Fecha agendada",
     noImages: "No hay imágenes médicas disponibles",
+    turnosEmptys: "No tenés turnos pasados para mostrar.",
     //my data
     myData: "Mis Datos",
     personalData: "Datos personales",
@@ -288,7 +269,7 @@ translation: {
     textNoti: "Hemos confirmado su cita con el especialista {{nombre}}",
     notification: "Notificaciones",
     emptyNotis: "No tenés notificaciones.",
-    appointmentMessage: "Reservaste un turno para el día {{fecha}} a las {{hora}} con el/la profesional {{nombre}} {{apellido}}",
+    notificationMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}}",
     //nextTurn
     next: "Próximo Turno",
     emptyAppointment: "No tenés próximos turnos.",
@@ -324,6 +305,7 @@ translation: {
     titleDelete: "¿Eliminar turno?",
     messageDelete: "Esta acción no se puede deshacer",
     confirmDelete: "Eliminar turno",
+    noScheduled: "No hay turnos agendados",
     //Sin especialidad
     mailValidation: "Por favor, ingresá un correo electrónico válido.",
     mailNoExist: "El correo electrónico ingresado no existe en nuestros registros.",
@@ -344,17 +326,14 @@ translation: {
     passwordSame: "La nueva contraseña no puede ser igual a la anterior.",
     passwordEmpty: "Please enter a password.",
     errorTitle: "Error",
-    verifyData: "Verificá los datos ingresados."
+    verifyData: "Verificá los datos ingresados.",
+    recoverPasswordSubject: "Recuperá tu cuenta",
+    recoverPasswordText: "Ingresá este código en la aplicación para restablecer tu contraseña: {{codigo}}",
+    noCredentialFound:"No se encontró una afiliación válida para mostrar una credencial.",
+
 }
 }
 };
-
-
-
-
-
-
-
 
 i18n
 .use(initReactI18next)
@@ -366,12 +345,5 @@ interpolation: {
     escapeValue: false,
 },
 });
-
-
-
-
-
-
-
 
 export default i18n;

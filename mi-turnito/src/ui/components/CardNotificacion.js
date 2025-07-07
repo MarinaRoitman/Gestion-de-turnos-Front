@@ -6,9 +6,12 @@ import { useTranslation } from 'react-i18next';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
+
+
 export const CardNotificacion = ({ titulo, nombre , onDelete}) => {
 const { theme, isDark } = useTheme();
 const { t } = useTranslation();
+
 
 return (
     <View style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]}>
@@ -18,7 +21,7 @@ return (
                 { titulo }
             </Text>
             <Text style={[styles.subinfo, {color: theme.textColor}]}>
-                {t('textNoti', { nombre })}
+                { nombre }
             </Text>
         </View>
         <TouchableOpacity
@@ -31,6 +34,7 @@ return (
     </View>
 );
 };
+
 
 const styles = StyleSheet.create({
 card: {
@@ -61,13 +65,14 @@ subinfo:{
 width:'270',
 size:'15',
 
+
 },
 nombre: {
     fontSize: 17,
     fontWeight: 'bold',
     color: '#4F3680',
     width:300,
-    paddingBottom:7,
+    paddingBottom:1,
 },
 deleteIcon: {
     paddingRight: 17,

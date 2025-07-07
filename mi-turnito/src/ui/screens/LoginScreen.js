@@ -10,11 +10,16 @@ import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
 
+
+
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
+const [modalType, setModalType] = useState('error');
 const { login } = useAuth();
 const { t } = useTranslation();
+
+
 
 
 const goToRegistro = () => {
@@ -22,17 +27,24 @@ const goToRegistro = () => {
 };
 
 
+
+
 const goToRecupero = () => {
     navigation.navigate("Recupero");
 };
 
 
+
+
 const handleLogin = async () => {
     if (!username || !password) {
-        setErrorText("Por favor, completá todos los campos.");
+        setModalType('error');
+        setErrorText(t('camposEmptys'));
         setModalVisible(true);
         return;
     }
+
+
 
 
     try {
@@ -40,15 +52,20 @@ const handleLogin = async () => {
         login(pacienteId);
         navigation.replace('Tabs', { screen: 'Home' });
     } catch (error) {
-        setErrorText("Correo o contraseña incorrectos.");
+        setModalType('error');
+        setErrorText(t('mailOrPassError'));
         setModalVisible(true);
     }
 };
 
 
+
+
 const { isDark, toggleTheme, theme } = useTheme();
 const [modalVisible, setModalVisible] = useState(false);
 const [errorText, setErrorText] = useState('');
+
+
 
 
 return (
@@ -57,6 +74,7 @@ return (
     visible={modalVisible}
     message={errorText}
     onClose={() => setModalVisible(false)}
+    type={modalType}
     />
     <View style={styles.containerFoto}>
     <Image
@@ -70,10 +88,14 @@ return (
     </View>
 
 
+
+
     <View style={styles.containerContenido}>
     <RectangleLogin style={{ height: 718 }} />
     <Text style={[styles.texto, {color: theme.textColor} ]}>{t('welcome')}</Text>
     <Text style={[styles.subTexto, {color: theme.textColor}]}>{t('loginToContinue')}</Text>
+
+
 
 
     <View style={styles.containerForm}>
@@ -87,6 +109,8 @@ return (
         />
 
 
+
+
         <InputField
         label={t('password')}
         isPassword={true}
@@ -97,8 +121,12 @@ return (
         />
 
 
+
+
         <View style={{ marginTop: 10 }}>
         <CustomButton onPress={handleLogin} title={t('login')} />
+
+
 
 
         <View style={styles.containerExtras}>
@@ -117,6 +145,8 @@ return (
 </ScrollView>
 );
 };
+
+
 
 
 const styles = StyleSheet.create({

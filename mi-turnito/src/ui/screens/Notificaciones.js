@@ -7,12 +7,15 @@ import { CardNotificacion } from '../components/CardNotificacion.js';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getNotificacionesVisibles, eliminarNotificacion } from '../../api/notificacion.js';
 
+
 export default function Notificaciones({ navigation }) {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
 
+
   const [notificaciones, setNotificaciones] = useState([]);
+
 
   useEffect(() => {
     const fetchNotificaciones = async () => {
@@ -26,6 +29,7 @@ export default function Notificaciones({ navigation }) {
     fetchNotificaciones();
   }, []);
 
+
   const handleDelete = async (idNotificacion) => {
     try {
       await eliminarNotificacion(idNotificacion);
@@ -34,6 +38,7 @@ export default function Notificaciones({ navigation }) {
       console.error("Error al eliminar notificación:", error);
     }
   };
+
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
@@ -54,6 +59,7 @@ export default function Notificaciones({ navigation }) {
         </View>
       </View>
 
+
       <ScrollView contentContainerStyle={styles.body}>
         {notificaciones.length === 0 ? (
           <View style={styles.containerFoto}>
@@ -72,7 +78,7 @@ export default function Notificaciones({ navigation }) {
             {notificaciones.map((noti) => (
               <CardNotificacion
                 key={noti.id}
-                // titulo={t("notiTitle")} // ver despues cómo hacer con cancelar turno
+                titulo={t("notiTitle")} // ver despues cómo hacer con cancelar turno
                 nombre={noti.texto}
                 onDelete={() => handleDelete(noti.id)}
               />
@@ -83,6 +89,7 @@ export default function Notificaciones({ navigation }) {
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
 containerGlobal: {
@@ -99,7 +106,7 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    
+   
 },
 tituloInicial: {
     fontSize: 30,
@@ -116,7 +123,7 @@ iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
-    borderColor: '#4F3680', 
+    borderColor: '#4F3680',
 },
 centrar:{
     alignItems: 'center',
@@ -130,7 +137,6 @@ option: {
     borderBottomWidth: 1,
     borderBottomColor: '#DEDEDE',
     position: 'relative',
-
 },
 optionTitle: {
     fontSize: 17,
@@ -147,7 +153,6 @@ arrow: {
     right: 15,
     top: 20,
 },
-
 contenedorCard:{
 margin: 10,
 },
@@ -181,7 +186,6 @@ body: {
     alignItems: 'center',
     gap: 10,
 },
-
 imagen:{
     marginTop:'200',
 }

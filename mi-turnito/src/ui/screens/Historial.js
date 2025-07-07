@@ -91,9 +91,14 @@ export default function HistorialScreen({ navigation }) {
             </View>
           ))
         ) : (
-          <View style={styles.noTurnosContainer}>
-            <Text style={[styles.noTurnosText, { color: theme.textColor }]}>
-              {t('No past appointments to show') || 'No hay turnos pasados para mostrar.'}
+          <View style={styles.center}>
+            <Image
+                source={require('../../assets/images/noHistory.png')}
+                style={styles.noCredentialImage}
+                resizeMode="contain"
+                />
+            <Text style={[styles.subtitle, { color: theme.textColor }]}>
+              {t('turnosEmptys')}
             </Text>
           </View>
         )}
@@ -146,6 +151,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+    subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   specialty: {
     fontSize: 14,
   },
@@ -157,5 +166,12 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold',
+  },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      marginTop: 150,
+      justifyContent: 'center',
+      paddingHorizontal: 20,
   },
 });

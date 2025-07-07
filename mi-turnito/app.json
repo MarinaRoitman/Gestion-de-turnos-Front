@@ -4,31 +4,23 @@
     "slug": "mi-turnito",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/LogoTurnito.png",
+    "icon": "./assets/icon-turnito.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./src/assets/images/LogoTurnito.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#4F3680",
-      "dark": {
-        "image": "./src/assets/images/LogoTurnito.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#000000"
-      }
+      "image": "./assets/splash-turnito.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#4F3680"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/LogoTurnito.png",
+        "foregroundImage": "./assets/icon-turnito.png",
         "backgroundColor": "#4F3680"
       },
       "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-localization"

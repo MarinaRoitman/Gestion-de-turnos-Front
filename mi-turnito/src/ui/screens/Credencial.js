@@ -74,13 +74,18 @@ export default function Credencial({ navigation }) {
             </Text>
             <Text style={styles.label}>{t('numCredential')}</Text>
             <Text style={styles.credentialNumber}>{afiliacion.nroAfiliado}</Text>
-            <Text style={styles.plan}>Plan "{afiliacion.plan?.nombre || 'Desconocido'}"</Text>
+            <Text style={styles.plan}>Plan "{afiliacion.plan?.nombre || t('unknown')}"</Text>
           </LinearGradient>
         </View>
       ) : (
-        <View style={styles.centered}>
-          <Text style={[{ color: theme.textColor, fontSize: 18, textAlign: 'center', marginHorizontal: 40 }]}>
-            {t('noCredentialFound') || 'No se encontró una afiliación válida para mostrar una credencial.'}
+        <View style={styles.center}>
+          <Image
+          source={require('../../assets/images/notCredential.png')}
+          style={styles.noCredentialImage}
+          resizeMode="contain"
+          />
+          <Text style={[{ color: theme.textColor, fontSize: 18, textAlign: 'center', marginHorizontal: 40}]}>
+            {t('noCredentialFound')}
           </Text>
         </View>
       )}
@@ -98,6 +103,15 @@ export default function Credencial({ navigation }) {
         justifyContent: 'center',
         position: 'relative',
     },
+    noTurnosContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+  },
+  noCredentialImage: {
+    width: 200,
+    height: 200,
+  },
     iconWrapper: {
         position: 'absolute',
         left: 30,
@@ -171,5 +185,11 @@ export default function Credencial({ navigation }) {
         fontSize: 14,
         textAlign: 'right',
         fontStyle: 'italic',
+    },
+    center: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
     },
     });

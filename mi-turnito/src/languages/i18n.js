@@ -79,7 +79,7 @@ translation: {
     seeImg: "See image",
     noteMedical: "Medication adjustment to improve glycemic control. A thyroid study is ordered.",
     unknown: "Unknown",
-    state: "State",
+    state: "State:",
     reserved: "Reserved",
     cancelled: "Cancelled",
     completed: "Completed",
@@ -104,10 +104,12 @@ translation: {
     save: "Save data",
     //notifications
     notiTitle:"We've confirmed your appointment! 🥳",
+    notiTitleCancel: "You have cancelled an appointment",
     textNoti:"We have confirmed your appointment with specialist {{nombre}}",
     notification: "Notifications",
     emptyNotis: "You don't have notifications.",
     notificationMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}}",
+    notificationMessageCancel: "You cancelled your appointment on {{fecha}} at {{hora}} with professional {{nombre}}",
     //next turn
     next: "Next appointment",
     emptyAppointment: "You don't have any upcoming appointments.",
@@ -168,6 +170,10 @@ translation: {
     noCredentialFound:"No valid affiliation found to display a credential.",
     filter6Months: "Last 6 months",
     showAll: "Show all",
+    //filtro
+    selectSpeciality: "-- Select Specialty --",
+    pleaseSelectSpecialty: "Please select a specialty",
+    noNotes: "No doctor notes yet.",
 }
 
 
@@ -241,7 +247,7 @@ translation: {
     seeImg: "Ver imagen",
     noteMedical: "Ajuste en la medicación para mejorar el control glucémico. Se solicita estudio de tiroides.",
     unknown: "Desconocido",
-    state: "Estado",
+    state: "Estado:",
     reserved: "Reservado",
     cancelled: "Cancelado",
     completed: "Cumplido",
@@ -267,10 +273,11 @@ translation: {
     save:"Guardar datos",
     //notificacions
     notiTitle:"¡Confirmamos tu Turno! 🥳",
-    textNoti: "Hemos confirmado su cita con el especialista {{nombre}}",
+    notiTitleCancel: "Has cancelado un Turno",
     notification: "Notificaciones",
     emptyNotis: "No tenés notificaciones.",
-    notificationMessage: "You booked an appointment for {{fecha}} at {{hora}} with professional {{nombre}}",
+    notificationMessage: "Reservaste un turno para el {{fecha}} a las {{hora}} con el profesional {{nombre}}",
+    notificationMessageCancel: "Has cancelado tu turno del {{fecha}} a las {{hora}} con el profesional {{nombre}}",
     //nextTurn
     next: "Próximo Turno",
     emptyAppointment: "No tenés próximos turnos.",
@@ -333,6 +340,10 @@ translation: {
     noCredentialFound:"No se encontró una afiliación válida para mostrar una credencial.",
     filter6Months: "Últimos 6 meses",
     showAll: "Mostrar todos",
+    //filtro
+    selectSpeciality: "-- Seleccionar Especialidad --",
+    pleaseSelectSpecialty: "Por favor seleccioná una especialidad",
+    noNotes: "No hay notas del médico áun.",
 }
 }
 };

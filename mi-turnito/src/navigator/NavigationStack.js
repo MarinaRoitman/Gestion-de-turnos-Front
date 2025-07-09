@@ -18,6 +18,7 @@ import ProximoTurno from '../ui/screens/ProximoTurno';
 import Credencial from '../ui/screens/Credencial';
 import CodigoRecupero from '../ui/screens/CodigoRecupero';
 import ContrasenaRecupero from '../ui/screens/ContrasenaRecupero';
+import Perfil from '../ui/screens/Perfil';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ const Stack = createNativeStackNavigator();
 export default function MyStack() {
 return (
     <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Recupero" component={Recupero}/>
         <Stack.Screen name="Registro" component={Registro}/>
@@ -44,5 +46,5 @@ return (
         <Stack.Screen name="CodigoRecupero" component={CodigoRecupero} />
         <Stack.Screen name="ContrasenaRecupero" component={ContrasenaRecupero} />
     </Stack.Navigator>
-);
+    );
 }

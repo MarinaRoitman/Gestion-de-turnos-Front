@@ -18,6 +18,7 @@ import DetalleScreen from '../ui/screens/DetalleHistorial';
 import ProximoTurno from '../ui/screens/ProximoTurno';
 import Credencial from '../ui/screens/Credencial';
 import { useTranslation } from 'react-i18next';
+import { CommonActions } from '@react-navigation/native';
 
 
 import { View } from 'react-native';
@@ -92,57 +93,121 @@ export default function NavigationTab() {
     const { theme } = useTheme();
     const { t } = useTranslation();
 return (
-<Tab.Navigator initialRouteName="Home" screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-            backgroundColor: theme.tabBarBackground,
-            height: 100,
-            paddingTop: 13,
-            paddingBottom:20,
-        },
-        tabBarActiveTintColor: theme.tabBarIconColor,
-        tabBarInactiveTintColor: theme.tabBarIconColor,
-    }}>
-
-
-    <Tab.Screen name="Turnos" component={TurnosStack} options={{
-        tabBarIcon: ({ color, size }) => (
-            <View style={{ position: 'absolute'}}>
+<Tab.Navigator
+  initialRouteName="Home"
+  screenOptions={{
+    headerShown: false,
+    tabBarStyle: {
+      backgroundColor: theme.tabBarBackground,
+      height: 100,
+      paddingTop: 13,
+      paddingBottom: 20,
+    },
+    tabBarActiveTintColor: theme.tabBarIconColor,
+    tabBarInactiveTintColor: theme.tabBarIconColor,
+  }}
+>
+  {/* Turnos */}
+  <Tab.Screen
+    name="Turnos"
+    component={TurnosStack}
+    options={{
+        tabBarIcon: ({ color }) => (
+        <View style={{ position: 'absolute' }}>
             <MaterialIcons name="event" color={color} size={32} />
-            </View>),
-        tabBarLabel: t('turno'),
-    }}/>
-    <Tab.Screen name="Historial" component={HistorialStack}
-    options={{
-        tabBarIcon: ({ color, size }) => (
-        <MaterialIcons name="history" color={color}size={32}/>),
-        tabBarLabel: t('history'),
-    }}/>
-    <Tab.Screen name="Home" component={HomeStack}
-    options={{
-        tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="home" color={color} size={32} />
+        </View>
         ),
-        tabBarLabel: t('home'),
-        }}
+        tabBarLabel: t('turno'),
+    }}
+    listeners={({ navigation }) => ({
+        tabPress: e => {
+        e.preventDefault();
+        navigation.navigate('Turnos', {
+            screen: 'TurnosMain',
+        });
+        },
+    })}
     />
-    <Tab.Screen name="Notificaciones" component={NotificacionesStack}
+
+  <Tab.Screen
+    name="Historial"
+    component={HistorialStack}
     options={{
-        tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="notifications" color={color} size={32} />
+        tabBarIcon: ({ color }) => (
+        <MaterialIcons name="history" color={color} size={32} />
+        ),
+        tabBarLabel: t('history'),
+    }}
+    listeners={({ navigation }) => ({
+        tabPress: e => {
+        e.preventDefault();
+        navigation.navigate('Historial', {
+            screen: 'HistorialMain',
+        });
+        },
+    })}
+    />
+
+  {/* Home */}
+  <Tab.Screen
+    name="Home"
+    component={HomeStack}
+    options={{
+      tabBarIcon: ({ color }) => (
+        <MaterialIcons name="home" color={color} size={32} />
+      ),
+      tabBarLabel: t('home'),
+    }}
+    listeners={({ navigation }) => ({
+      tabPress: e => {
+        e.preventDefault();
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
+      },
+    })}
+  />
+
+  <Tab.Screen
+    name="Notificaciones"
+    component={NotificacionesStack}
+    options={{
+        tabBarIcon: ({ color }) => (
+        <MaterialIcons name="notifications" color={color} size={32} />
         ),
         tabBarLabel: t('notification'),
     }}
+    listeners={({ navigation }) => ({
+        tabPress: e => {
+        e.preventDefault();
+        navigation.navigate('Notificaciones', {
+            screen: 'NotificacionesMain',
+        });
+        },
+    })}
     />
-    <Tab.Screen name="Perfil" component={PerfilStack}
+
+  <Tab.Screen
+    name="Perfil"
+    component={PerfilStack}
     options={{
-        tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="person" color={color} size={32} />
+        tabBarIcon: ({ color }) => (
+        <MaterialIcons name="person" color={color} size={32} />
         ),
         tabBarLabel: t('profile'),
-    }}/>
-
-
+    }}
+    listeners={({ navigation }) => ({
+        tabPress: e => {
+        e.preventDefault();
+        navigation.navigate('Perfil', {
+            screen: 'PerfilMain',
+        });
+        },
+    })}
+    />
 </Tab.Navigator>
 );
 }

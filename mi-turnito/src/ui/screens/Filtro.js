@@ -14,10 +14,14 @@ import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
 import { getEspecialidades } from '../../api/especialidad.js';
+import ErrorModal from '../components/ErrorModal'; // Ajustá la ruta si está en otro lado
 
 export default function Seleccionar({ navigation }) {
     const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState(null);
     const [especialidades, setEspecialidades] = useState([]);
+    const [showError, setShowError] = useState(false);
+    const [errorVisible, setErrorVisible] = useState(false);
+
     const { theme, isDark } = useTheme();
     const { t } = useTranslation();
 
@@ -56,10 +60,16 @@ export default function Seleccionar({ navigation }) {
                             style={{ color: theme.modalButtonText, backgroundColor: theme.backgroundImput }}
                             dropdownIconColor={theme.modalButtonText}
                         >
+                            <Picker.Item label={t("selectSpeciality")} value={null} />
                             {especialidades.map((esp) => (
                                 <Picker.Item key={esp.id} label={esp.nombre} value={esp.nombre} />
                             ))}
                         </Picker>
+                        {showError && (
+                            <Text style={{ color: 'red', marginTop: 5 }}>
+                                {t('pleaseSelectSpecialty') || 'Por favor seleccioná una especialidad'}
+                            </Text>
+                        )}
                     </View> 
                 </View>
             </ScrollView>    
@@ -77,18 +87,28 @@ export default function Seleccionar({ navigation }) {
                 <Button
                     title={t('applyFilters')}
                     onPress={() => {
-                        const especialidadObj = especialidades.find(e => e.nombre === especialidadSeleccionada);
-                        navigation.navigate('Resultados', {
-                            especialidad: especialidadSeleccionada,
-                            especialidadId: especialidadObj?.id
-                        });
+                    if (!especialidadSeleccionada) {
+                        setErrorVisible(true);
+                        return;
+                    }
+
+                    const especialidadObj = especialidades.find(e => e.nombre === especialidadSeleccionada);
+                    navigation.navigate('Resultados', {
+                        especialidad: especialidadSeleccionada,
+                        especialidadId: especialidadObj?.id
+                    });
                     }}
-                />
+                    />
             </View>
+            <ErrorModal
+                visible={errorVisible}
+                message={t('pleaseSelectSpecialty')}
+                onClose={() => setErrorVisible(false)}
+                type="error"
+            />
         </SafeAreaView>
     );
 }
-
 
 const styles = StyleSheet.create({
     containerGlobal: {
@@ -160,7 +180,7 @@ pickerContainer: {
 containerFoto: {
     alignItems: 'center',
     position: 'absolute',
-    bottom: 170, 
+    bottom: 230, 
     left: 0,
     right: 0,
 },

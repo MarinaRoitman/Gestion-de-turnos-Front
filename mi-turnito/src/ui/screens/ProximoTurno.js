@@ -9,24 +9,20 @@ import { AuthContext } from '../../context/AuthContext.js';
 import { getTurnosFuturosPorPaciente, cancelarTurno } from '../../api/turno.js';
 import { crearNotificacion } from '../../api/notificacion.js';
 
-
 export default function ProximoTurno({ navigation }) {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
 
-
   const [turnosProximos, setTurnosProximos] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-
   const formatearFechaHora = (fecha, hora) => {
-  const [año, mes, dia] = fecha.split("-");
-  const horaCorta = hora.slice(0, 5);
-  return `${dia}/${mes}/${año} ${horaCorta}`;
-};
-
+    const [año, mes, dia] = fecha.split("-");
+    const horaCorta = hora.slice(0, 5);
+    return `${dia}/${mes}/${año} ${horaCorta}`;
+  };
 
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -41,34 +37,43 @@ export default function ProximoTurno({ navigation }) {
     fetchTurnos();
   }, []);
 
-
   const handleDelete = async () => {
     try {
-        await cancelarTurno(selectedTurno.id, userId);
+      await cancelarTurno(selectedTurno.id, userId);
 
+      const fechaFormateada = selectedTurno.fecha.split('-').reverse().join('/');
+      const horaFormateada = selectedTurno.hora.slice(0, 5);
+      const nombreProfesional = `${selectedTurno.profesional.nombre} ${selectedTurno.profesional.apellido}`;
 
-        const fechaFormateada = selectedTurno.fecha.split('-').reverse().join('/');
-        const horaFormateada = selectedTurno.hora.slice(0, 5);
-        const nombreProfesional = `${selectedTurno.profesional.nombre} ${selectedTurno.profesional.apellido}`;
-        const mensaje = `Cancelaste el turno del día ${fechaFormateada} a las ${horaFormateada} con el/la profesional ${nombreProfesional}`;
+      const mensaje = t('notificationMessageCancel', {
+        fecha: fechaFormateada,
+        hora: horaFormateada,
+        nombre: nombreProfesional,
+      });
 
+      await crearNotificacion(mensaje, selectedTurno.id, userId, t("notiTitleCancel"));
 
-        await crearNotificacion(mensaje, selectedTurno.id, userId, "Cancelaste un turno");
-
-
-        setTurnosProximos(prev => prev.filter(t => t.id !== selectedTurno.id));
-        setShowDeleteModal(false);
+      setTurnosProximos(prev => prev.filter(t => t.id !== selectedTurno.id));
+      setShowDeleteModal(false);
     } catch (error) {
-        console.error("Error al cancelar el turno o crear la notificación:", error);
+      console.error("Error al cancelar el turno o crear la notificación:", error);
     }
-    };
-
+  };
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
       <View style={styles.header}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }]}>
-          <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={() =>
+              navigation.navigate('Tabs', {
+                screen: 'Turnos',
+                params: {
+                  screen: 'TurnosMain',
+                },
+              })
+            }>
             <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
           </TouchableOpacity>
           <View style={styles.centrar}>
@@ -76,7 +81,6 @@ export default function ProximoTurno({ navigation }) {
           </View>
         </View>
       </View>
-
 
       <ScrollView contentContainerStyle={styles.body}>
         {turnosProximos.length === 0 ? (
@@ -109,7 +113,6 @@ export default function ProximoTurno({ navigation }) {
         )}
       </ScrollView>
 
-
       <ConfirmationModal
         visible={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
@@ -124,111 +127,78 @@ export default function ProximoTurno({ navigation }) {
   );
 }
 
-
 const styles = StyleSheet.create({
-containerGlobal: {
+  containerGlobal: {
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
-},
-//TurnitoHeader
-contenedorHeader: {
+  },
+  contenedorHeader: {
     paddingTop: 80,
-    paddingBottom:20,
+    paddingBottom: 20,
     borderBottomColor: '#4F3680',
     borderBottomWidth: 5,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-   
-},
-tituloInicial: {
+  },
+  tituloInicial: {
     fontSize: 30,
     color: '#4F3680',
     fontWeight: 'bold',
-},
-subTexto: {
+  },
+  subTexto: {
     fontSize: 18,
     color: '#655873',
-    fontWeight: 500,
-    alignSelf:'center',
-},
-iconWrapper: {
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
     borderColor: '#4F3680',
-},
-centrar:{
+  },
+  centrar: {
     alignItems: 'center',
     justifyContent: 'center',
-},
-//BodyTurnos
-option: {
-    backgroundColor: '#F0F0F0',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DEDEDE',
-    position: 'relative',
-
-
-},
-optionTitle: {
-    fontSize: 17,
+  },
+  contenedorCard: {
+    margin: 10,
+    paddingTop: 10,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 20,
+    padding: 15,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+  name: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#4F3680',
-    marginBottom: 5,
-},
-optionSub: {
-    fontSize: 15,
-    color: '#6D6D6D',
-},
-arrow: {
-    position: 'absolute',
-    right: 15,
-    top: 20,
-},
-
-
-contenedorCard:{
-margin: 10,
-paddingTop: 10 ,
-},
-card: {
-flexDirection: 'row',
-alignItems: 'center',
-margin: 20,
-padding: 15,
-borderRadius: 12,
-shadowColor: '#000',
-shadowOpacity: 0.1,
-shadowRadius: 4,
-elevation: 2,
-},
-avatar: {
-width: 60,
-height: 60,
-borderRadius: 30,
-marginRight: 15,
-},
-name: {
-fontSize: 20,
-fontWeight: 'bold',
-},
-specialty: {
-fontSize: 16,
-color: '#655873',
-},
-body: {
+  },
+  specialty: {
+    fontSize: 16,
+    color: '#655873',
+  },
+  body: {
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-},
-
-
-imagen:{
-    marginTop:'200',
-    alignSelf:'center'
-}
+  },
+  imagen: {
+    marginTop: '200',
+    alignSelf: 'center',
+  },
 });

@@ -17,7 +17,12 @@ const { t } = useTranslation();
 return (
 <View style={{ flex: 1, backgroundColor: theme.backgroundSecondary }}>
     <View style={[styles.header, { borderBottomColor: theme.borderBottomColor }]}>
-    <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.goBack()}>
+    <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate('Tabs', {
+        screen: 'Perfil',
+        params: {
+            screen: 'PerfilMain',
+        },
+        })}>
         <MaterialIcons name="arrow-back-ios-new" size={28} style={{ color: theme.textColor }} />
     </TouchableOpacity>
     <Text style={[styles.title, { color: theme.textColor }]}>{t('myData')}</Text>

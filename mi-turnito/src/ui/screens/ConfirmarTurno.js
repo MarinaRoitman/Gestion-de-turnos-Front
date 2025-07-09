@@ -10,6 +10,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useContext } from 'react';
 import { crearNotificacion } from '../../api/notificacion';
 import { Modal } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 
 export default function ConfirmarTurno({ route, navigation }) {
@@ -34,7 +35,7 @@ const handleConfirmar = async () => {
       hora: horaFormateada,
       nombre: `${medico.nombre} ${medico.apellido}`
     });
-    await crearNotificacion(mensaje, turno.id, userId, "Reservaste un turno!");
+    await crearNotificacion(mensaje, turno.id, userId, t("notiTitle"));
     setModalVisible(true);
   } catch (error) {
     console.error('Error al confirmar turno o crear notificación:', error);
@@ -131,8 +132,16 @@ const handleConfirmar = async () => {
       <TouchableOpacity
         onPress={() => {
           setModalVisible(false);
-          // hacer invocacion a la home, pasar un state a la siguiente pantalla
-          navigation.navigate('Home');
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Home', // nombre de la tab
+                },
+              ],
+            })
+          );
         }}
         style={{
           backgroundColor: theme.modalButton,

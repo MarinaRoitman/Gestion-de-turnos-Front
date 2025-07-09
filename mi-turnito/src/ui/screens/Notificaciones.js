@@ -1,11 +1,12 @@
+import React, { useEffect, useState, useContext } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState, useContext } from 'react';
 import { CardNotificacion } from '../components/CardNotificacion.js';
 import { AuthContext } from '../../context/AuthContext.js';
 import { getNotificacionesVisibles, eliminarNotificacion } from '../../api/notificacion.js';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export default function Notificaciones({ navigation }) {
@@ -17,17 +18,20 @@ export default function Notificaciones({ navigation }) {
   const [notificaciones, setNotificaciones] = useState([]);
 
 
-  useEffect(() => {
-    const fetchNotificaciones = async () => {
-      try {
-        const data = await getNotificacionesVisibles(userId);
-        setNotificaciones(data);
-      } catch (error) {
-        console.error("Error al traer notificaciones:", error);
-      }
-    };
-    fetchNotificaciones();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchNotificaciones = async () => {
+        try {
+          const data = await getNotificacionesVisibles(userId);
+          setNotificaciones(data);
+        } catch (error) {
+          console.error("Error al traer notificaciones:", error);
+        }
+      };
+
+      fetchNotificaciones();
+    }, [userId])
+  );
 
 
   const handleDelete = async (idNotificacion) => {
@@ -78,7 +82,7 @@ export default function Notificaciones({ navigation }) {
             {notificaciones.map((noti) => (
               <CardNotificacion
                 key={noti.id}
-                titulo={t("notiTitle")} // ver despues cómo hacer con cancelar turno
+                titulo={noti.titulo}
                 nombre={noti.texto}
                 onDelete={() => handleDelete(noti.id)}
               />

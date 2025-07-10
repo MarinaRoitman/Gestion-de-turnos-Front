@@ -87,6 +87,7 @@ export default function Notificaciones({ navigation }) {
                 titulo={noti.titulo}
                 nombre={noti.texto}
                 onDelete={() => handleDelete(noti.id)}
+                imagen={noti.turno?.profesional?.foto ?? ''}
               />
             ))}
           </View>

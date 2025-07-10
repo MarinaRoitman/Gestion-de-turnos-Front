@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image, ScrollView,TouchableOpacity, SafeAreaVie
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { useTranslation } from 'react-i18next';
-
+import { CommonActions } from '@react-navigation/native';
 
 export default function Turnos({ navigation }) {
 
@@ -26,7 +26,16 @@ return (
 <SafeAreaView style={{ backgroundColor:theme.backgroundTertiary , flex: 1 }}>
     <View style={styles.containerGlobal}>
         <View style={[styles.contenedorHeader, { borderBottomColor: theme.borderBottomColor }, {backgroundColor: theme.backgroundTertiary}]}>
-            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity style={styles.iconWrapper} onPress={() => navigation.dispatch(
+                        CommonActions.reset({
+                          index: 0,
+                          routes: [
+                            {
+                              name: 'Home', // nombre de la tab
+                            },
+                          ],
+                        })
+                      )}>
                 <MaterialIcons name="arrow-back-ios-new" size={28} style={[{textShadowColor: theme.textColor}, {textShadowRadius: 1}, {color: theme.textColor}]} />
             </TouchableOpacity>
             <View style={styles.centrar}>

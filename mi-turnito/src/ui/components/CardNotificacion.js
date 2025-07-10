@@ -8,31 +8,33 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 
 
-export const CardNotificacion = ({ titulo, nombre , onDelete}) => {
-const { theme, isDark } = useTheme();
-const { t } = useTranslation();
+export const CardNotificacion = ({ titulo, nombre, onDelete, imagen }) => {
+  const { theme } = useTheme();
+  const { t } = useTranslation();
 
-
-return (
-    <View style={[styles.card, {backgroundColor: theme.colorBackgroundCard}]}>
-        <Image source={medicos} style={styles.avatar} />
-        <View style={styles.info}>
-            <Text style={[styles.nombre,{color: theme.textColor}]}>
-                { titulo }
-            </Text>
-            <Text style={[styles.subinfo, {color: theme.textColor}]}>
-                { nombre }
-            </Text>
-        </View>
-        <TouchableOpacity
-            style={styles.deleteIcon}
-            onPress={() => onDelete(nombre)}
-            activeOpacity={0.7}
-        >
-            <MaterialIcons name="delete" size={24} color="#BA000D" />
-        </TouchableOpacity>
+  return (
+    <View style={[styles.card, { backgroundColor: theme.colorBackgroundCard }]}>
+      <Image
+        source={
+            imagen
+            ? { uri: `data:image/jpeg;base64,${imagen}` }
+            : require('../../assets/images/medicaSilvia.jpg')
+        }
+        style={styles.avatar}
+      /> 
+      <View style={styles.info}>
+        <Text style={[styles.nombre, { color: theme.textColor }]}>{titulo}</Text>
+        <Text style={[styles.subinfo, { color: theme.textColor }]}>{nombre}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.deleteIcon}
+        onPress={onDelete}
+        activeOpacity={0.7}
+      >
+        <MaterialIcons name="delete" size={24} color="#BA000D" />
+      </TouchableOpacity>
     </View>
-);
+  );
 };
 
 

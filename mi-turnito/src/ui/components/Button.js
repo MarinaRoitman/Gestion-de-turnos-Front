@@ -7,6 +7,7 @@ export const Button = ({ title, onPress, backgroundColor = '#4F3680', color = '#
             style={[styles.button, { backgroundColor }]}
             onPress={onPress}
             activeOpacity={0.7}
+            testID="button-touchable"
         >
             <Text style={[styles.text, { color }]}>{title}</Text>
         </TouchableOpacity>

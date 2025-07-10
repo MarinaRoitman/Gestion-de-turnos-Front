@@ -168,7 +168,7 @@ translation: {
     passwordEmpty: "Please enter a password.",
     recoverPasswordText: "Enter this code in the app to reset your password: {{codigo}}",
     noCredentialFound:"No valid affiliation found to display a credential.",
-    filter6Months: "Last 6 months",
+    filter6Months: "Last 3 months",
     showAll: "Show all",
     //filtro
     selectSpeciality: "-- Select Specialty --",
@@ -338,7 +338,7 @@ translation: {
     recoverPasswordSubject: "Recuperá tu cuenta",
     recoverPasswordText: "Ingresá este código en la aplicación para restablecer tu contraseña: {{codigo}}",
     noCredentialFound:"No se encontró una afiliación válida para mostrar una credencial.",
-    filter6Months: "Últimos 6 meses",
+    filter6Months: "Últimos 3 meses",
     showAll: "Mostrar todos",
     //filtro
     selectSpeciality: "-- Seleccionar Especialidad --",

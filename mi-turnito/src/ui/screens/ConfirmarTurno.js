@@ -126,7 +126,7 @@ const handleConfirmar = async () => {
       alignItems: 'center',
     }}>
       <MaterialIcons name="check-circle" size={43} color="#4CAF50" style={{ marginBottom: 12 }} />
-      <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textColor, marginBottom: 8 }}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textColor, marginBottom: 16, textAlign: 'center' }}>
         {t('success')}
       </Text>
       <TouchableOpacity

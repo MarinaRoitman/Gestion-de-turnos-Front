@@ -8,22 +8,27 @@ import { AuthContext } from '../../context/AuthContext.js';
 import { getNotificacionesVisibles, eliminarNotificacion } from '../../api/notificacion.js';
 import { useFocusEffect } from '@react-navigation/native';
 
-
 export default function Notificaciones({ navigation }) {
   const { theme, isDark } = useTheme();
   const { t } = useTranslation();
   const { userId } = useContext(AuthContext);
 
-
   const [notificaciones, setNotificaciones] = useState([]);
-
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchNotificaciones = async () => {
         try {
           const data = await getNotificacionesVisibles(userId);
-          setNotificaciones(data);
+
+          // Ordenar por fechaEnvio y horaEnvio
+          const dataOrdenada = [...data].sort((a, b) => {
+            const fechaA = new Date(`${a.fechaEnvio}T${a.horaEnvio}`);
+            const fechaB = new Date(`${b.fechaEnvio}T${b.horaEnvio}`);
+            return fechaB - fechaA; // Más reciente primero
+          });
+
+          setNotificaciones(dataOrdenada);
         } catch (error) {
           console.error("Error al traer notificaciones:", error);
         }
@@ -33,7 +38,6 @@ export default function Notificaciones({ navigation }) {
     }, [userId])
   );
 
-
   const handleDelete = async (idNotificacion) => {
     try {
       await eliminarNotificacion(idNotificacion);
@@ -42,7 +46,6 @@ export default function Notificaciones({ navigation }) {
       console.error("Error al eliminar notificación:", error);
     }
   };
-
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.backgroundTertiary, flex: 1 }}>
@@ -62,7 +65,6 @@ export default function Notificaciones({ navigation }) {
           </View>
         </View>
       </View>
-
 
       <ScrollView contentContainerStyle={styles.body}>
         {notificaciones.length === 0 ? (
@@ -94,14 +96,12 @@ export default function Notificaciones({ navigation }) {
   );
 }
 
-
 const styles = StyleSheet.create({
-containerGlobal: {
+  containerGlobal: {
     alignItems: 'center',
     backgroundColor: '#F0F0F0',
-},
-//TurnitoHeader
-contenedorHeader: {
+  },
+  contenedorHeader: {
     paddingTop: 80,
     paddingBottom: 16,
     borderBottomColor: '#4F3680',
@@ -110,87 +110,37 @@ contenedorHeader: {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-   
-},
-tituloInicial: {
+  },
+  tituloInicial: {
     fontSize: 30,
     color: '#4F3680',
     fontWeight: 'bold',
-},
-subTexto: {
+  },
+  subTexto: {
     fontSize: 18,
     color: '#655873',
-    fontWeight: 500,
-    alignSelf:'center',
-},
-iconWrapper: {
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  iconWrapper: {
     position: 'absolute',
     left: 30,
     top: 87,
     borderColor: '#4F3680',
-},
-centrar:{
+  },
+  centrar: {
     alignItems: 'center',
     justifyContent: 'center',
-},
-//BodyTurnos
-option: {
-    backgroundColor: '#F0F0F0',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DEDEDE',
-    position: 'relative',
-},
-optionTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: '#4F3680',
-    marginBottom: 5,
-},
-optionSub: {
-    fontSize: 15,
-    color: '#6D6D6D',
-},
-arrow: {
-    position: 'absolute',
-    right: 15,
-    top: 20,
-},
-contenedorCard:{
-margin: 10,
-},
-card: {
-flexDirection: 'row',
-alignItems: 'center',
-margin: 20,
-padding: 15,
-borderRadius: 12,
-shadowColor: '#000',
-shadowOpacity: 0.1,
-shadowRadius: 4,
-elevation: 2,
-},
-avatar: {
-width: 60,
-height: 60,
-borderRadius: 30,
-marginRight: 15,
-},
-name: {
-fontSize: 20,
-fontWeight: 'bold',
-},
-specialty: {
-fontSize: 16,
-color: '#655873',
-},
-body: {
+  },
+  body: {
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
-},
-imagen:{
-    marginTop:'200',
-}
+  },
+  imagen: {
+    marginTop: 200,
+  },
+  contenedorCard: {
+    margin: 10,
+  },
 });

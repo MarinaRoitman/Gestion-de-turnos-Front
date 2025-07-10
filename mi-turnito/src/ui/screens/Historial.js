@@ -44,7 +44,7 @@ export default function HistorialScreen({ navigation }) {
   }, [userId]);
 
   const seisMesesAtras = new Date();
-  seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
+  seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 3);
 
   const turnosFiltrados = filtroActivo
     ? turnosAnteriores.filter(turno => new Date(turno.fecha) >= seisMesesAtras)

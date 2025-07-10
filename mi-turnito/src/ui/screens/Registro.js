@@ -25,6 +25,27 @@ const [modalMessage, setModalMessage] = useState('');
 const [modalType, setModalType] = useState('error');
 
 const handleRegistro = async () => {
+  // Validación de campos vacíos
+  if (
+    !nombre.trim() || !apellido.trim() || !dni.trim() ||
+    !telefono.trim() || !fechaNacimiento.trim() ||
+    !username.trim() || !password.trim()
+  ) {
+    setModalMessage("Por favor, completá todos los campos obligatorios.");
+    setModalType("error");
+    setModalVisible(true);
+    return;
+  }
+
+  // Validación de formato de fecha (yyyy-mm-dd)
+  const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!fechaRegex.test(fechaNacimiento)) {
+    setModalMessage("La fecha debe estar en formato yyyy-mm-dd.");
+    setModalType("error");
+    setModalVisible(true);
+    return;
+  }
+
   try {
     const paciente = await createPaciente(
       nombre,
@@ -45,7 +66,7 @@ const handleRegistro = async () => {
       setModalMessage("Ocurrió un error al registrar el paciente.");
     }
 
-    setModalType('error');
+    setModalType("error");
     setModalVisible(true);
   }
 };

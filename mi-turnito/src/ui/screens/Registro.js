@@ -31,7 +31,7 @@ const handleRegistro = async () => {
     !telefono.trim() || !fechaNacimiento.trim() ||
     !username.trim() || !password.trim()
   ) {
-    setModalMessage("Por favor, completá todos los campos obligatorios.");
+    setModalMessage(t('modalEmpty'));
     setModalType("error");
     setModalVisible(true);
     return;
@@ -40,7 +40,7 @@ const handleRegistro = async () => {
   // Validación de formato de fecha (yyyy-mm-dd)
   const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (!fechaRegex.test(fechaNacimiento)) {
-    setModalMessage("La fecha debe estar en formato yyyy-mm-dd.");
+    setModalMessage(t('modalDate'));
     setModalType("error");
     setModalVisible(true);
     return;
@@ -61,9 +61,9 @@ const handleRegistro = async () => {
     console.log("Error al registrar paciente:", error);
 
     if (error.response && error.response.status === 400 && error.response.data?.message?.includes("email")) {
-      setModalMessage("Ya hay un usuario registrado con ese email.");
+      setModalMessage(t('modalMail'));
     } else {
-      setModalMessage("Ocurrió un error al registrar el paciente.");
+      setModalMessage(t('modalError'));
     }
 
     setModalType("error");
@@ -75,7 +75,6 @@ const handleRegistro = async () => {
 const goToLogin = () => {
     navigation.navigate("Login");
 };
-
 
 return (
 <View style={[styles.containerGlobal, { backgroundColor: theme.background }]}>

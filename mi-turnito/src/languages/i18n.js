@@ -40,6 +40,10 @@ translation: {
     enterPhone: "Enter your phone number",
     enterEmail: "Enter your email",
     enterPassword: "Enter your password",
+    modalDate: "The date must be in the format yyyy-mm-dd.",
+    modalMail: "There is already a user registered with that email.",
+    modalError: "An error occurred while registering the patient.",
+    modalEmpty: "Please fill in all required fields.",
     //perfil
     profile: "Profile",
     name: "First Name",
@@ -208,6 +212,10 @@ translation: {
     enterPhone: "Ingresá tu teléfono",
     enterEmail: "Ingresá tu correo",
     enterPassword: "Ingresá tu contraseña",
+    modalDate: "La fecha debe estar en formato yyyy-mm-dd.",
+    modalMail: "Ya hay un usuario registrado con ese correo.",
+    modalError: "Ocurrió un error al registrar el paciente.",
+    modalEmpty: "Por favor, completá todos los campos obligatorios.",
     //profile
     profile: "Perfil",
     name: "Nombre",

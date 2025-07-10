@@ -123,17 +123,20 @@ return (
 
 
 
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 16 }}>
         <CustomButton onPress={handleLogin} title={t('login')} />
 
 
 
 
         <View style={styles.containerExtras}>
+            {/*
             <Text style={[styles.subTexto1, {color: theme.textColor} ]}>{t('orLoginWith')}</Text>
+            
             <View style={styles.containerFoto}>
                     <Image source={require('../../../src/assets/images/GoogleIcon.png')} style={styles.imagenGoogle} />
                     </View>
+            */}
             <Text  onPress={goToRecupero} style={[styles.subTexto1, { paddingTop: 10 }, {color: theme.textColor} ]}>{t('forgotPassword')}</Text>
             <Text style={[styles.subTexto1, {color: theme.textColor}]}>
             {t('noAccount')} <Text onPress={goToRegistro} style={[{fontWeight: '900'}, {color: theme.textColor}]}>{t('register')}</Text>
@@ -173,19 +176,19 @@ containerContenido: {
     paddingTop: 38,
 },
 texto: {
-    fontSize: 40,
+    fontSize: 46,
     color: '#4F3680',
     fontWeight: 'bold',
     marginBottom: 8,
 },
 subTexto: {
-    fontSize: 16,
+    fontSize: 19,
     color: '#655873',
     fontWeight: 500,
     marginBottom: 20,
 },
 subTexto1: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#4F3680',
     marginBottom: 10,
     textAlign: 'center',
@@ -199,6 +202,7 @@ containerForm: {
 containerExtras: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 40,
+    gap: 10,
 },
 });

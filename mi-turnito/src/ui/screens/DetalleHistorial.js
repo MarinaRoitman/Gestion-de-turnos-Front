@@ -140,7 +140,7 @@ export default function DetalleScreen({ navigation }) {
                   key={img.id || index}
                   style={[styles.radioCard, { backgroundColor: theme.colorBackgroundCard }]}
                   onPress={() => {
-                    setModalTitle(img.nombre || `${t('image')} ${index + 1}`);
+                    setModalTitle(img.titulo || `${t('image')} ${index + 1}`);
                     setModalImage({ uri: `data:image/jpeg;base64,${img.imagen}` });
                     setModalVisible(true);
                   }}

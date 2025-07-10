@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createPaciente } from '../../api/paciente.js';
 import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
-
+import SHA256 from 'crypto-js/sha256';
 
 export default function Registro( {navigation} ) {
 const [username, setUsername] = useState('');
@@ -47,11 +47,12 @@ const handleRegistro = async () => {
   }
 
   try {
+    const hashedPassword = SHA256(password).toString();
     const paciente = await createPaciente(
       nombre,
       apellido,
       username,
-      password,
+      hashedPassword,
       dni,
       fechaNacimiento,
       telefono

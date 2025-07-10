@@ -7,6 +7,7 @@ import ButtonSecondary from '../components/ButtonSecondary';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { AuthContext } from '../../context/AuthContext';
 import { getPacienteById, modifyPaciente } from '../../api/paciente';
+import SHA256 from 'crypto-js/sha256';
 
 export default function ContactoTab() {
   const { theme } = useTheme();
@@ -31,7 +32,7 @@ export default function ContactoTab() {
         setPacienteOriginal(paciente);
         
         if (paciente.password) {
-            setPasswordPlaceholder('*'.repeat(paciente.password.length));
+            setPasswordPlaceholder('*'.repeat(8));
         } else {
             setPasswordPlaceholder('********');
         }
@@ -47,12 +48,13 @@ export default function ContactoTab() {
     if (!pacienteOriginal) return;
 
     try {
+      const hashedPassword = SHA256(password).toString();
       await modifyPaciente(
         pacienteOriginal.id,
         pacienteOriginal.nombre,
         pacienteOriginal.apellido,
         pacienteOriginal.mail,
-        password || pacienteOriginal.password,
+        hashedPassword || pacienteOriginal.password,
         pacienteOriginal.dni,
         pacienteOriginal.fechaNacimiento,
         pacienteOriginal.telefono

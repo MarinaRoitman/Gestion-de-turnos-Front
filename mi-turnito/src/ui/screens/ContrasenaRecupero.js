@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import ErrorModal from '../../ui/components/ErrorModal';
 import { getPacienteByEmail, modifyPaciente } from '../../api/paciente';
+import SHA256 from 'crypto-js/sha256';
 
 export default function ContrasenaRecupero({ navigation, route }) {
 const { correo } = route.params;
@@ -23,9 +24,9 @@ const { isDark, toggleTheme, theme } = useTheme();
 const { t } = useTranslation();
 
 const handleUpdatePassword = async () => {
-    const newPass = CodeNew.trim();
-    const repeatPass = CodeRepeat.trim();
-
+    const newPass = SHA256(CodeNew.trim()).toString();
+    const repeatPass = SHA256(CodeRepeat.trim()).toString();
+    
     if (newPass === '' || repeatPass === '') {
       setModalMessage(t('passwordEmpty'));
       setModalVisible(true);

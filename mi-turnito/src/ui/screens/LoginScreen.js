@@ -8,9 +8,7 @@ import ErrorModal from '../../ui/components/ErrorModal';
 import { loginPaciente } from '../../api/paciente.js';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-
-
-
+import SHA256 from 'crypto-js/sha256';
 
 export default function LoginScreen( {navigation} ) {
 const [username, setUsername] = useState('');
@@ -19,22 +17,13 @@ const [modalType, setModalType] = useState('error');
 const { login } = useAuth();
 const { t } = useTranslation();
 
-
-
-
 const goToRegistro = () => {
     navigation.navigate("Registro");
 };
 
-
-
-
 const goToRecupero = () => {
     navigation.navigate("Recupero");
 };
-
-
-
 
 const handleLogin = async () => {
     if (!username || !password) {
@@ -44,11 +33,9 @@ const handleLogin = async () => {
         return;
     }
 
-
-
-
     try {
-        const pacienteId = await loginPaciente(username, password);
+        const hashedPassword = SHA256(password).toString();
+        const pacienteId = await loginPaciente(username, hashedPassword);
         login(pacienteId);
         navigation.replace('Tabs', { screen: 'Home' });
     } catch (error) {
@@ -58,15 +45,9 @@ const handleLogin = async () => {
     }
 };
 
-
-
-
 const { isDark, toggleTheme, theme } = useTheme();
 const [modalVisible, setModalVisible] = useState(false);
 const [errorText, setErrorText] = useState('');
-
-
-
 
 return (
 <ScrollView contentContainerStyle={[styles.containerGlobal, { backgroundColor: theme.background }]} keyboardShouldPersistTaps="handled">
@@ -87,16 +68,10 @@ return (
     />
     </View>
 
-
-
-
     <View style={styles.containerContenido}>
     <RectangleLogin style={{ height: 718 }} />
     <Text style={[styles.texto, {color: theme.textColor} ]}>{t('welcome')}</Text>
     <Text style={[styles.subTexto, {color: theme.textColor}]}>{t('loginToContinue')}</Text>
-
-
-
 
     <View style={styles.containerForm}>
         <InputField
@@ -108,9 +83,6 @@ return (
         keyboardType="mail-address"
         />
 
-
-
-
         <InputField
         label={t('password')}
         isPassword={true}
@@ -120,14 +92,8 @@ return (
         secureTextEntry={true}
         />
 
-
-
-
         <View style={{ marginTop: 16 }}>
         <CustomButton onPress={handleLogin} title={t('login')} />
-
-
-
 
         <View style={styles.containerExtras}>
             {/*
@@ -148,9 +114,6 @@ return (
 </ScrollView>
 );
 };
-
-
-
 
 const styles = StyleSheet.create({
 containerGlobal: {

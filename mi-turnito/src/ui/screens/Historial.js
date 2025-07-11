@@ -21,27 +21,42 @@ export default function HistorialScreen({ navigation }) {
     return `${fechaFormateada} ${horaFormateada}`;
   };
 
-  useEffect(() => {
-    async function fetchTurnos() {
-      try {
-        const paciente = await getPacienteById(userId);
-        const hoy = new Date();
+useEffect(() => {
+  async function fetchTurnos() {
+    try {
+      const paciente = await getPacienteById(userId);
+      const hoy = new Date();
 
-        const filtrados = paciente.turnos.filter(turno => {
-          const fechaTurno = new Date(turno.fecha);
-          return fechaTurno < hoy || turno.estado?.id === 1;
-        });
+      const filtrados = paciente.turnos.filter(turno => {
+        const fechaTurno = new Date(turno.fecha);
+        return fechaTurno <= hoy || turno.estado?.id === 1; // Filtrar turnos pasados y no cancelados
+      });
 
-        setTurnosAnteriores(filtrados);
-      } catch (error) {
-        console.error("Error al obtener turnos:", error);
-      }
+      // Ordenar primero por fecha (de más reciente a más antigua), luego por hora (de mayor a menor)
+      filtrados.sort((a, b) => {
+        const fechaA = new Date(a.fecha);
+        const fechaB = new Date(b.fecha);
+
+        // Primero, ordenamos por fecha (de más reciente a más antigua)
+        if (fechaA > fechaB) return -1; // A es más reciente, lo ponemos primero
+        if (fechaA < fechaB) return 1;  // B es más reciente, lo ponemos primero
+
+        // Si las fechas son iguales, ordenamos por hora (de mayor a menor)
+        const horaA = a.hora.split(':').join(''); // Convierte la hora en un valor numérico
+        const horaB = b.hora.split(':').join('');
+        return horaB - horaA; // Ordenar de mayor a menor (hora más tarde primero)
+      });
+
+      setTurnosAnteriores(filtrados);
+    } catch (error) {
+      console.error("Error al obtener turnos:", error);
     }
+  }
+  if (userId) {
+    fetchTurnos();
+  }
+}, [userId]);
 
-    if (userId) {
-      fetchTurnos();
-    }
-  }, [userId]);
 
   const seisMesesAtras = new Date();
   seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 3);

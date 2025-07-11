@@ -146,7 +146,7 @@ export default function DetalleScreen({ navigation }) {
                   }}
                 >
                   <Image source={{ uri: `data:image/jpeg;base64,${img.imagen}` }} style={styles.radioImage} />
-                  <Text style={[styles.radioText, { color: theme.textColor }]}>{img.nombre || t('seeImg')}</Text>
+                  <Text style={[styles.radioText, { color: theme.textColor }]}>{img.titulo || t('seeImg')}</Text>
                 </TouchableOpacity>
               ))
             ) : (
@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
   radioText: {
     fontSize: 14,
     marginLeft: 10,
+    fontWeight: 'bold',
   },
   estadoWrapper: {
     flexDirection: 'row',

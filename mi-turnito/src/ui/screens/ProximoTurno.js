@@ -24,18 +24,22 @@ export default function ProximoTurno({ navigation }) {
     return `${dia}/${mes}/${año} ${horaCorta}`;
   };
 
-  useEffect(() => {
-    const fetchTurnos = async () => {
-      try {
-        const turnos = await getTurnosFuturosPorPaciente(userId);
-        const turnosValidos = turnos.filter(t => t.estado?.id !== 1);
-        setTurnosProximos(turnosValidos);
-      } catch (error) {
-        console.error("Error al cargar turnos futuros:", error);
-      }
-    };
-    fetchTurnos();
-  }, []);
+useEffect(() => {
+  const fetchTurnos = async () => {
+    try {
+      const turnos = await getTurnosFuturosPorPaciente(userId);
+      const turnosValidos = turnos
+        .filter(t => t.estado?.id !== 1)
+        .sort((a, b) => new Date(a.fecha + 'T' + a.hora) - new Date(b.fecha + 'T' + b.hora)); // 👈 Orden correcto
+
+      setTurnosProximos(turnosValidos);
+    } catch (error) {
+      console.error("Error al cargar turnos futuros:", error);
+    }
+  };
+
+  fetchTurnos();
+}, []);
 
   const handleDelete = async () => {
     try {

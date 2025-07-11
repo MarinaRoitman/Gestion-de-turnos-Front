@@ -15,7 +15,7 @@ return (
         <Text style={[styles.title, {color: theme.textColor}]}>{title}</Text>
         <Image source={imageSource} style={styles.image} resizeMode="contain" />
         <TouchableOpacity style={[styles.button, {backgroundColor: theme.modalButton}]} onPress={onClose}>
-        <Text style={[styles.buttonText, {color: theme.textColor}]}>{t('close')}</Text>
+        <Text style={[styles.buttonText, {color: theme.placeholderColor}]}>{t('close')}</Text>
         </TouchableOpacity>
     </View>
     </View>

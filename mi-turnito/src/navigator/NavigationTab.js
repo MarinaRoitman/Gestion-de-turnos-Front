@@ -141,9 +141,12 @@ return (
     listeners={({ navigation }) => ({
         tabPress: e => {
         e.preventDefault();
-        navigation.navigate('Historial', {
-            screen: 'HistorialMain',
-        });
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Historial' }],
+          })
+        );
         },
     })}
     />

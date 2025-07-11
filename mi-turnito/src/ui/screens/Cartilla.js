@@ -4,11 +4,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CardsMedicos } from '../components/CardsMedicos.js';
 import { useTheme } from '../../theme/ThemeContext.js';
 import { getProfesionales } from '../../api/profesional.js';
+import { useTranslation } from 'react-i18next';
 
 export default function Cartilla({ navigation }) {
   const { isDark, toggleTheme, theme } = useTheme();
   const [profesionales, setProfesionales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function fetchProfesionales() {
@@ -43,7 +45,7 @@ export default function Cartilla({ navigation }) {
             />
           </TouchableOpacity>
           <Text style={[styles.tituloInicial, { color: theme.textColor }, { width: '60%', paddingLeft: 70 }]}>
-            Cartilla
+            {t('directory')}
           </Text>
         </View>
       </View>

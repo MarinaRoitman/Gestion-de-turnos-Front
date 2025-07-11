@@ -30,6 +30,7 @@ export const CardNotificacion = ({ titulo, nombre, onDelete, imagen }) => {
         style={styles.deleteIcon}
         onPress={onDelete}
         activeOpacity={0.7}
+        testID="delete-icon"
       >
         <MaterialIcons name="delete" size={24} color="#BA000D" />
       </TouchableOpacity>

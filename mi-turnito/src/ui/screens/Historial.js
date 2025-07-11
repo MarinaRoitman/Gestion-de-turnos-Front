@@ -29,22 +29,19 @@ useEffect(() => {
 
       const filtrados = paciente.turnos.filter(turno => {
         const fechaTurno = new Date(turno.fecha);
-        return fechaTurno <= hoy || turno.estado?.id === 1; // Filtrar turnos pasados y no cancelados
+        return fechaTurno <= hoy || turno.estado?.id === 1;
       });
 
-      // Ordenar primero por fecha (de más reciente a más antigua), luego por hora (de mayor a menor)
       filtrados.sort((a, b) => {
         const fechaA = new Date(a.fecha);
         const fechaB = new Date(b.fecha);
 
-        // Primero, ordenamos por fecha (de más reciente a más antigua)
-        if (fechaA > fechaB) return -1; // A es más reciente, lo ponemos primero
-        if (fechaA < fechaB) return 1;  // B es más reciente, lo ponemos primero
+        if (fechaA < fechaB) return -1;
+        if (fechaA > fechaB) return 1;
 
-        // Si las fechas son iguales, ordenamos por hora (de mayor a menor)
         const horaA = a.hora.split(':').join(''); // Convierte la hora en un valor numérico
         const horaB = b.hora.split(':').join('');
-        return horaB - horaA; // Ordenar de mayor a menor (hora más tarde primero)
+        return horaA - horaB;
       });
 
       setTurnosAnteriores(filtrados);
